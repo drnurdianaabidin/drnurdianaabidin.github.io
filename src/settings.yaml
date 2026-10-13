@@ -86,7 +86,7 @@ siteUrl: https://drnurdianaabidin.github.io
 # Anonymous visit counting with GoatCounter (https://www.goatcounter.com),
 # which uses no cookies. Write the code you chose when signing up, for example
 # nurdiana for https://nurdiana.goatcounter.com. Leave it empty to count nothing.
-goatcounter: ""
+goatcounter: drnurdianaabidin
 
 # Yellow highlighting for placeholder text.
 # true  = highlight anything still in [[double square brackets]]
