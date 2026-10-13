@@ -38,6 +38,10 @@ The work covers:
 
 Ongoing research at the prototype stage. The patch is not a proven treatment, a registered medical product or a commercial product.
 
+## Intellectual property
+
+A step-by-step visual protocol for fabricating the patches was notified for copyright in April 2026 (CRLY2026E01949), with Universiti Sains Malaysia as owner. See [copyright works](/industry/2026-copyright-works/).
+
 ## Recognition
 
 The microneedle research received a Gold Medal and was First Runner-Up in the Special Category at the [USM–AUSC International Sports Innovation Challenge 2025](/academic/2025-sports-innovation-challenge-gold/).
