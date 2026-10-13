@@ -232,6 +232,16 @@ highlightPlaceholders: false
 
 and publish.
 
+**What Google reads about you.** The home page and the About page carry a short description of you that visitors do not see but search engines read: your name, post, university and departments, degrees, research areas, portrait and the profile links that have a web address. It is built from `src/settings.yaml` and `src/content/about/index.md`, so it stays up to date when you change those files.
+
+**Visitor counter.** The site can count visits anonymously with [GoatCounter](https://www.goatcounter.com), which is free for personal sites and uses no cookies. Visitors see no counter, only one sentence in the footer saying that visits are counted.
+
+1. Sign up at https://www.goatcounter.com/signup and choose a code, for example `nurdiana`. Your statistics will be at `https://nurdiana.goatcounter.com`.
+2. In `src/settings.yaml`, write the code on the `goatcounter:` line, for example `goatcounter: nurdiana`, and publish.
+3. Open your GoatCounter address at any time to see visits, the most visited pages, where visitors came from and their countries.
+
+Visits from your own computer while you preview the site are not counted. To stop counting your own visits to the live site, open `https://drnurdianaabidin.github.io/#toggle-goatcounter` once in each browser you use. To turn the counter off, empty the `goatcounter:` line again.
+
 ---
 
 ## 8. Photos and videos

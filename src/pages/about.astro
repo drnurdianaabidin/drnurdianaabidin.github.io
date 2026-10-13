@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
+import StructuredData from '../components/StructuredData.astro';
 import T from '../components/T.astro';
 import Profiles from '../components/Profiles.astro';
 import { settings, sections, resolveLocalFile } from '../lib/items';
@@ -23,6 +24,7 @@ const categoryClass = (c: string) => `tl__cat--${c.toLowerCase()}`;
 
 <Base title="About" description={`Biography, academic positions, qualifications, career timeline and CV of ${settings.name}, ${settings.institution}.`}>
   <Masthead slot="header" current="about" />
+  <StructuredData slot="head" page="about" />
 
   <header class="about-hero">
     <div class="wrap reveal">

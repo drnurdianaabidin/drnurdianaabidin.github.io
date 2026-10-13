@@ -1,0 +1,87 @@
+---
+// A description of you that search engines read but visitors do not see
+// (schema.org structured data). It helps Google connect this site with your
+// name, post, university and academic profiles. Everything comes from
+// src/settings.yaml, src/sections.yaml and src/content/about/index.md.
+import { getImage } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, sections } from '../lib/items';
+
+interface Props {
+  /** The home page describes the site and you; the About page is your profile page. */
+  page: 'home' | 'about';
+}
+
+const { page } = Astro.props;
+const about = (await getEntry('about', 'index'))!;
+const site = new URL('/', Astro.site).href;
+const personId = `${site}#person`;
+
+const portrait = await getImage({ src: about.data.portrait, width: 800, format: 'jpg', quality: 82 });
+const name = plain(settings.shortName);
+const prefix = plain(settings.name).replace(name, '').trim();
+const university = { '@type': 'CollegeOrUniversity', name: plain(settings.institution) };
+const withoutYear = (place: string) => plain(place).replace(/,\s*\d{4}\s*$/, '').trim();
+const orcid = settings.profiles.find((p) => /orcid/i.test(p.label) && p.value);
+const topics = [
+  ...settings.tagline,
+  ...(sections.research.overview?.groups ?? []).map((g) => g.title),
+].map((t) => plain(t)).filter((t, i, all) => t && all.indexOf(t) === i);
+
+const person = {
+  '@type': 'Person',
+  '@id': personId,
+  name,
+  ...(prefix && { honorificPrefix: prefix }),
+  url: site,
+  image: new URL(portrait.src, Astro.site).href,
+  description: plain(settings.description),
+  ...(about.data.positions[0] && { jobTitle: plain(about.data.positions[0].role) }),
+  email: `mailto:${plain(settings.email)}`,
+  worksFor: university,
+  affiliation: settings.affiliations.map((a) => ({
+    '@type': 'Organization',
+    name: plain(a),
+    parentOrganization: university,
+  })),
+  alumniOf: [...new Set(about.data.education.map((e) => withoutYear(e.place)))].map((place) => ({
+    '@type': 'CollegeOrUniversity',
+    name: place,
+  })),
+  knowsAbout: topics,
+  sameAs: settings.profiles.filter((p) => p.url).map((p) => p.url),
+  ...(orcid && { identifier: { '@type': 'PropertyValue', propertyID: 'ORCID', value: orcid.value } }),
+};
+
+const graph =
+  page === 'home'
+    ? [
+        {
+          '@type': 'WebSite',
+          '@id': `${site}#website`,
+          url: site,
+          name: plain(settings.name),
+          description: plain(settings.description),
+          inLanguage: 'en-GB',
+          about: { '@id': personId },
+          author: { '@id': personId },
+        },
+        person,
+      ]
+    : [
+        {
+          '@type': 'ProfilePage',
+          url: new URL(Astro.url.pathname, Astro.site).href,
+          name: `About ${plain(settings.name)}`,
+          inLanguage: 'en-GB',
+          mainEntity: { '@id': personId },
+        },
+        person,
+      ];
+
+// Escape "<" so the text can never close the script element early.
+const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
+---
+
+<script is:inline type="application/ld+json" set:html={json} />

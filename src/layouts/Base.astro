@@ -69,6 +69,7 @@ if (image) {
     <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:locale" content="en_GB" />
     <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
 
     <script is:inline>
       (function () {
@@ -91,5 +92,10 @@ if (image) {
     <script>
       import '../scripts/site';
     </script>
+    {
+      settings.goatcounter && (
+        <script is:inline async data-goatcounter={`https://${settings.goatcounter}.goatcounter.com/count`} src="https://gc.zgo.at/count.js" />
+      )
+    }
   </body>
 </html>

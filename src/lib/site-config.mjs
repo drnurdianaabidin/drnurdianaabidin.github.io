@@ -70,6 +70,17 @@ export function parseSettings(text) {
     detail: h?.detail ? String(h.detail).trim() : '',
   }));
   const optional = (key) => (typeof raw[key] === 'string' ? raw[key].trim() : '');
+  // The GoatCounter code is the first part of the dashboard address, such as
+  // "nurdiana" for https://nurdiana.goatcounter.com. Accept the full address too.
+  const goatcounter = optional('goatcounter')
+    .replace(/^https?:\/\//, '')
+    .replace(/\.goatcounter\.com.*$/, '')
+    .toLowerCase();
+  if (goatcounter && !/^[a-z0-9-]+$/.test(goatcounter)) {
+    throw new Error(
+      `The goatcounter code in ${where} should be the short name you chose when signing up, such as "nurdiana" (letters, numbers and hyphens only).`
+    );
+  }
   return {
     name: requireText(raw, 'name', 'Your name', where),
     shortName: requireText(raw, 'shortName', 'The short form of your name (shortName)', where),
@@ -86,6 +97,7 @@ export function parseSettings(text) {
     profiles,
     highlights,
     siteUrl,
+    goatcounter,
     highlightPlaceholders: raw.highlightPlaceholders !== false,
   };
 }

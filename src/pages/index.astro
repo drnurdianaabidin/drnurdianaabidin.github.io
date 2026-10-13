@@ -4,6 +4,7 @@ import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import T from '../components/T.astro';
 import Masthead from '../components/Masthead.astro';
+import StructuredData from '../components/StructuredData.astro';
 import Illustration from '../components/Illustration.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import {
@@ -46,6 +47,7 @@ const explore = await Promise.all(
 
 <Base title={settings.siteTitle || undefined} titleIsFull>
   <Masthead slot="header" />
+  <StructuredData slot="head" page="home" />
 
   <!-- Hero -->
   <section class="hero band" aria-labelledby="hero-title">
