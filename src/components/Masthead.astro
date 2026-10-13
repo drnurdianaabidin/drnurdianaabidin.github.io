@@ -9,11 +9,14 @@ interface Props {
   /** Kept for older pages; the header looks the same everywhere. */
   size?: 'large' | 'compact';
   current?: string;
+  /** A thin bar along the bottom edge showing how far through an article the reader is. */
+  progress?: boolean;
 }
 
-const { current } = Astro.props;
+const { current, progress = false } = Astro.props;
 
-// Publications and Innovations follow Research, and Media follows Community.
+// Publications and Innovations follow Research, Media follows Community,
+// and the Blog follows Industry.
 const links = [
   ...sectionKeys.flatMap((key) => [
     { href: `/${key}/`, label: sections[key].title, key },
@@ -54,6 +57,13 @@ const links = [
       <ThemeToggle class="site-nav__theme" />
     </nav>
   </div>
+  {
+    progress && (
+      <div class="read-progress" aria-hidden="true">
+        <span data-read-progress />
+      </div>
+    )
+  }
 </header>
 
 <style>
@@ -76,6 +86,23 @@ const links = [
 
   .site-header[data-scrolled] {
     box-shadow: 0 10px 30px rgb(3 10 20 / 28%);
+  }
+
+  .read-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    pointer-events: none;
+  }
+
+  .read-progress span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--night-accent), #b9b0ef);
+    transform: scaleX(0);
+    transform-origin: left;
   }
 
   .site-header__inner {

@@ -1,0 +1,225 @@
+---
+// One blog article as a card: cover, topic, title, opening lines, date and
+// reading time. The whole card opens the article.
+import { Image } from 'astro:assets';
+import T from './T.astro';
+import { formatDate, isoDate } from '../lib/items';
+import { type Post, postUrl, topicOf, readingTime, coverOf } from '../lib/blog';
+
+interface Props {
+  post: Post;
+  /** "feature" is the large story at the top of the Blog page. */
+  size?: 'feature' | 'default';
+  delay?: number;
+  level?: 2 | 3;
+  /** Give the cover a name so it can glide into place on the article page. */
+  transition?: boolean;
+}
+
+const { post, size = 'default', delay = 0, level = 3, transition = true } = Astro.props;
+const { data } = post;
+const topic = topicOf(data.category);
+const cover = coverOf(post);
+const Heading = level === 2 ? 'h2' : 'h3';
+const feature = size === 'feature';
+---
+
+<article
+  class:list={['card', 'card--link', 'post-card', 'reveal', { 'post-card--feature': feature }]}
+  data-topic-colour={topic.colour}
+  style={`--delay:${delay}ms`}
+>
+  <div class="post-card__media zoom">
+    <Image
+      src={cover.src}
+      alt=""
+      widths={feature ? [640, 960, 1280, 1600] : [400, 640, 900]}
+      sizes={feature ? '(min-width: 1000px) 720px, 94vw' : '(min-width: 1240px) 380px, (min-width: 640px) 45vw, 92vw'}
+      format="webp"
+      quality={78}
+      style={transition ? `view-transition-name: post-${post.id}` : undefined}
+    />
+  </div>
+  <div class="post-card__body">
+    <p class="post-card__topic">
+      <span class="topic-dot" aria-hidden="true"></span>{data.category}
+      {data.draft && <span class="post-card__draft">Draft</span>}
+    </p>
+    <Heading class="post-card__title">
+      <a class="post-card__link" href={postUrl(post)}><T text={data.title} /></a>
+    </Heading>
+    <p class="post-card__excerpt"><T text={data.description} /></p>
+    <p class="post-card__meta">
+      <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{readingTime(post)} min read</span>
+    </p>
+    {
+      feature && (
+        <p class="post-card__more" aria-hidden="true">
+          Read the article <span class="btn__arrow">→</span>
+        </p>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .post-card__media {
+    aspect-ratio: 3 / 2;
+    background: var(--night);
+  }
+
+  .post-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.3rem 1.45rem 1.5rem;
+    flex: 1;
+  }
+
+  .post-card__topic {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--topic);
+  }
+
+  .post-card__draft {
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background: var(--ph-bg);
+    color: var(--ph-ink);
+    letter-spacing: 0.06em;
+  }
+
+  .post-card__title {
+    font-size: clamp(1.4rem, 0.7vw + 1.15rem, 1.7rem);
+    font-weight: 600;
+    line-height: 1.18;
+  }
+
+  /* The whole card opens the article */
+  .post-card__link {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .post-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .post-card:hover .post-card__link {
+    color: var(--link);
+  }
+
+  .post-card__excerpt {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .post-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: auto 0 0;
+    padding-top: 0.35rem;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+
+  /* A coloured edge in the topic's colour slides in on hover */
+  .post-card::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--topic);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--medium) var(--ease-out);
+  }
+
+  .post-card:hover::before,
+  .post-card:focus-within::before {
+    transform: scaleY(1);
+  }
+
+  /* The featured story: picture beside the words on wide screens */
+  .post-card--feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+
+  .post-card--feature .post-card__media {
+    aspect-ratio: auto;
+    min-height: 26rem;
+  }
+
+  .post-card--feature .post-card__body {
+    justify-content: center;
+    gap: 0.9rem;
+    padding: clamp(1.75rem, 4vw, 3.25rem);
+  }
+
+  .post-card--feature .post-card__title {
+    font-size: clamp(2rem, 2.2vw + 1.1rem, 3rem);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+
+  .post-card--feature .post-card__excerpt {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 0.6vw + 1.05rem, 1.4rem);
+    line-height: 1.45;
+  }
+
+  .post-card--feature .post-card__meta {
+    margin-top: 0.25rem;
+  }
+
+  .post-card__more {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin: 0.4rem 0 0;
+    font-weight: 600;
+    color: var(--brass-text);
+  }
+
+  .post-card:hover .post-card__more .btn__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 860px) {
+    .post-card--feature {
+      grid-template-columns: 1fr;
+    }
+
+    .post-card--feature .post-card__media {
+      aspect-ratio: 3 / 2;
+      min-height: 0;
+    }
+  }
+</style>

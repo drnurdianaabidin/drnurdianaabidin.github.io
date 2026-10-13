@@ -35,10 +35,13 @@ You will only ever need to touch these files and folders:
 | Research work | `src/content/research/` |
 | Community work | `src/content/community/` |
 | Industry work | `src/content/industry/` |
+| Blog articles (see BLOG-GUIDE.md) | `src/content/blog/` |
+| Blog title, introduction and topics | `src/blog.yaml` |
 | Your biography, portrait and CV | `src/content/about/` |
 | The career timeline on the About page | `src/timeline.yaml` |
 | The drawings used across the site | `src/assets/illustrations/` |
 | A blank template for new work | `templates/new-work/` |
+| A template for a new blog article | `templates/new-blog-post/` |
 | The picture shown when someone shares a link to your home page | `public/og-default.jpg` |
 
 **Each piece of work is one folder.** Inside the folder there is a text file called `index.md` and the photos for that piece of work. For example:
@@ -53,6 +56,8 @@ src/content/research/2026-sarcopenia-screening/
 
 The folder name becomes the web address of the page. The example above appears at
 `https://drnurdianaabidin.github.io/research/2026-sarcopenia-screening/`
+
+**The blog** has its own step-by-step guide: [BLOG-GUIDE.md](BLOG-GUIDE.md).
 
 **Placeholder text.** Anything inside `[[double square brackets]]` is placeholder text and shows up highlighted in yellow. When you replace it, remove the brackets too.
 

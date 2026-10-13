@@ -4,9 +4,11 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { loadSections, SECTION_KEYS } from './lib/site-config.mjs';
+import { loadSections, loadBlog, loadSettings, SECTION_KEYS } from './lib/site-config.mjs';
 
 const sections = loadSections();
+const blog = loadBlog();
+const settings = loadSettings();
 
 // Each piece of work is either a folder with an index.md inside
 // (research/2026-sarcopenia-screening/index.md) or a single file
@@ -190,6 +192,81 @@ function sectionCollection(section: (typeof SECTION_KEYS)[number]) {
   });
 }
 
+// Blog articles: src/content/blog/<web-address>/index.md with their photos.
+// The folder name becomes the address, for example /blog/why-muscle-strength-matters/
+const blogPost = defineCollection({
+  loader: glob({
+    base: './src/content/blog',
+    pattern: ['**/*.md', '!**/_*/**', '!**/_*.md'],
+    generateId: idFromPath,
+  }),
+  schema: ({ image }) => {
+    const topics = blog.categories.map((c) => c.name);
+    const topicList = topics.map((t) => `"${t}"`).join(', ');
+    const date = (field: string) =>
+      z.preprocess(
+        yearOrDate,
+        z.coerce.date({
+          error: (issue) =>
+            issue.input === undefined
+              ? `This article needs a "${field}". Add a line such as "${field}: 2026-10-20" (year, month, day).`
+              : `The ${field} "${String(issue.input)}" is not understood. Write it as year-month-day, for example 2026-10-20.`,
+        })
+      );
+    return z
+      .strictObject(
+        {
+          title: requiredText('title', 'followed by the title of the article'),
+          description: requiredText('description', 'followed by one or two sentences that make readers want to read on'),
+          subtitle: optionalText,
+          date: date('date'),
+          updated: date('updated').optional(),
+          category: z.enum(topics as [string, ...string[]], {
+            error: (issue) =>
+              issue.input === undefined
+                ? `This article needs a "category". Choose one of: ${topicList}.`
+                : `"${String(issue.input)}" is not one of the blog topics. Choose one of: ${topicList}. Spelling and capital letters must match exactly. You can add topics in src/blog.yaml.`,
+          }),
+          tags: z
+            .array(z.string().trim().min(1), { error: '"tags" should be a list, such as [sarcopenia, exercise].' })
+            .default([]),
+          cover: z
+            .string({ error: '"cover" should be the file name of a photo in the same folder, such as ./cover.jpg' })
+            .pipe(image())
+            .optional(),
+          coverAlt: optionalText,
+          coverCredit: optionalText,
+          coverCreditUrl: webAddress('"coverCreditUrl"').optional(),
+          author: z.string().trim().min(1).default(settings.name),
+          draft: z.boolean({ error: '"draft" must be either true or false.' }).default(false),
+          featured: z.boolean({ error: '"featured" must be either true or false.' }).default(false),
+          // Contents list: true or false. Left out, long articles get one automatically.
+          toc: z.boolean({ error: '"toc" must be either true or false.' }).optional(),
+          // Pages on this site (or elsewhere) that go with the article.
+          related: z
+            .array(
+              z.object({
+                label: requiredText('label', 'followed by the link text'),
+                href: webAddress('Each related "href"'),
+              }),
+              { error: '"related" should be a list. Each link needs a "label" and an "href".' }
+            )
+            .default([]),
+        },
+        {
+          error: (issue) =>
+            issue.code === 'unrecognized_keys'
+              ? `The field ${issue.keys.map((k) => `"${k}"`).join(', ')} is not recognised. Check the spelling against the template in templates/new-blog-post/index.md.`
+              : undefined,
+        }
+      )
+      .refine((d) => !d.cover || (d.coverAlt && d.coverAlt.length > 0), {
+        error: 'This article has a "cover" photo but no "coverAlt". Add a line starting with "coverAlt:" followed by a short description of the photo.',
+        path: ['coverAlt'],
+      });
+  },
+});
+
 const about = defineCollection({
   loader: glob({ base: './src/content/about', pattern: 'index.md' }),
   schema: ({ image }) =>
@@ -225,4 +302,5 @@ export const collections = {
   community: sectionCollection('community'),
   industry: sectionCollection('industry'),
   about,
+  blog: blogPost,
 };

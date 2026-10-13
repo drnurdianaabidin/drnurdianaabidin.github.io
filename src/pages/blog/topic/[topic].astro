@@ -1,0 +1,157 @@
+---
+// One page per blog topic that has articles, for example
+// /blog/topic/science-made-simple/
+import Base from '../../../layouts/Base.astro';
+import Masthead from '../../../components/Masthead.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { blog, getPosts, topicsWithPosts, topicUrl, type Post, type Topic } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const topics = topicsWithPosts(posts);
+  return topics.map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic, posts: posts.filter((p) => p.data.category === topic.name), topics },
+  }));
+}
+
+interface Props {
+  topic: Topic & { count: number };
+  posts: Post[];
+  topics: (Topic & { count: number })[];
+}
+
+const { topic, posts, topics } = Astro.props;
+const others = topics.filter((t) => t.name !== topic.name);
+---
+
+<Base
+  title={`${topic.name}: ${blog.title}`}
+  description={topic.description || `Articles on ${topic.name} from ${blog.title}, the blog of Dr Nurdiana Zainol Abidin.`}
+>
+  <Masthead slot="header" current="blog" />
+
+  <header class="topic-hero" data-topic-colour={topic.colour}>
+    <div class="wrap reveal">
+      <p class="topic-hero__crumbs label">
+        <a href="/blog/">{blog.title}</a>
+        <span aria-hidden="true">/</span> Topic
+      </p>
+      <h1 class="topic-hero__title"><span class="topic-dot" aria-hidden="true"></span>{topic.name}</h1>
+      {topic.description && <p class="topic-hero__desc">{topic.description}</p>}
+      <p class="topic-hero__count">{posts.length === 1 ? '1 article' : `${posts.length} articles`}</p>
+    </div>
+  </header>
+
+  <section class="wrap topic-posts" aria-label={`Articles on ${topic.name}`}>
+    <div class="grid">
+      {posts.map((post, i) => <BlogCard post={post} level={2} delay={Math.min(i, 5) * 70} />)}
+    </div>
+  </section>
+
+  {
+    others.length > 0 && (
+      <nav class="wrap topic-others" aria-labelledby="others-heading">
+        <h2 id="others-heading" class="label label--muted">
+          More topics
+        </h2>
+        <ul>
+          {others.map((t) => (
+            <li>
+              <a class="chip" href={topicUrl(t.name)} data-topic-colour={t.colour}>
+                <span class="topic-dot" aria-hidden="true" />
+                {t.name} <span class="chip__count">{t.count}</span>
+              </a>
+            </li>
+          ))}
+          <li>
+            <a class="chip" href="/blog/">
+              All articles
+            </a>
+          </li>
+        </ul>
+      </nav>
+    )
+  }
+</Base>
+
+<style>
+  .topic-hero {
+    padding: clamp(3rem, 7vw, 5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+    background: radial-gradient(900px 320px at 85% 0%, var(--topic-soft), transparent 70%);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .topic-hero__crumbs {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0 0 1rem;
+  }
+
+  .topic-hero__crumbs a {
+    color: var(--brass-text);
+    text-decoration: none;
+  }
+
+  .topic-hero__crumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .topic-hero__title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: clamp(2.6rem, 4.5vw + 0.5rem, 4.4rem);
+    font-weight: 500;
+    line-height: 1.05;
+  }
+
+  .topic-hero__title .topic-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .topic-hero__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.55rem);
+    line-height: 1.4;
+    max-width: 40ch;
+    margin: 1rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .topic-hero__count {
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--topic);
+  }
+
+  .topic-posts {
+    padding-top: var(--space-6);
+  }
+
+  .topic-others {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .topic-others h2 {
+    margin: 0 0 1rem;
+  }
+
+  .topic-others ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topic-others .chip {
+    text-decoration: none;
+  }
+</style>

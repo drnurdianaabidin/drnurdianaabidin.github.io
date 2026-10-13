@@ -7,6 +7,8 @@ import Masthead from '../components/Masthead.astro';
 import StructuredData from '../components/StructuredData.astro';
 import Illustration from '../components/Illustration.astro';
 import PublicationCard from '../components/PublicationCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getPosts } from '../lib/blog';
 import {
   settings,
   sections,
@@ -26,6 +28,9 @@ const themes = sections.research.overview?.groups ?? [];
 const features = sections.research.features.slice(0, 3);
 const publications = await getPublications();
 const latest = publications.slice(0, 3);
+// The newest blog articles; the section is left out until there are any.
+const posts = await getPosts();
+const latestPosts = posts.slice(0, 3);
 const article = (await getMedia()).find((item) => item.data.type === 'Newspaper articles');
 const innovations = (await getInnovations()).sort(
   (a, b) => (a.data.innovation?.order ?? 99) - (b.data.innovation?.order ?? 99)
@@ -271,6 +276,31 @@ const explore = await Promise.all(
       </div>
     </div>
   </section>
+
+  <!-- Latest from the blog -->
+  {
+    latestPosts.length > 0 && (
+      <section class="section section--sunk" aria-labelledby="blog-heading">
+        <div class="wrap">
+          <div class="split-head reveal">
+            <div class="heading-block">
+              <p class="label">Beyond the Lab</p>
+              <h2 id="blog-heading">Latest From the Blog</h2>
+            </div>
+            <a class="btn btn--ghost" href="/blog/">
+              {posts.length > latestPosts.length ? `All ${posts.length} articles` : 'Visit the blog'}
+              <span class="btn__arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="grid">
+            {latestPosts.map((post, i) => (
+              <BlogCard post={post} delay={i * 90} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Explore -->
   <section class="section section--tight" aria-labelledby="explore-heading">

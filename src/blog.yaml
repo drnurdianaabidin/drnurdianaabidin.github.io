@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------
+# THE BLOG: Beyond the Lab
+#
+# The words at the top of the Blog page, the topics (categories) and a few
+# settings. Articles themselves live in src/content/blog/, one folder per
+# article. BLOG-GUIDE.md explains how to write and publish one.
+# ---------------------------------------------------------------
+
+title: Beyond the Lab
+tagline: Thoughts on science, ageing, innovation, and life in academia.
+heroLine: Science, ideas, discoveries, and reflections.
+introduction: Welcome to my little corner of the internet, where I share thoughts on research, scientific discoveries, healthy ageing, emerging technologies, and the experiences that come with life in academia. Some posts explore scientific questions, while others are simply reflections on things I've learned along the way.
+
+# How many articles the Blog page shows before pointing to the archive.
+postsOnBlogPage: 12
+
+# How many articles each page of the archive lists.
+archivePageSize: 40
+
+# The search box on the Blog page appears once there are this many
+# published articles.
+searchFrom: 6
+
+# Reading speed used for the "5 min read" estimate, in words per minute.
+wordsPerMinute: 220
+
+# The topics. Each article chooses one of these names as its "category".
+#   name:        exactly as it should appear, and as articles must spell it
+#   description: one sentence, shown on the topic's page
+#   colour:      teal, violet, blue, amber or sage
+#   image:       the drawing used when an article has no cover photo, one of
+#                musculoskeletal, bone, prediction, exercise, digital,
+#                microneedle, community, physioverse, quiz, fibres or journal
+# Topics without any published articles are hidden from visitors.
+categories:
+  - name: Science Made Simple
+    description: How the body works, and what the evidence really says, in plain language.
+    colour: teal
+    image: musculoskeletal
+  - name: Behind the Research
+    description: How research actually happens, from the first question to the published paper.
+    colour: violet
+    image: microneedle
+  - name: AI, Technology & Innovation
+    description: Machine learning, virtual reality and new tools in health, and what they can and cannot do.
+    colour: blue
+    image: prediction
+  - name: Life in Academia
+    description: Teaching, supervision, publishing and the everyday life of a university researcher.
+    colour: amber
+    image: journal
+  - name: Healthy Ageing & Everyday Life
+    description: Practical science for staying strong, active and well at every age.
+    colour: sage
+    image: community

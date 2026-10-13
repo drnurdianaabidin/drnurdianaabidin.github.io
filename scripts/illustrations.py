@@ -509,6 +509,86 @@ def quiz():
     return s.render()
 
 
+def fibres(seed=21):
+    """A cross-section of skeletal muscle filling the frame: bundles of fibres
+    (fascicles) wrapped in connective tissue, with nuclei at the fibre edges.
+    Used behind the blog banner, so the left side is kept quieter."""
+    rng = random.Random(seed)
+    s = Svg('fib', glow=(900, 300, VIOLET))
+    rid = s.id('glow2')
+    s.defs.append(
+        f'<radialGradient id="{rid}" cx="0.5" cy="0.5" r="0.5">'
+        f'<stop offset="0" stop-color="{TEAL}" stop-opacity="0.22"/>'
+        f'<stop offset="1" stop-color="{TEAL}" stop-opacity="0"/></radialGradient>'
+    )
+    s.add(f'<circle cx="300" cy="700" r="460" fill="url(#{rid})"/>')
+    fascicles = pack(rng, lambda r: (r.uniform(330, W + 70), r.uniform(-70, H + 70)), 82, 128, 30, tries=60000)
+    glow_i = 0
+    for (fx, fy, fr) in fascicles:
+        quiet = max(0.3, min(1.0, (fx - 200) / (W * 0.55)))
+        s.add(f'<circle cx="{f(fx)}" cy="{f(fy)}" r="{f(fr)}" fill="{NAVY}" fill-opacity="0.35" stroke="{VIOLET_L}" stroke-opacity="{f(0.4 * quiet)}" stroke-width="3"/>')
+        fibres_ = pack(rng, in_circle(fx, fy, fr - 6), 10, 15, 80, tries=30000, bound=lambda x, y, r, fx=fx, fy=fy, fr=fr: math.hypot(x - fx, y - fy) + r < fr - 4)
+        for (x, y, r) in fibres_:
+            op = rng.uniform(0.18, 0.6) * quiet
+            cls = ''
+            if quiet > 0.6 and rng.random() < 0.05:
+                glow_i += 1
+                cls = f' class="il-fib-on il-fib-d{glow_i % 5}"'
+            colour = VIOLET if rng.random() < 0.18 else TEAL
+            s.add(f'<circle{cls} cx="{f(x)}" cy="{f(y)}" r="{f(r)}" fill="{colour}" fill-opacity="{f(op)}" stroke="{TEAL_L}" stroke-opacity="{f(0.3 * quiet)}" stroke-width="1"/>')
+            if rng.random() < 0.3:
+                a = rng.uniform(0, 2 * math.pi)
+                s.add(f'<circle cx="{f(x + (r - 2.5) * math.cos(a))}" cy="{f(y + (r - 2.5) * math.sin(a))}" r="2" fill="{MIST}" fill-opacity="{f(0.55 * quiet)}"/>')
+    s.anim('il-fib-on', 'animation:il-fib-pulse 9s ease-in-out infinite')
+    for k in range(1, 5):
+        s.anim(f'il-fib-d{k}', f'animation-delay:-{k * 1.8:.1f}s')
+    s.css.append('@keyframes il-fib-pulse{0%,100%{fill-opacity:.25}50%{fill-opacity:.95}}')
+    return s.render()
+
+
+def journal():
+    """An open research notebook: notes on one page, a plotted result with
+    error bars on the other, and a pen."""
+    s = Svg('jnl', glow=(640, 380, AMBER))
+    # Pages, slightly turned.
+    s.add('<g transform="rotate(-4 600 420)">')
+    s.add(f'<path d="M180 190 Q390 150 600 205 L600 690 Q390 640 180 680 Z" fill="{MIST}" fill-opacity="0.09" stroke="{MIST}" stroke-opacity="0.7" stroke-width="4" stroke-linejoin="round"/>')
+    s.add(f'<path d="M600 205 Q810 150 1020 190 L1020 680 Q810 640 600 690 Z" fill="{MIST}" fill-opacity="0.12" stroke="{MIST}" stroke-opacity="0.7" stroke-width="4" stroke-linejoin="round"/>')
+    s.add(f'<path d="M600 205 L600 690" stroke="{MIST}" stroke-opacity="0.35" stroke-width="3"/>')
+    # Notes on the left page: a heading and lines of writing.
+    s.add(f'<rect x="230" y="235" width="220" height="16" rx="8" fill="{AMBER}" fill-opacity="0.8"/>')
+    widths = [320, 290, 335, 250, 310, 0, 300, 330, 270, 315, 210]
+    for k, w in enumerate(widths):
+        if w:
+            s.add(f'<rect x="230" y="{280 + k * 34}" width="{w}" height="9" rx="4.5" fill="{MIST}" fill-opacity="0.32"/>')
+    # A small sketch of a muscle fibre bundle in the margin.
+    for (x, y, r) in [(500, 600, 16), (528, 590, 12), (522, 618, 11), (548, 610, 13), (502, 630, 10)]:
+        s.add(f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{TEAL_L}" stroke-opacity="0.7" stroke-width="2.5"/>')
+    # The plot on the right page.
+    s.add(f'<path d="M660 600 L660 280 M660 600 L970 600" stroke="{MIST}" stroke-opacity="0.65" stroke-width="3" stroke-linecap="round"/>')
+    pts = [(700, 548), (760, 500), (820, 470), (880, 405), (940, 352)]
+    errs = [26, 30, 22, 34, 28]
+    for (x, y), e in zip(pts, errs):
+        s.add(f'<path d="M{x} {y - e}V{y + e}M{x - 8} {y - e}h16M{x - 8} {y + e}h16" stroke="{VIOLET_L}" stroke-opacity="0.75" stroke-width="2.5"/>')
+    line = 'M' + ' L'.join(f'{x} {y}' for x, y in pts)
+    s.add(f'<path class="il-jnl-line" d="{line}" fill="none" stroke="{TEAL}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/>')
+    for (x, y) in pts:
+        s.add(f'<circle cx="{x}" cy="{y}" r="8" fill="{NAVY}" stroke="{TEAL_L}" stroke-width="3"/>')
+    for k in range(4):
+        s.add(f'<path d="M652 {300 + k * 75}h16" stroke="{MIST}" stroke-opacity="0.5" stroke-width="2"/>')
+    s.add(f'<rect x="680" y="625" width="200" height="9" rx="4.5" fill="{MIST}" fill-opacity="0.3"/>')
+    s.add('</g>')
+    # A pen resting across the notebook.
+    s.add('<g transform="rotate(-32 1000 640)">')
+    s.add(f'<rect x="760" y="626" width="300" height="26" rx="13" fill="{SLATE}"/>')
+    s.add(f'<rect x="760" y="626" width="70" height="26" rx="13" fill="{AMBER}" fill-opacity="0.85"/>')
+    s.add(f'<path d="M1060 626 L1104 639 L1060 652 Z" fill="{MIST}" fill-opacity="0.85"/>')
+    s.add('</g>')
+    s.anim('il-jnl-line', 'animation:il-jnl-draw 6s ease-in-out infinite')
+    s.css.append('@keyframes il-jnl-draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}')
+    return s.render()
+
+
 ILLUSTRATIONS = {
     'musculoskeletal': musculoskeletal,
     'bone': bone,
@@ -519,6 +599,8 @@ ILLUSTRATIONS = {
     'community': community,
     'physioverse': physioverse,
     'quiz': quiz,
+    'fibres': fibres,
+    'journal': journal,
 }
 
 if __name__ == '__main__':

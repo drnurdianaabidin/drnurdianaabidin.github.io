@@ -8,3 +8,7 @@ node_modules/
 Thumbs.db
 desktop.ini
 *.log
+
+# Private blog drafts: article folders in src/content/blog/ whose names
+# start with "private-" stay on your computer and are never uploaded.
+src/content/blog/private-*/

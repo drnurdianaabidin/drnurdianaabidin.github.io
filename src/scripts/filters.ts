@@ -1,6 +1,13 @@
-// Filtering on section pages: by type, by year and by search words.
-// Cards that stay on screen glide to their new places, cards that leave
-// fade out, and cards that arrive fade in. Nothing reloads.
+// Filtering on section pages, Publications and the Blog: by type (or blog
+// topic), by year and by search words. Cards that stay on screen glide to
+// their new places, cards that leave fade out, and cards that arrive fade in.
+// Nothing reloads.
+//
+// Optional extras, used by the Blog page:
+//   data-only-filtered       on a card: shown only while a filter is active
+//   data-hide-when-filtered  on any element: hidden while a filter is active
+//   data-show-for-type="X"   on any element: shown only while type X is chosen
+//   data-noun / data-nouns   on the results line: what to call the cards
 
 const DURATION = 520;
 const EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
@@ -17,6 +24,10 @@ export function initFilters() {
   const results = document.querySelector<HTMLElement>('[data-results]');
   const empty = document.querySelector<HTMLElement>('[data-empty]');
   const clear = document.querySelector<HTMLButtonElement>('[data-clear]');
+  const hideWhenFiltered = [...document.querySelectorAll<HTMLElement>('[data-hide-when-filtered]')];
+  const showForType = [...document.querySelectorAll<HTMLElement>('[data-show-for-type]')];
+  const noun = results?.dataset.noun ?? 'entry';
+  const nouns = results?.dataset.nouns ?? 'entries';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const state = { type: '', year: '', q: '' };
@@ -28,7 +39,10 @@ export function initFilters() {
   state.q = params.get('q') ?? '';
   if (search) search.value = state.q;
 
+  const filtering = () => Boolean(state.type || state.year || state.q);
+
   const matches = (card: HTMLElement) => {
+    if (card.dataset.onlyFiltered !== undefined && !filtering()) return false;
     if (state.type && card.dataset.type !== state.type) return false;
     if (state.year && card.dataset.year !== state.year) return false;
     if (state.q) {
@@ -115,14 +129,19 @@ export function initFilters() {
       commit();
     }
 
+    for (const el of hideWhenFiltered) el.hidden = filtering();
+    for (const el of showForType) el.hidden = el.dataset.showForType !== state.type;
+
     if (results) {
-      const n = shown.length;
+      // Every card stands for one entry, including a featured one shown above
+      // the grid, so the total is always the number of cards.
+      const n = filtering() ? shown.length : cards.length;
       results.textContent =
         n === cards.length
-          ? `${n} ${n === 1 ? 'entry' : 'entries'}`
-          : `Showing ${n} of ${cards.length} ${cards.length === 1 ? 'entry' : 'entries'}`;
+          ? `${n} ${n === 1 ? noun : nouns}`
+          : `Showing ${n} of ${cards.length} ${cards.length === 1 ? noun : nouns}`;
     }
-    if (empty) empty.hidden = shown.length > 0;
+    if (empty) empty.hidden = shown.length > 0 || !filtering();
     syncButtons();
   };
 

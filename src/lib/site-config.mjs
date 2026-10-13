@@ -171,7 +171,61 @@ function parseFeatures(list, key, where) {
   });
 }
 
+const BLOG_COLOURS = ['teal', 'violet', 'blue', 'amber', 'sage'];
+
+/** A topic's name as it appears in web addresses: "Life in Academia" becomes life-in-academia. */
+export const topicSlug = (name) =>
+  String(name)
+    .toLowerCase()
+    .replace(/&/g, ' ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+export function parseBlog(text) {
+  const where = 'src/blog.yaml';
+  const raw = readYaml(text, where);
+  const number = (key, fallback) => {
+    if (raw[key] === undefined) return fallback;
+    const n = Number(raw[key]);
+    if (!Number.isInteger(n) || n < 1) throw new Error(`"${key}" in ${where} should be a whole number, such as ${fallback}.`);
+    return n;
+  };
+  const categories = (Array.isArray(raw.categories) ? raw.categories : []).map((c, i) => {
+    if (!c || typeof c !== 'object' || !c.name) {
+      throw new Error(`Topic number ${i + 1} in ${where} needs a "name", for example "name: Science Made Simple".`);
+    }
+    const colour = String(c.colour ?? 'teal').trim().toLowerCase();
+    if (!BLOG_COLOURS.includes(colour)) {
+      throw new Error(`The colour of the topic "${c.name}" in ${where} should be one of: ${BLOG_COLOURS.join(', ')}.`);
+    }
+    return {
+      name: String(c.name).trim(),
+      slug: topicSlug(c.name),
+      description: typeof c.description === 'string' ? c.description.trim() : '',
+      colour,
+      image: typeof c.image === 'string' && c.image.trim() ? c.image.trim() : 'fibres',
+    };
+  });
+  if (categories.length === 0) {
+    throw new Error(`The blog needs at least one topic, listed under "categories:" in ${where}.`);
+  }
+  return {
+    title: requireText(raw, 'title', 'The blog title', where),
+    tagline: requireText(raw, 'tagline', 'The blog tagline', where),
+    heroLine: typeof raw.heroLine === 'string' ? raw.heroLine.trim() : '',
+    introduction: typeof raw.introduction === 'string' ? raw.introduction.trim() : '',
+    postsOnBlogPage: number('postsOnBlogPage', 12),
+    archivePageSize: number('archivePageSize', 40),
+    searchFrom: number('searchFrom', 6),
+    wordsPerMinute: number('wordsPerMinute', 220),
+    categories,
+  };
+}
+
 export const loadSettings = () => parseSettings(readFile(settingsPath, 'src/settings.yaml'));
 export const loadSections = () => parseSections(readFile(sectionsPath, 'src/sections.yaml'));
 
-export const configFiles = [settingsPath, sectionsPath];
+const blogPath = resolve(process.cwd(), 'src/blog.yaml');
+export const loadBlog = () => parseBlog(readFile(blogPath, 'src/blog.yaml'));
+
+export const configFiles = [settingsPath, sectionsPath, blogPath];

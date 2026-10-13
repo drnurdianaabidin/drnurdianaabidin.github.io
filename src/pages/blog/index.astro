@@ -1,0 +1,468 @@
+---
+// The Blog page, "Beyond the Lab": the banner, the featured article, topic
+// filters and the most recent articles. Everything comes from src/blog.yaml
+// and the articles in src/content/blog/.
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import Illustration from '../../components/Illustration.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { plain } from '../../lib/placeholder.mjs';
+import { settings } from '../../lib/items';
+import { blog, getPosts, featuredPost, topicsWithPosts, topicUrl, postUrl, searchText } from '../../lib/blog';
+
+const posts = await getPosts();
+const featured = featuredPost(posts);
+const recent = posts.filter((p) => p !== featured).slice(0, blog.postsOnBlogPage);
+const loaded = featured ? [featured, ...recent] : [];
+const topics = topicsWithPosts(posts);
+const loadedIn = (name: string) => loaded.filter((p) => p.data.category === name).length;
+const more = posts.length > loaded.length;
+const showSearch = posts.length >= blog.searchFrom;
+// Filters only help once there is something to choose between.
+const showFilters = topics.length > 1 || showSearch;
+
+const site = new URL('/', Astro.site).href;
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: blog.title,
+  description: blog.tagline,
+  url: new URL('/blog/', Astro.site).href,
+  inLanguage: 'en-GB',
+  author: { '@type': 'Person', '@id': `${site}#person`, name: plain(settings.shortName), url: site },
+  blogPost: posts.slice(0, 20).map((post) => ({
+    '@type': 'BlogPosting',
+    headline: plain(post.data.title),
+    url: new URL(postUrl(post), Astro.site).href,
+    datePublished: post.data.date.toISOString(),
+  })),
+}).replace(/</g, '\\u003c');
+---
+
+<Base title={`${blog.title}: Blog`} description={plain(`${blog.tagline} ${blog.introduction}`)}>
+  <Masthead slot="header" current="blog" />
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
+
+  <header class="blog-hero band" data-blog-hero>
+    <div class="blog-hero__art" aria-hidden="true">
+      <Illustration name="fibres" alt="" />
+    </div>
+    <div class="wrap blog-hero__inner">
+      <p class="label reveal">Blog</p>
+      <h1 class="blog-hero__title reveal" style="--delay:80ms">{blog.title}</h1>
+      {blog.heroLine && <p class="blog-hero__line reveal" style="--delay:160ms">{blog.heroLine}</p>}
+      <p class="blog-hero__tagline reveal" style="--delay:220ms">{blog.tagline}</p>
+      {blog.introduction && <p class="blog-hero__intro reveal" style="--delay:280ms">{blog.introduction}</p>}
+      <p class="blog-hero__links reveal" style="--delay:340ms">
+        {posts.length > 0 && <a href="/blog/archive/">All articles by year</a>}
+        <a href="/blog/rss.xml">Follow by RSS</a>
+      </p>
+    </div>
+    <button class="blog-hero__pause" type="button" aria-pressed="false" data-blog-pause hidden>
+      <span aria-hidden="true">❚❚</span> <span data-blog-pause-label>Pause background</span>
+    </button>
+  </header>
+
+  {
+    featured && (
+      <section class="wrap blog-featured" aria-labelledby="featured-heading" data-hide-when-filtered>
+        <h2 id="featured-heading" class="label blog-featured__label">
+          Featured
+        </h2>
+        <BlogCard post={featured} size="feature" />
+      </section>
+    )
+  }
+
+  {
+    recent.length > 0 && (
+      <section class="wrap blog-browse" aria-labelledby="browse-heading">
+        <div class="blog-browse__head">
+          <h2 id="browse-heading" class="blog-browse__title">
+            Recent articles
+          </h2>
+          {more && (
+            <a class="blog-browse__all" href="/blog/archive/">
+              All {posts.length} articles <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </div>
+
+        <div class:list={['filters', 'blog-filters', { 'blog-filters--none': !showFilters }]} data-filters hidden>
+          <div class="filters__group" role="group" aria-labelledby="topic-filter-label">
+            <p class="label label--muted filters__label" id="topic-filter-label">
+              Browse by topic
+            </p>
+            <div class="filters__buttons">
+              <button type="button" class="chip" data-filter="type" data-value="" aria-pressed="true">
+                All topics
+              </button>
+              {topics.map((topic) => (
+                <button
+                  type="button"
+                  class="chip"
+                  data-filter="type"
+                  data-value={topic.name}
+                  data-topic-colour={topic.colour}
+                  aria-pressed="false"
+                >
+                  <span class="topic-dot" aria-hidden="true" />
+                  {topic.name} <span class="chip__count">{topic.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          {showSearch && (
+            <div class="filters__search">
+              <label class="label label--muted filters__label" for="blog-search">
+                Search
+              </label>
+              <input id="blog-search" type="search" class="search" placeholder="Search articles" autocomplete="off" data-search />
+            </div>
+          )}
+        </div>
+
+        {/* Without scripts, the topics are plain links to their own pages. */}
+        <nav class:list={['topic-index', { 'blog-filters--none': !showFilters }]} aria-label="Topics">
+          {topics.map((topic) => (
+            <a href={topicUrl(topic.name)} data-topic-colour={topic.colour}>
+              <span class="topic-dot" aria-hidden="true" />
+              {topic.name} ({topic.count})
+            </a>
+          ))}
+        </nav>
+
+        <p
+          class="results label label--muted"
+          aria-live="polite"
+          data-results
+          data-noun={more ? 'recent article' : 'article'}
+          data-nouns={more ? 'recent articles' : 'articles'}
+        >
+          {loaded.length} {more ? 'recent ' : ''}
+          {loaded.length === 1 ? 'article' : 'articles'}
+        </p>
+
+        <div class="grid blog-grid" data-grid>
+          {featured && (
+            <div class="grid__item" data-card data-only-filtered data-type={featured.data.category} data-text={searchText(featured)} hidden>
+              <BlogCard post={featured} transition={false} />
+            </div>
+          )}
+          {recent.map((post, i) => (
+            <div class="grid__item" data-card data-type={post.data.category} data-text={searchText(post)}>
+              <BlogCard post={post} delay={Math.min(i, 5) * 70} />
+            </div>
+          ))}
+        </div>
+
+        {topics
+          .filter((topic) => topic.count > loadedIn(topic.name))
+          .map((topic) => (
+            <p class="blog-browse__more" data-show-for-type={topic.name} hidden>
+              <a href={topicUrl(topic.name)}>
+                All {topic.count} articles on {topic.name} <span aria-hidden="true">→</span>
+              </a>
+            </p>
+          ))}
+
+        <div class="empty" data-empty hidden>
+          <p>No articles match this search.</p>
+          <button type="button" class="chip" data-clear>
+            Show all articles
+          </button>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    posts.length === 0 && (
+      <section class="wrap blog-soon reveal" aria-labelledby="soon-heading">
+        <div class="blog-soon__art">
+          <Illustration name="journal" alt="" />
+        </div>
+        <div>
+          <h2 id="soon-heading" class="blog-soon__title">
+            The first articles are on their way
+          </h2>
+          <p>New articles will appear here as they are published. To hear about them, follow the blog by RSS.</p>
+        </div>
+      </section>
+    )
+  }
+
+  <aside class="wrap blog-note reveal" aria-label="About this blog">
+    <p>
+      Articles here are personal writing for a general audience. They are not peer-reviewed. Research papers are listed under <a
+        href="/publications/">Publications</a
+      >, and newspaper articles under <a href="/media/">Media</a>.
+    </p>
+  </aside>
+</Base>
+
+<script>
+  import { initFilters } from '../../scripts/filters';
+  initFilters();
+
+  // The moving fibres behind the banner can be paused.
+  const hero = document.querySelector<HTMLElement>('[data-blog-hero]');
+  const pause = document.querySelector<HTMLButtonElement>('[data-blog-pause]');
+  const label = document.querySelector<HTMLElement>('[data-blog-pause-label]');
+  if (hero && pause && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pause.hidden = false;
+    pause.addEventListener('click', () => {
+      const paused = pause.getAttribute('aria-pressed') !== 'true';
+      pause.setAttribute('aria-pressed', String(paused));
+      hero.classList.toggle('is-paused', paused);
+      if (label) label.textContent = paused ? 'Play background' : 'Pause background';
+    });
+  }
+</script>
+
+<style>
+  .blog-hero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(4rem, 9vw, 7rem) 0 clamp(6rem, 11vw, 8.5rem);
+  }
+
+  /* The drawing fades into the banner on its left, behind the words */
+  .blog-hero__art {
+    position: absolute;
+    inset: 0 0 0 30%;
+    opacity: 0.9;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 55%) 30%, #000 70%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 55%) 30%, #000 70%);
+  }
+
+  .blog-hero.is-paused .blog-hero__art :global(*) {
+    animation-play-state: paused !important;
+  }
+
+  .blog-hero__inner {
+    position: relative;
+  }
+
+  .blog-hero__inner > * {
+    max-width: 40rem;
+  }
+
+  .blog-hero__title {
+    font-size: clamp(3.4rem, 7vw + 0.5rem, 6.6rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    margin: 0.7rem 0 0.9rem;
+  }
+
+  .blog-hero__line {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.4vw + 1.1rem, 2.1rem);
+    line-height: 1.3;
+    color: var(--on-night);
+    margin: 0 0 1.4rem;
+  }
+
+  .blog-hero__tagline {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--night-accent);
+    margin: 0 0 0.9rem;
+  }
+
+  .blog-hero__intro {
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .blog-hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 1.6rem 0 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .blog-hero__pause {
+    position: absolute;
+    right: var(--gutter);
+    top: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 36px;
+    padding: 0.3rem 0.85rem;
+    border: 1px solid var(--night-rule);
+    border-radius: 999px;
+    background: rgb(11 26 46 / 55%);
+    color: var(--on-night-soft);
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+
+  .blog-hero__pause:hover {
+    color: var(--on-night);
+    border-color: var(--night-accent);
+  }
+
+  .blog-featured {
+    position: relative;
+    margin-top: calc(-1 * clamp(2rem, 4vw, 3rem));
+  }
+
+  .blog-featured__label {
+    position: absolute;
+    top: -2.4rem;
+    left: var(--gutter);
+    margin: 0;
+    color: var(--night-accent);
+  }
+
+  .blog-featured[hidden] {
+    display: none;
+  }
+
+  .blog-browse {
+    padding-top: var(--space-6);
+  }
+
+  .blog-browse__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .blog-browse__title {
+    font-size: clamp(2rem, 2.4vw + 1rem, 3rem);
+  }
+
+  .blog-browse__all {
+    font-weight: 600;
+  }
+
+  .blog-filters .filters__group,
+  .blog-filters .filters__search {
+    grid-template-columns: 9rem minmax(0, 1fr);
+  }
+
+  .blog-filters--none {
+    display: none !important;
+  }
+
+  .topic-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .topic-index a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--topic);
+    font-weight: 600;
+  }
+
+  :global(.js) .topic-index {
+    display: none;
+  }
+
+  /* The newest two articles are a little larger than the rest */
+  .blog-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .blog-grid > :global(*) {
+    grid-column: span 2;
+  }
+
+  .blog-grid > :global(:nth-child(-n + 2 of :not([hidden]))) {
+    grid-column: span 3;
+  }
+
+  .blog-browse__more {
+    margin: var(--space-5) 0 0;
+    font-weight: 600;
+  }
+
+  .blog-soon {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-top: var(--space-6);
+  }
+
+  .blog-soon__art {
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lift);
+  }
+
+  .blog-soon__title {
+    font-size: clamp(1.9rem, 2vw + 1.1rem, 2.6rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .blog-note {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .blog-note p {
+    max-width: 52rem;
+    margin: 0;
+  }
+
+  @media (max-width: 1000px) {
+    .blog-grid > :global(*),
+    .blog-grid > :global(:nth-child(-n + 2 of :not([hidden]))) {
+      grid-column: span 3;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .blog-hero__art {
+      inset: 0;
+      opacity: 0.5;
+    }
+
+    /* Still on phones, so there is nothing to pause */
+    .blog-hero__art :global(*) {
+      animation: none !important;
+    }
+
+    .blog-hero__pause {
+      display: none;
+    }
+
+    .blog-filters .filters__group,
+    .blog-filters .filters__search {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-soon {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-grid > :global(*),
+    .blog-grid > :global(:nth-child(-n + 2 of :not([hidden]))) {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

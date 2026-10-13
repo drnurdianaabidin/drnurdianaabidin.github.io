@@ -170,11 +170,12 @@ export async function getInnovations(): Promise<Item[]> {
   return (await getAllItems()).filter((item) => item.data.innovation);
 }
 
-/** The extra pages in the main menu, each placed after the section it relates to. */
+/** The extra pages in the main menu, each placed after the section it relates to (the Blog comes last). */
 export const extraPages = [
   { key: 'publications', href: '/publications/', label: 'Publications', after: 'research' },
   { key: 'innovations', href: '/innovations/', label: 'Innovations', after: 'research' },
   { key: 'media', href: '/media/', label: 'Media', after: 'community' },
+  { key: 'blog', href: '/blog/', label: 'Blog', after: 'industry' },
 ];
 
 /** Community work shown on the Media page, in the order of its groups. */

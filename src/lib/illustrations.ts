@@ -9,4 +9,6 @@ export const ILLUSTRATION_ALT: Record<string, string> = {
   community: 'Illustration of older adults walking together, linked to a phone showing activity.',
   physioverse: 'Illustration of a three-dimensional knee joint with muscles and axes in a browser window.',
   quiz: 'Illustration of a multiple-choice quiz card with one answer marked correct.',
+  fibres: 'Illustration of a cross-section of skeletal muscle, with bundles of fibres wrapped in connective tissue.',
+  journal: 'Illustration of an open research notebook with handwritten notes, a plotted result with error bars, and a pen.',
 };

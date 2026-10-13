@@ -13,6 +13,7 @@ import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { plain } from '../lib/placeholder.mjs';
 import { settings } from '../lib/items';
+import { blog } from '../lib/blog';
 import Footer from '../components/Footer.astro';
 
 interface Props {
@@ -57,6 +58,7 @@ if (image) {
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${blog.title}, the blog of ${plain(settings.name)}`} href="/blog/rss.xml" />
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={settings.name} />

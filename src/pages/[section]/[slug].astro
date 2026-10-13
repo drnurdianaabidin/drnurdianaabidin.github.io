@@ -21,6 +21,7 @@ import {
   resolveLocalFile,
   type Item,
 } from '../../lib/items';
+import { postsLinkingTo, postUrl } from '../../lib/blog';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -48,6 +49,8 @@ const section = sections[item.collection];
 const { Content } = await render(item);
 const doi = doiLink(item);
 const appearances = sortedAppearances(item);
+// Blog articles that point to this page in their further reading.
+const blogPosts = await postsLinkingTo(itemUrl(item));
 
 // Generated covers say so in their description; a real photo's description
 // will not start this way, so the caption disappears when one is added.
@@ -166,6 +169,22 @@ const links = data.links.map((link) => {
                       <span class="links__arrow" aria-hidden="true">
                         {link.external ? '↗' : '↓'}
                       </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        {
+          blogPosts.length > 0 && (
+            <section class="aside-block">
+              <h2 class="label">On the blog</h2>
+              <ul class="links">
+                {blogPosts.map((post) => (
+                  <li>
+                    <a href={postUrl(post)}>
+                      <T text={post.data.title} />
                     </a>
                   </li>
                 ))}

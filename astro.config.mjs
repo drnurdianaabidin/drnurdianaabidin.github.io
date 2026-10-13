@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import { loadSettings, configFiles } from './src/lib/site-config.mjs';
 import { satteri } from '@astrojs/markdown-satteri';
 import { placeholderPlugin } from './src/lib/placeholder.mjs';
+import { figurePlugin } from './src/lib/figures.mjs';
 
 const settings = loadSettings();
 
@@ -23,8 +24,12 @@ export default defineConfig({
     },
   ],
   markdown: {
-    // Highlights [[placeholder]] text in the body of each piece of work.
-    processor: satteri({ hastPlugins: [() => placeholderPlugin()] }),
+    // Highlights [[placeholder]] text in the body of each piece of work,
+    // turns captioned pictures into figures, and heads footnotes "References".
+    processor: satteri({
+      hastPlugins: [() => placeholderPlugin(), () => figurePlugin()],
+      features: { gfm: { footnotes: { label: 'References' } } },
+    }),
   },
   image: {
     responsiveStyles: true,

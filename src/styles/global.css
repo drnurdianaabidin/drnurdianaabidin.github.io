@@ -686,6 +686,106 @@ button {
 }
 
 /* ------------------------------------------------------------------
+   Blog topics: each has its own colour, set in src/blog.yaml
+   ------------------------------------------------------------------ */
+[data-topic-colour] {
+  --topic: #1d6b67;
+  --topic-soft: #e3f2f1;
+}
+
+[data-topic-colour='violet'] {
+  --topic: #5a4fa3;
+  --topic-soft: #ece9f8;
+}
+
+[data-topic-colour='blue'] {
+  --topic: #2f5f93;
+  --topic-soft: #e4edf7;
+}
+
+[data-topic-colour='amber'] {
+  --topic: #85561a;
+  --topic-soft: #f6ecdc;
+}
+
+[data-topic-colour='sage'] {
+  --topic: #3c6a49;
+  --topic-soft: #e5f0e8;
+}
+
+:root[data-theme='dark'] [data-topic-colour],
+.band [data-topic-colour] {
+  --topic: #8fd8d3;
+  --topic-soft: #0f2a2c;
+}
+
+:root[data-theme='dark'] [data-topic-colour='violet'],
+.band [data-topic-colour='violet'] {
+  --topic: #bdb3f2;
+  --topic-soft: #1d1a36;
+}
+
+:root[data-theme='dark'] [data-topic-colour='blue'],
+.band [data-topic-colour='blue'] {
+  --topic: #9cc2ea;
+  --topic-soft: #13253a;
+}
+
+:root[data-theme='dark'] [data-topic-colour='amber'],
+.band [data-topic-colour='amber'] {
+  --topic: #e8bf7e;
+  --topic-soft: #2e2414;
+}
+
+:root[data-theme='dark'] [data-topic-colour='sage'],
+.band [data-topic-colour='sage'] {
+  --topic: #a6d3b1;
+  --topic-soft: #16281c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) [data-topic-colour] {
+    --topic: #8fd8d3;
+    --topic-soft: #0f2a2c;
+  }
+
+  :root:not([data-theme='light']) [data-topic-colour='violet'] {
+    --topic: #bdb3f2;
+    --topic-soft: #1d1a36;
+  }
+
+  :root:not([data-theme='light']) [data-topic-colour='blue'] {
+    --topic: #9cc2ea;
+    --topic-soft: #13253a;
+  }
+
+  :root:not([data-theme='light']) [data-topic-colour='amber'] {
+    --topic: #e8bf7e;
+    --topic-soft: #2e2414;
+  }
+
+  :root:not([data-theme='light']) [data-topic-colour='sage'] {
+    --topic: #a6d3b1;
+    --topic-soft: #16281c;
+  }
+}
+
+.topic-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--topic);
+}
+
+/* A topic chip in its own colour, used by the blog's topic filter */
+.chip[data-topic-colour][aria-pressed='true'] {
+  background: var(--topic);
+  border-color: var(--topic);
+  color: var(--paper-raised);
+}
+
+/* ------------------------------------------------------------------
    Placeholder highlighting (switched on in src/settings.yaml)
    ------------------------------------------------------------------ */
 mark.ph {
