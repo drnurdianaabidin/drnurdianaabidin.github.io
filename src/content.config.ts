@@ -35,6 +35,9 @@ const requiredText = (field: string, hint: string) =>
 
 const optionalText = z.string().trim().optional();
 
+// A year on its own (2024) is stored as 1 January and shown as the year only.
+const yearOrDate = (v: unknown) => (/^\d{4}$/.test(String(v).trim()) ? `${String(v).trim()}-01-01` : v);
+
 const webAddress = (what: string) =>
   z.string({ error: `${what} must be text.` }).trim().refine((v) => /^(https?:\/\/|\.\/|\/|mailto:)/.test(v), {
     error: `${what} must be a full web address starting with https:// or a file in the same folder starting with ./`,
@@ -58,9 +61,8 @@ function itemSchema(section: (typeof SECTION_KEYS)[number]) {
     return z.strictObject(
       {
         title: requiredText('title', 'followed by the title'),
-        // A year on its own (date: 2024) is stored as 1 January and shown as the year only.
         date: z.preprocess(
-          (v) => (/^\d{4}$/.test(String(v).trim()) ? `${String(v).trim()}-01-01` : v),
+          yearOrDate,
           z.coerce.date({
             error: (issue) =>
               issue.input === undefined
@@ -85,6 +87,25 @@ function itemSchema(section: (typeof SECTION_KEYS)[number]) {
         status: optionalText,
         // For publications: the full reference, with the journal in *stars* for italics.
         citation: optionalText,
+        // For media work: each outlet that published or broadcast it, with the date.
+        appearances: z
+          .array(
+            z.object({
+              outlet: requiredText('outlet', 'followed by the newspaper, programme or website'),
+              date: z
+                .preprocess(
+                  yearOrDate,
+                  z.coerce.date({
+                    error: (issue) =>
+                      `The appearance date "${String(issue.input)}" is not understood. Write it as year-month-day, for example 2026-07-30.`,
+                  })
+                )
+                .optional(),
+              url: webAddress('Each appearance "url"').optional(),
+            }),
+            { error: '"appearances" should be a list. Each one needs an "outlet", and can have a "date" and a "url".' }
+          )
+          .default([]),
         // For research innovations, which are also listed on the Innovations page.
         innovation: z
           .object(

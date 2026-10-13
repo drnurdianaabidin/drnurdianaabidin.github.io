@@ -107,13 +107,16 @@ community:
           - Exercise and physical function
           - Technology-assisted community health programmes
           - Knowledge translation
-    note: PRIME-Active, a digital platform still in development, is intended to link research with community physical activity programmes. See [PRIME-Active](/community/2026-prime-active/).
+    note: PRIME-Active, a digital platform still in development, is intended to link research with community physical activity programmes. Newspaper articles, interviews and other public science communication are collected under [Media contributions and public engagement](/media/).
+  # The last five categories also appear on the Media page.
   categories:
-    - Health outreach
-    - Public talks
     - Community programmes
-    - Articles for the public
-    - Media appearances
+    - Health outreach
+    - Newspaper articles
+    - Interviews
+    - Expert commentary
+    - Public talks
+    - Public science communication
 
 industry:
   title: Industry

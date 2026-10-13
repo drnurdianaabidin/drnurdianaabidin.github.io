@@ -152,8 +152,28 @@ export async function getInnovations(): Promise<Item[]> {
   return (await getAllItems()).filter((item) => item.data.innovation);
 }
 
-/** The extra pages listed in the main menu after the sections. */
+/** The extra pages in the main menu, each placed after the section it relates to. */
 export const extraPages = [
-  { key: 'publications', href: '/publications/', label: 'Publications' },
-  { key: 'innovations', href: '/innovations/', label: 'Innovations' },
+  { key: 'publications', href: '/publications/', label: 'Publications', after: 'research' },
+  { key: 'innovations', href: '/innovations/', label: 'Innovations', after: 'research' },
+  { key: 'media', href: '/media/', label: 'Media', after: 'community' },
 ];
+
+/** Community work shown on the Media page, in the order of its groups. */
+export const MEDIA_TYPES = [
+  'Newspaper articles',
+  'Interviews',
+  'Expert commentary',
+  'Public talks',
+  'Public science communication',
+];
+
+/** Media work, newest first. */
+export async function getMedia(): Promise<Item[]> {
+  return (await getItems('community')).filter((item) => MEDIA_TYPES.includes(item.data.type));
+}
+
+/** Where a piece of media work appeared, newest first, with undated appearances last. */
+export function sortedAppearances(item: Item) {
+  return [...item.data.appearances].sort((a, b) => (b.date?.getTime() ?? -Infinity) - (a.date?.getTime() ?? -Infinity));
+}

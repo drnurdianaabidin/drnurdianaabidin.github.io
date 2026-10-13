@@ -1,26 +1,35 @@
 ---
 title: "The silent health crisis hidden by the scales"
 date: 2026-05-18
-type: Articles for the public
+type: Newspaper articles
 status: Published
-summary: "An opinion article on sarcopenic obesity: why a normal body weight can hide low muscle and excess fat. Published in several Malaysian news outlets in May 2026."
+summary: "An opinion article raising public awareness of sarcopenic obesity, body composition and the importance of muscle strength in healthy ageing."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of thin wavy lines."
-links:
-  - label: "Malaysiakini"
-    url: https://www.malaysiakini.com/letters/775434
-  - label: "Sinar Daily"
-    url: https://www.sinardaily.my/article/736270/opinions/letters/the-silent-health-crisis-hidden-by-the-scales
-  - label: "Life News Agency"
-    url: https://lifenewsagency.com/the-silent-health-crisis-hidden-by-the-scales/
-  - label: "Malay Mail"
+collaboratorsLabel: Author
+collaborators:
+  - "Dr Nurdiana Zainol Abidin"
+# Every newspaper or website that published this article.
+appearances:
+  - outlet: "theSun"
+    date: 2026-07-30
+    url: https://thesun.my/opinion/silent-health-crisis-hidden-by-the-scales/
+  - outlet: "Malay Mail"
+    date: 2026-05-18
     url: https://www.malaymail.com/news/what-you-think/2026/05/18/the-silent-health-crisis-hidden-by-the-scales-nurdiana-zainol-abidin/220367
+  - outlet: "Malaysiakini"
+    date: 2026-05-18
+    url: https://www.malaysiakini.com/letters/775434
+  - outlet: "Sinar Daily"
+    url: https://www.sinardaily.my/article/736270/opinions/letters/the-silent-health-crisis-hidden-by-the-scales
+  - outlet: "Life News Agency"
+    url: https://lifenewsagency.com/the-silent-health-crisis-hidden-by-the-scales/
 ---
 
-An opinion article for general readers, published on 18 May 2026 in Malaysiakini and Malay Mail, and also in Sinar Daily and Life News Agency.
+This opinion article raises public awareness of sarcopenic obesity, the combination of low muscle and excess body fat. It explains why body weight alone can be misleading, why body composition matters, and why muscle strength is important for healthy ageing.
 
-The article explains why body weight alone can be misleading: a person can look slim, or keep a stable weight, while losing muscle and gaining fat, a condition known as sarcopenic obesity.
+The same article was first published in Malay Mail and Malaysiakini on 18 May 2026, and later in theSun on 30 July 2026. It also appeared in Sinar Daily and Life News Agency.
 
 See also [When the scales lie: the hidden danger of being "skinny fat"](/community/2026-when-the-scales-lie-skinny-fat/).

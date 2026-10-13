@@ -1,15 +1,19 @@
 ---
-title: "When the scales lie: the hidden danger of being \"skinny fat\""
+title: "When the scales lie: the hidden danger of being “skinny fat”"
 date: 2026
-type: Articles for the public
+type: Newspaper articles
 status: Published
-summary: "An opinion article on \"skinny fat\", or sarcopenic obesity: how people who look slim can have low muscle and excess body fat, and the health risks this carries."
+summary: "An opinion article on “skinny fat”, or sarcopenic obesity: how people who look slim can have low muscle and excess body fat, and the health risks this carries."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of thin wavy lines."
-links:
-  - label: "Focus Malaysia"
+collaboratorsLabel: Author
+collaborators:
+  - "Dr Nurdiana Zainol Abidin"
+# Every newspaper or website that published this article.
+appearances:
+  - outlet: "Focus Malaysia"
     url: https://focusmalaysia.my/when-the-scales-lie-the-hidden-danger-of-being-skinny-fat/
 ---
 

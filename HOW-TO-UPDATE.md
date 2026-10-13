@@ -84,6 +84,20 @@ The folder name becomes the web address of the page. The example above appears a
 | `citation` | No | For publications: the full reference, with the journal name in `*stars*` for italics. It appears on the page and on the Publications page. |
 | `innovation` | No | For a research innovation: `problem` and `users` on the lines below it (indented by two spaces), and optionally `recognition` and `order`. The work is then also listed on the Innovations page. |
 
+| `appearances` | No | For media work: each newspaper, programme or website that published it, with `outlet`, and optionally `date` and `url`. |
+
+**Media contributions.** Newspaper articles, interviews, expert commentary, public talks and other public science communication go in `src/content/community/`, with `type:` set to `Newspaper articles`, `Interviews`, `Expert commentary`, `Public talks` or `Public science communication`. They are then also listed on the Media page. If the same article appeared in several outlets, make one entry and list every outlet under `appearances`, for example:
+
+```
+appearances:
+  - outlet: theSun
+    date: 2026-07-30
+    url: https://thesun.my/opinion/silent-health-crisis-hidden-by-the-scales/
+  - outlet: Malay Mail
+    date: 2026-05-18
+    url: https://www.malaymail.com/news/what-you-think/2026/05/18/...
+```
+
 **Publications.** Put each publication in `src/content/research/` with `type: Publications`, a `citation`, a `status` and a `links` entry for its DOI labelled `Read the paper`. The Publications page groups them by status: accepted papers appear under "Accepted and in press", and submitted papers under "Under review (not yet accepted)", separate from published work.
 
 **Which program to use for editing.** Any plain text editor works. On Windows, Notepad is fine. A free editor called Visual Studio Code (code.visualstudio.com) is easier because it colours the different parts and shows the folders on the left.

@@ -12,10 +12,11 @@ interface Props {
 
 const { size = 'compact', current } = Astro.props;
 const large = size === 'large';
-// Publications and Innovations sit straight after Research.
-const sectionLinks = sectionKeys.map((key) => ({ href: `/${key}/`, label: sections[key].title, key }));
-const at = sectionLinks.findIndex((link) => link.key === 'research') + 1;
-const links = [...sectionLinks.slice(0, at), ...extraPages, ...sectionLinks.slice(at)];
+// Publications and Innovations follow Research, and Media follows Community.
+const links = sectionKeys.flatMap((key) => [
+  { href: `/${key}/`, label: sections[key].title, key },
+  ...extraPages.filter((page) => page.after === key),
+]);
 ---
 
 <header class:list={['masthead', `masthead--${size}`]}>

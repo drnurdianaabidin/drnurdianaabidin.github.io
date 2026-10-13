@@ -16,6 +16,8 @@ import {
   isoDate,
   doiLink,
   citationHtml,
+  sortedAppearances,
+  MEDIA_TYPES,
   resolveLocalFile,
   type Item,
 } from '../../lib/items';
@@ -45,6 +47,7 @@ const { data } = item;
 const section = sections[item.collection];
 const { Content } = await render(item);
 const doi = doiLink(item);
+const appearances = sortedAppearances(item);
 
 const people = data.collaborators.map((c) => (typeof c === 'string' ? { name: c } : c));
 const peopleLabel = data.collaboratorsLabel ?? 'Collaborators';
@@ -114,6 +117,32 @@ const links = data.links.map((link) => {
           )
         }
         {
+          appearances.length > 0 && (
+            <section class="aside-block">
+              <h2 class="label">Published in</h2>
+              <ul class="links">
+                {appearances.map((a) => (
+                  <li>
+                    {a.url ? (
+                      <a href={a.url} rel="noopener">
+                        <T text={a.outlet} />
+                        <span class="links__arrow" aria-hidden="true">
+                          ↗
+                        </span>
+                      </a>
+                    ) : (
+                      <span class="appearance__outlet">
+                        <T text={a.outlet} />
+                      </span>
+                    )}
+                    {a.date && <span class="appearance__date">{formatDate(a.date)}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        {
           links.length > 0 && (
             <section class="aside-block">
               <h2 class="label">Links</h2>
@@ -152,6 +181,16 @@ const links = data.links.map((link) => {
                 <div>
                   <dt>Status</dt>
                   <dd>{data.status}</dd>
+                </div>
+              )
+            }
+            {
+              item.collection === 'community' && MEDIA_TYPES.includes(data.type) && (
+                <div>
+                  <dt>Listed in</dt>
+                  <dd>
+                    <a href="/media/">Media contributions</a>
+                  </dd>
                 </div>
               )
             }
@@ -348,6 +387,12 @@ const links = data.links.map((link) => {
     font-size: 1.25rem;
     line-height: 1.25;
     color: var(--ink);
+  }
+
+  .appearance__date {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--muted);
   }
 
   .people__role {

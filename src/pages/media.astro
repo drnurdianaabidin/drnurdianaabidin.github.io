@@ -1,0 +1,194 @@
+---
+// Media contributions and public engagement: newspaper articles, interviews,
+// expert commentary, public talks and other science communication from the
+// Community section, grouped by type. Each piece is listed once, with every
+// outlet that published it.
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import T from '../components/T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, getMedia, itemUrl, formatDate, sortedAppearances, MEDIA_TYPES } from '../lib/items';
+
+const media = await getMedia();
+const groups = MEDIA_TYPES.map((type) => ({
+  type,
+  id: type.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+  items: media.filter((item) => item.data.type === type),
+})).filter((g) => g.items.length > 0);
+---
+
+<Base
+  title="Media Contributions & Public Engagement"
+  description={`Newspaper articles, expert commentary and public science communication by ${settings.name} on sarcopenia, body composition, muscle health and healthy ageing.`}
+>
+  <Masthead slot="header" current="media" />
+
+  <div class="wrap">
+    <header class="media-head reveal">
+      <p class="label">Public engagement</p>
+      <h1 class="media-head__title">Media Contributions &amp; Public Engagement</h1>
+      <p class="media-head__desc">
+        Writing and commentary for the public on muscle health, body composition and healthy ageing.
+      </p>
+    </header>
+
+    <div class="media reveal">
+      {
+        groups.map((group) => (
+          <section class="media__group" aria-labelledby={group.id}>
+            <h2 id={group.id} class="label section-heading section-heading--left">
+              {group.type}
+            </h2>
+            <ol class="media__list">
+              {group.items.map((item) => {
+                const appearances = sortedAppearances(item);
+                return (
+                  <li class="media__item">
+                    <h3 class="media__title">
+                      <a href={itemUrl(item)}>
+                        <T text={item.data.title} />
+                      </a>
+                    </h3>
+                    <p class="media__summary">
+                      <T text={item.data.summary} />
+                    </p>
+                    {appearances.length > 0 && (
+                      <p class="media__where">
+                        <span class="label label--muted">Published in</span>
+                        <span class="media__outlets">
+                          {appearances.map((a, i) => (
+                            <>
+                              {i > 0 && <span class="media__sep" aria-hidden="true">·</span>}
+                              <span>
+                                {a.url ? (
+                                  <a href={a.url} rel="noopener">
+                                    <T text={a.outlet} />
+                                    <span class="visually-hidden">: {plain(item.data.title)}</span>
+                                  </a>
+                                ) : (
+                                  <T text={a.outlet} />
+                                )}
+                                {a.date && <span class="media__date">, {formatDate(a.date)}</span>}
+                              </span>
+                            </>
+                          ))}
+                        </span>
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ))
+      }
+
+      <p class="media__note">
+        Requests for interviews or expert comment are welcome by <a href="/contact/">email</a>.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .media-head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .media-head__title {
+    font-size: clamp(2.4rem, 4.6vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1.08;
+    max-width: 18ch;
+    margin: 0.6rem auto 1rem;
+  }
+
+  .media-head__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.6rem);
+    line-height: 1.4;
+    max-width: 40ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+  }
+
+  .media {
+    max-width: 50rem;
+    margin: 0 auto;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .media__group + .media__group {
+    margin-top: var(--space-6);
+  }
+
+  .media__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2rem;
+  }
+
+  .media__title {
+    font-size: clamp(1.4rem, 0.8vw + 1.2rem, 1.75rem);
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
+  }
+
+  .media__title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .media__title a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--brass);
+  }
+
+  .media__summary {
+    color: var(--ink-soft);
+    margin: 0 0 0.6rem;
+  }
+
+  .media__where {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .media__where .label {
+    margin: 0;
+  }
+
+  .media__sep {
+    margin: 0 0.6rem;
+    color: var(--brass);
+  }
+
+  .media__date {
+    color: var(--muted);
+  }
+
+  .media__note {
+    margin: var(--space-6) 0 0;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  @media (max-width: 560px) {
+    .media__where {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

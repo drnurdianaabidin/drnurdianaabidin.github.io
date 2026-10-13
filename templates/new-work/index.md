@@ -45,6 +45,13 @@ status: Ongoing
 # For publications only: the full reference. Put the journal in *stars*.
 # citation: "Abidin NZ, Author B. 2026. Title of the paper. *Journal Name*, 12(3), 45–56."
 
+# For media work only: every newspaper, programme or website that
+# published it. Remove the # at the start of each line to use them.
+# appearances:
+#   - outlet: theSun
+#     date: 2026-07-30
+#     url: https://thesun.my/opinion/...
+
 # For research innovations only: these lines also list the work on the
 # Innovations page. Remove the # at the start of each line to use them.
 # innovation:
