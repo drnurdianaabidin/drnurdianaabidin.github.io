@@ -12,6 +12,6 @@ links:
     url: https://news.amdi.usm.my/fullnews.php?id=eGVTSy9mZnRMZzJoNCs2QXVFVlZhZz09
 ---
 
-An article for general readers, published in the AMDI Newsletter (10 June 2024).
+An article for general readers, published on 10 June 2024 in the AMDI Newsletter of Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI).
 
-Use the link to read the article on the AMDI news site.
+Use the link to read the article on the newsletter website.

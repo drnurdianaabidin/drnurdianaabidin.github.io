@@ -12,8 +12,8 @@ links:
     url: https://news.amdi.usm.my/fullnews.php?id=dG9qeXJNZmJHelNqM1dYOUJEZzA4UT09
 ---
 
-An article for general readers, published in the AMDI Newsletter (23 August 2022).
+An article for general readers, published on 23 August 2022 in the AMDI Newsletter of Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI).
 
-Use the link to read the article on the AMDI news site.
+Use the link to read the article on the newsletter website.
 
 See also the research article [The "Fat or Fit Paradox" in postmenopausal women](/research/2023-fat-or-fit-paradox/).

@@ -8,7 +8,7 @@ positions:
   - role: Head of Programme, MSc Clinical Exercise Science
     place: Universiti Sains Malaysia, 2023 to present
   - role: Founder, AMDI Longitudinal Program for Healthy Ageing (ALPHA)
-    place: Advanced Medical and Dental Institute, Universiti Sains Malaysia
+    place: Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI), Universiti Sains Malaysia
 education:
   - degree: PhD in Biosciences
     place: University of Nottingham, 2021

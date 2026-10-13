@@ -9,4 +9,4 @@ cover: ./cover.jpg
 coverAlt: "Abstract graphic of thin wavy lines."
 ---
 
-An article for general readers, published in the AMDI Newsletter (4 June 2025).
+An article for general readers, published on 4 June 2025 in the AMDI Newsletter of Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI).

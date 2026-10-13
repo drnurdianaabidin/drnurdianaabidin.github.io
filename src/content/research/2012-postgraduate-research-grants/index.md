@@ -9,5 +9,5 @@ cover: ./cover.jpg
 coverAlt: "Abstract graphic of a grid of small dots."
 ---
 
-- **Advanced Medical and Dental Institute Postgraduate Research Student Fund**, Universiti Sains Malaysia: RM 40,000 (2012 to 2014)
+- **Postgraduate Research Student Fund**, Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI), Universiti Sains Malaysia: RM 40,000 (2012 to 2014)
 - **Postgraduate Research Scheme Grant**, Institute of Postgraduate Study, Universiti Sains Malaysia: RM 10,000 (2012 to 2014)
