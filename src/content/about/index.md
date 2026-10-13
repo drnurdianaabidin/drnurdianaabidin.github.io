@@ -18,7 +18,7 @@ education:
     place: International Islamic University Malaysia, 2008
 ---
 
-Dr Nurdiana Zainol Abidin is a Senior Lecturer at Universiti Sains Malaysia and Head of Programme for the MSc in Clinical Exercise Science. The research looks at how muscle, bone and fat change with age, and how physical activity and exercise can support healthy ageing. Topics include osteosarcopenic obesity in postmenopausal women, physical activity in older adults measured with accelerometers, recovery from exercise-induced muscle soreness, and cognitive training in virtual reality for older adults with mild cognitive impairment.
+Dr Nurdiana Zainol Abidin is a Senior Lecturer at Universiti Sains Malaysia, and has been Head of Programme for the MSc in Clinical Exercise Science for the 2023/2024, 2024/2025 and 2025/2026 cohorts. The research looks at how muscle, bone and fat change with age, and how physical activity and exercise can support healthy ageing. Topics include osteosarcopenic obesity in postmenopausal women, physical activity in older adults measured with accelerometers, recovery from exercise-induced muscle soreness, and cognitive training in virtual reality for older adults with mild cognitive impairment.
 
 Dr Nurdiana completed a PhD in Biosciences at the University of Nottingham in 2021, with a thesis on screening criteria for osteosarcopenic obesity and its association with bioavailable 25(OH)D. An earlier MSc in Health Sciences at Universiti Sains Malaysia measured the physical activity of Malay older adults with tri-axial accelerometers.
 
