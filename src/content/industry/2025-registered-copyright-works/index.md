@@ -13,7 +13,7 @@ coverAlt: "Abstract graphic of a large circle with rings around it."
 | --- | --- | --- |
 | Cellular Lifespan Part I | Film | CRFM2023P02711 |
 | Cellular Lifespan Part II | Film | CRM2024 P03804 |
-| Cellular Lifespan Part II | Film | CRFM2025P07518 |
+| Cellular Lifespan Part III | Film | CRFM2025P07518 |
 | DADU DODECA-FIT | Art | CRAR2025P07523 |
 
 Cellular lifespan is also one of the topics in [TCE 504 Applied Exercise Physiology](/academic/2026-modules-taught/).
