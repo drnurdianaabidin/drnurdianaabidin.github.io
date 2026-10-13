@@ -1,21 +1,42 @@
 ---
 portrait: ./portrait.jpg
-portraitAlt: "[[Portrait of Dr Nurdiana Zainol Abidin]]"
+portraitAlt: "Portrait of Dr Nurdiana Zainol Abidin"
 cv: ./cv.pdf
 positions:
-  - role: "[[Job title]]"
-    place: Department of Community Health, Universiti Sains Malaysia
-  - role: "[[Role]]"
-    place: Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB)
+  - role: Senior Lecturer
+    place: Universiti Sains Malaysia
+  - role: Head of Programme, MSc Clinical Exercise Science
+    place: Universiti Sains Malaysia, 2023 to present
+  - role: Founder, AMDI Longitudinal Program for Healthy Ageing (ALPHA)
+    place: Advanced Medical and Dental Institute, Universiti Sains Malaysia
 education:
-  - degree: "[[PhD, subject]]"
-    place: "[[University, year]]"
-  - degree: "[[MSc, subject]]"
-    place: "[[University, year]]"
+  - degree: PhD in Biosciences
+    place: University of Nottingham, 2021
+  - degree: MSc in Health Sciences (by research)
+    place: Universiti Sains Malaysia, 2015
+  - degree: BSc (Hons) in Biomedical Sciences
+    place: International Islamic University Malaysia, 2008
 ---
 
-[[This is placeholder text for a short biography of two or three paragraphs. Replace it with your own words.]]
+Dr Nurdiana Zainol Abidin is a Senior Lecturer at Universiti Sains Malaysia and Head of Programme for the MSc in Clinical Exercise Science. The research looks at how muscle, bone and fat change with age, and how physical activity and exercise can support healthy ageing. Topics include osteosarcopenic obesity in postmenopausal women, physical activity in older adults measured with accelerometers, recovery from exercise-induced muscle soreness, and cognitive training in virtual reality for older adults with mild cognitive impairment.
 
-[[Dr Nurdiana Zainol Abidin works in the Department of Community Health at Universiti Sains Malaysia and with Pusat Kanser Tun Abdullah Ahmad Badawi. The research looks at sarcopenia, adiposity, musculoskeletal ageing and physical function, with a focus on measures that can be used in the community.]]
+Dr Nurdiana completed a PhD in Biosciences at the University of Nottingham in 2021, with a thesis on screening criteria for osteosarcopenic obesity and its association with bioavailable 25(OH)D. An earlier MSc in Health Sciences at Universiti Sains Malaysia measured the physical activity of Malay older adults with tri-axial accelerometers.
 
-[[A second paragraph might describe teaching, postgraduate supervision and work with community and industry partners.]]
+Current projects, led as principal investigator, include a resveratrol-loaded microneedle patch for muscle soreness after exercise, funded by the Fundamental Research Grant Scheme, and dual-task cognitive training in fully immersive virtual reality. Teaching covers applied and clinical exercise physiology, supported by digital learning tools such as PhysioVerse 3D, an interactive 3D biomechanics platform. Dr Nurdiana also founded the AMDI Longitudinal Program for Healthy Ageing (ALPHA).
+
+## Research profiles
+
+- [ORCID: 0000-0002-0305-4157](https://orcid.org/0000-0002-0305-4157)
+- [Google Scholar](https://scholar.google.com/citations?user=C_jBuOYAAAAJ)
+- [Scopus Author ID: 56366272800](https://www.scopus.com/authid/detail.uri?authorId=56366272800)
+- Web of Science ResearcherID: O-3964-2016
+
+## Professional memberships
+
+- The Physiological Society, United Kingdom
+- Nutrition Society of Malaysia
+- Malaysia Healthy Ageing Society
+
+## Certification
+
+- Good Clinical Practice, Universiti Sains Malaysia, 2010

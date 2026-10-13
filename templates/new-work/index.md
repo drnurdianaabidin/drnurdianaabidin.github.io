@@ -16,7 +16,8 @@
 
 title: "Title of the work"
 
-# Year-month-day
+# Year-month-day. If you only know the year, write just the year,
+# for example 2024, and only the year is shown.
 date: 2026-01-31
 
 # Must match one of the categories for this section in src/sections.yaml,

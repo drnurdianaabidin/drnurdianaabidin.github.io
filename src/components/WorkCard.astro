@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import T from './T.astro';
-import { type Item, sections, itemUrl, formatDate } from '../lib/items';
+import { type Item, sections, itemUrl, formatDate, isoDate } from '../lib/items';
 
 interface Props {
   item: Item;
@@ -34,7 +34,7 @@ const Heading = level === 2 ? 'h2' : 'h3';
       <span class="card__type">{data.type}</span>
     </p>
     <Heading class="card__title"><T text={data.title} /></Heading>
-    <p class="card__date"><time datetime={data.date.toISOString().slice(0, 10)}>{formatDate(data.date, 'month')}</time></p>
+    <p class="card__date"><time datetime={isoDate(data.date)}>{formatDate(data.date, 'month')}</time></p>
     {showSummary && <p class="card__summary"><T text={data.summary} /></p>}
   </a>
 </article>

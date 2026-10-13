@@ -33,6 +33,8 @@ export function itemUrl(item: Item) {
 }
 
 export function formatDate(date: Date, style: 'long' | 'month' = 'long') {
+  // Work dated by year only (date: 2024) is stored as 1 January.
+  if (date.getUTCMonth() === 0 && date.getUTCDate() === 1) return String(date.getUTCFullYear());
   return new Intl.DateTimeFormat('en-GB', {
     day: style === 'long' ? 'numeric' : undefined,
     month: 'long',
@@ -41,7 +43,13 @@ export function formatDate(date: Date, style: 'long' | 'month' = 'long') {
   }).format(date);
 }
 
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+/** Value for <time datetime>: the year alone for work dated by year only. */
+export function isoDate(date: Date) {
+  const iso = date.toISOString().slice(0, 10);
+  return iso.endsWith('-01-01') ? iso.slice(0, 4) : iso;
+}
+
+const ROMAN =['I', 'II', 'III', 'IV', 'V', 'VI'];
 export const roman = (index: number) => ROMAN[index] ?? String(index + 1);
 
 // Videos, PDFs and other files kept in the same folder as a piece of work.

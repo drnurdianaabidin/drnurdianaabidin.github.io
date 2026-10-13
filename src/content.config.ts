@@ -58,12 +58,16 @@ function itemSchema(section: (typeof SECTION_KEYS)[number]) {
     return z.strictObject(
       {
         title: requiredText('title', 'followed by the title'),
-        date: z.coerce.date({
-          error: (issue) =>
-            issue.input === undefined
-              ? 'This piece of work needs a "date". Add a line such as "date: 2026-03-14" (year, month, day).'
-              : `The date "${String(issue.input)}" is not understood. Write it as year-month-day, for example 2026-03-14.`,
-        }),
+        // A year on its own (date: 2024) is stored as 1 January and shown as the year only.
+        date: z.preprocess(
+          (v) => (/^\d{4}$/.test(String(v).trim()) ? `${String(v).trim()}-01-01` : v),
+          z.coerce.date({
+            error: (issue) =>
+              issue.input === undefined
+                ? 'This piece of work needs a "date". Add a line such as "date: 2026-03-14" (year, month, day).'
+                : `The date "${String(issue.input)}" is not understood. Write it as year-month-day, for example 2026-03-14, or just the year, for example 2024.`,
+          })
+        ),
         type: z.enum(categories as [string, ...string[]], {
           error: (issue) =>
             issue.input === undefined

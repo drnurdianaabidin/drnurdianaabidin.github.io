@@ -13,6 +13,7 @@ import {
   getItems,
   itemUrl,
   formatDate,
+  isoDate,
   resolveLocalFile,
   type Item,
 } from '../../lib/items';
@@ -49,7 +50,6 @@ const links = data.links.map((link) => {
   const href = local ? resolveLocalFile(item.filePath, link.url) : link.url;
   return { ...link, href, external: !local && /^https?:/.test(link.url) };
 });
-const isoDate = data.date.toISOString().slice(0, 10);
 ---
 
 <Base title={data.title} description={data.summary} image={data.cover} imageAlt={data.coverAlt} type="article">
@@ -63,7 +63,7 @@ const isoDate = data.date.toISOString().slice(0, 10);
         <a href={`/${item.collection}/?type=${encodeURIComponent(data.type)}`}>{data.type}</a>
       </nav>
       <h1 class="item__title"><T text={data.title} /></h1>
-      <p class="item__date"><time datetime={isoDate}>{formatDate(data.date)}</time></p>
+      <p class="item__date"><time datetime={isoDate(data.date)}>{formatDate(data.date)}</time></p>
     </header>
 
     <figure class="wrap item__cover reveal">

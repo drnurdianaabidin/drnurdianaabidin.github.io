@@ -12,37 +12,42 @@
 
 academic:
   title: Academic
-  description: "[[Teaching, postgraduate supervision and programme development at Universiti Sains Malaysia.]]"
+  description: Teaching, postgraduate supervision, programme leadership and digital learning tools in clinical exercise science at Universiti Sains Malaysia.
   categories:
     - Teaching
+    - Teaching innovation
     - Postgraduate supervision
     - Curriculum and programme development
+    - Leadership and service
     - Invited lectures
     - Awards
 
 research:
   title: Research
-  description: "[[Studies of muscle, fat and physical function as people age.]]"
+  description: Studies of muscle, bone, fat and physical activity as people age, and of exercise and recovery.
   categories:
     - Publications
     - Current projects
+    - Past projects
     - Grants
     - Conference presentations
 
 community:
   title: Community
-  description: "[[Health outreach and public engagement with communities in Malaysia.]]"
+  description: Healthy ageing programmes, community health projects and writing for the public in Malaysia.
   categories:
     - Health outreach
     - Public talks
     - Community programmes
+    - Articles for the public
     - Media appearances
 
 industry:
   title: Industry
-  description: "[[Partnerships and training carried out with organisations outside the university.]]"
+  description: Collaborations with organisations outside the university, and registered intellectual property.
   categories:
     - Partnerships
     - Consultancy
     - Workshops and training
     - Collaborative projects
+    - Intellectual property

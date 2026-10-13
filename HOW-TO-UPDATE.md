@@ -69,7 +69,7 @@ The folder name becomes the web address of the page. The example above appears a
 | Field | Required? | What to write |
 | --- | --- | --- |
 | `title` | Yes | The title of the work |
-| `date` | Yes | Year-month-day, for example `2026-03-14` |
+| `date` | Yes | Year-month-day, for example `2026-03-14`, or just the year, for example `2024` |
 | `type` | Yes | One of the categories for that section, spelled exactly as in `src/sections.yaml` |
 | `summary` | Yes | One or two sentences |
 | `cover` | Yes | The cover photo file name, for example `./cover.jpg` |
