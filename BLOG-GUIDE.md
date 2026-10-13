@@ -22,7 +22,7 @@ Each article is one folder with a text file and its photos. You never need to to
 14. [Optional later: writing in the browser](#14-optional-later-writing-in-the-browser)
 15. [If something goes wrong](#15-if-something-goes-wrong)
 
-Your first article, **Welcome to Beyond the Lab**, is waiting as a draft in `src/content/blog/welcome-to-beyond-the-lab/index.md`.
+Your first article, **A Little Space Beyond the Lab**, is in `src/content/blog/a-little-space-beyond-the-lab/index.md`. Open it to see how a finished article is written.
 
 ---
 

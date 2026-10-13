@@ -608,7 +608,12 @@ const jsonLd = JSON.stringify({
     margin: 0 0 1.35em;
   }
 
-  /* A drop capital opens the article */
+  /* A drop capital opens the article. The opening paragraph holds it, so a
+     short first paragraph does not push the next one sideways. */
+  .post-body > :global(p:first-child) {
+    display: flow-root;
+  }
+
   .post-body > :global(p:first-child)::first-letter {
     float: left;
     font-family: var(--font-display);
