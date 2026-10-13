@@ -27,115 +27,132 @@ const Heading = level === 2 ? 'h2' : 'h3';
 const doiLink = data.links.find((link) => /^https?:\/\/(dx\.)?doi\.org\//i.test(link.url));
 ---
 
-<article class="card reveal" style={`--delay:${delay}ms`}>
-  <a class="card__link" href={itemUrl(item)}>
-    <div class="card__media">
-      <Image src={data.cover} alt="" widths={[360, 560, 800, 1100]} sizes={sizes} format="webp" quality={78} />
-    </div>
-    <p class="label card__meta">
+<article class="card card--link work-card reveal" style={`--delay:${delay}ms`}>
+  <div class="work-card__media zoom">
+    <Image src={data.cover} alt="" widths={[360, 560, 800, 1100]} sizes={sizes} format="webp" quality={78} />
+  </div>
+  <div class="work-card__body">
+    <p class="label work-card__meta">
       {showSection && <span>{sections[item.collection].title}<span class="visually-hidden">,</span></span>}
-      <span class="card__type">{data.type}</span>
-      {data.status && <span class="card__status">{data.status}</span>}
+      <span class="work-card__type">{data.type}</span>
     </p>
-    <Heading class="card__title"><T text={data.title} /></Heading>
-    <p class="card__date"><time datetime={isoDate(data.date)}>{formatDate(data.date, 'month')}</time></p>
-    {showSummary && <p class="card__summary"><T text={data.summary} /></p>}
-  </a>
-  {
-    doiLink && (
-      <a class="card__doi label" href={doiLink.url} rel="noopener">
-        <T text={doiLink.label} />
-        <span class="visually-hidden">: {plain(data.title)}</span>
-        <span aria-hidden="true"> ↗</span>
-      </a>
-    )
-  }
+    <Heading class="work-card__title">
+      <a class="work-card__link" href={itemUrl(item)}><T text={data.title} /></a>
+    </Heading>
+    <p class="work-card__date">
+      <time datetime={isoDate(data.date)}>{formatDate(data.date, 'month')}</time>
+      {data.status && <span class="work-card__status">{data.status}</span>}
+    </p>
+    {showSummary && <p class="work-card__summary"><T text={data.summary} /></p>}
+    {
+      doiLink && (
+        <a class="work-card__doi" href={doiLink.url} rel="noopener">
+          <T text={doiLink.label} />
+          <span class="visually-hidden">: {plain(data.title)}</span>
+          <span aria-hidden="true"> ↗</span>
+        </a>
+      )
+    }
+  </div>
 </article>
 
 <style>
-  .card__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
+  .work-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
-  .card__media {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
+  .work-card__media {
+    aspect-ratio: 3 / 2;
     background: var(--paper-sunk);
-    margin-bottom: 1.1rem;
   }
 
-  .card__media :global(img) {
+  .work-card__media :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(1.001);
-    transition: transform 1400ms var(--ease), opacity var(--medium) var(--ease);
   }
 
-  .card__link:hover .card__media :global(img),
-  .card__link:focus-visible .card__media :global(img) {
-    transform: scale(1.035);
+  .work-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.2rem 1.35rem 1.35rem;
+    flex: 1;
   }
 
-  .card__meta {
-    margin: 0 0 0.55rem;
+  .work-card__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.15rem 0.9rem;
+    margin: 0;
   }
 
-  .card__type,
-  .card__status {
+  .work-card__type {
     color: var(--muted);
   }
 
-  .card__status::before {
-    content: '·';
-    margin-right: 0.9rem;
-    color: var(--brass);
+  .work-card__title {
+    font-size: clamp(1.3rem, 0.6vw + 1.12rem, 1.55rem);
+    font-weight: 600;
+    line-height: 1.2;
   }
 
-  .card__title {
-    font-size: clamp(1.35rem, 0.6vw + 1.15rem, 1.6rem);
-    line-height: 1.18;
-    margin-bottom: 0.5rem;
-    transition: color var(--quick) var(--ease);
+  /* The whole card opens the page */
+  .work-card__link {
+    color: var(--ink);
+    text-decoration: none;
   }
 
-  .card__link:hover .card__title {
+  .work-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .work-card:hover .work-card__link {
     color: var(--link);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
-    text-decoration-color: var(--brass);
   }
 
-  .card__date {
+  .work-card__date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
     color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 0.6rem;
+    font-size: 0.88rem;
+    margin: 0;
   }
 
-  .card__summary {
-    font-size: 0.98rem;
+  .work-card__status {
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--brass-text);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .work-card__summary {
+    font-size: 0.95rem;
     color: var(--ink-soft);
     margin: 0;
   }
 
-  .card__doi {
-    display: inline-block;
-    margin-top: 0.9rem;
-    color: var(--link);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.3em;
-    text-decoration-color: var(--brass);
+  .work-card__doi {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--brass-text);
+    text-decoration: none;
   }
 
-  .card__doi:hover,
-  .card__doi:focus-visible {
-    color: var(--ink);
+  .work-card__doi:hover {
+    text-decoration: underline;
   }
 </style>

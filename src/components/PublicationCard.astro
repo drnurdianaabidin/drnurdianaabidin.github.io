@@ -1,0 +1,157 @@
+---
+// One publication: type and year, title, journal, authors, and links to
+// the published paper (DOI) and to its page on this site.
+import T from './T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { type Item, itemUrl, doiLink, publicationType, journalOf, authorsOf } from '../lib/items';
+
+interface Props {
+  item: Item;
+  level?: 2 | 3;
+  delay?: number;
+}
+
+const { item, level = 3, delay = 0 } = Astro.props;
+const Heading = level === 2 ? 'h2' : 'h3';
+const doi = doiLink(item);
+const type = publicationType(item);
+const journal = journalOf(item);
+const authors = authorsOf(item);
+const year = item.data.date.getUTCFullYear();
+---
+
+<article class="pub-card card card--link reveal" style={`--delay:${delay}ms`}>
+  <p class="pub-card__meta">
+    <span class:list={['badge', { 'badge--violet': type === 'Review', 'badge--plain': type === 'Book chapter' }]}>{type}</span>
+    <span class="pub-card__year">{year}</span>
+    {item.data.status && item.data.status !== 'Published' && <span class="badge badge--plain">{item.data.status}</span>}
+  </p>
+  <Heading class="pub-card__title">
+    <a href={itemUrl(item)} class="pub-card__link"><T text={item.data.title} /></a>
+  </Heading>
+  {journal && <p class="pub-card__journal">{journal}</p>}
+  {authors && <p class="pub-card__authors">{authors}</p>}
+  <p class="pub-card__actions">
+    {
+      doi && (
+        <a class="pub-card__doi" href={doi.url} rel="noopener">
+          <T text={doi.label} />
+          <span class="visually-hidden">: {plain(item.data.title)}</span>
+          <span class="pub-card__arrow" aria-hidden="true">↗</span>
+        </a>
+      )
+    }
+    <span class="pub-card__details" aria-hidden="true">Details →</span>
+  </p>
+</article>
+
+<style>
+  .pub-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem 1.6rem 1.35rem;
+    height: 100%;
+  }
+
+  /* A coloured edge that slides in on hover */
+  .pub-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: linear-gradient(var(--brass), var(--violet));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--medium) var(--ease-out);
+  }
+
+  .pub-card:hover::before,
+  .pub-card:focus-within::before {
+    transform: scaleY(1);
+  }
+
+  .pub-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin: 0;
+  }
+
+  .pub-card__year {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pub-card__title {
+    font-size: clamp(1.3rem, 0.6vw + 1.15rem, 1.55rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* The whole card opens the publication's page */
+  .pub-card__link {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .pub-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .pub-card__journal {
+    margin: 0;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .pub-card__authors {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .pub-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: auto 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .pub-card__doi {
+    position: relative;
+    z-index: 1;
+    color: var(--brass-text);
+    text-decoration: none;
+  }
+
+  .pub-card__doi:hover {
+    text-decoration: underline;
+  }
+
+  .pub-card__arrow {
+    display: inline-block;
+    margin-left: 0.3rem;
+    transition: transform var(--quick) var(--ease);
+  }
+
+  .pub-card__doi:hover .pub-card__arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .pub-card__details {
+    color: var(--muted);
+    margin-left: auto;
+  }
+</style>

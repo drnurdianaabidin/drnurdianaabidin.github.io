@@ -2,16 +2,17 @@
 // Research innovations: work from any section that has an "innovation"
 // block, with what it is, the problem it addresses, who it is for and
 // how far it has got.
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
 import T from '../components/T.astro';
+import Illustration from '../components/Illustration.astro';
 import { plain } from '../lib/placeholder.mjs';
 import { settings, sections, getInnovations, itemUrl, inlineHtml } from '../lib/items';
 
 const innovations = (await getInnovations()).sort(
   (a, b) => (a.data.innovation?.order ?? 99) - (b.data.innovation?.order ?? 99)
 );
+const available = (status?: string) => /available/i.test(status ?? '');
 ---
 
 <Base
@@ -20,196 +21,221 @@ const innovations = (await getInnovations()).sort(
 >
   <Masthead slot="header" current="innovations" />
 
-  <div class="wrap">
-    <header class="inno-head reveal">
-      <p class="label">Research</p>
-      <h1 class="inno-head__title">Innovations</h1>
-      <p class="inno-head__desc">
-        Biomedical and digital tools developed alongside the research and teaching. The stage of each is given, from research
-        prototype to tools already in use with students.
-      </p>
-    </header>
+  <header class="inno-hero band">
+    <div class="wrap">
+      <div class="inno-hero__inner reveal">
+        <p class="label">Research innovations</p>
+        <h1 class="inno-hero__title">From the laboratory and the classroom</h1>
+        <p class="inno-hero__desc">
+          Biomedical and digital tools developed alongside the research and teaching. Each shows its real stage of development, from research prototype to tools already available to students.
+        </p>
+        <ul class="inno-hero__index">
+          {
+            innovations.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>
+                  <T text={item.data.title.split(/:| for /)[0]} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </header>
 
-    <ol class="inno">
-      {
-        innovations.map((item) => {
-          const { data } = item;
-          const info = data.innovation!;
-          return (
-            <li class="inno__item reveal">
-              <a class="inno__media" href={itemUrl(item)} tabindex="-1" aria-hidden="true">
-                <Image src={data.cover} alt="" widths={[360, 560, 800]} sizes="(min-width: 900px) 320px, 92vw" format="webp" quality={78} />
-              </a>
-              <div class="inno__body">
-                <p class="label inno__meta">
-                  <span>{sections[item.collection].title}</span>
-                  {data.status && <span class="inno__status">{data.status}</span>}
-                </p>
-                <h2 class="inno__title">
-                  <a href={itemUrl(item)}>
-                    <T text={data.title} />
-                  </a>
-                </h2>
-                <p class="inno__summary">
-                  <T text={data.summary} />
-                </p>
-                <dl class="inno__facts">
-                  <div>
-                    <dt>Problem it addresses</dt>
-                    <dd set:html={inlineHtml(info.problem)} />
-                  </div>
-                  <div>
-                    <dt>Intended users</dt>
-                    <dd set:html={inlineHtml(info.users)} />
-                  </div>
-                  {data.status && (
-                    <div>
-                      <dt>Stage</dt>
-                      <dd>{data.status}</dd>
-                    </div>
-                  )}
-                  {info.recognition && (
-                    <div>
-                      <dt>Recognition</dt>
-                      <dd set:html={inlineHtml(info.recognition)} />
-                    </div>
-                  )}
-                </dl>
-                <p class="inno__links label">
-                  <a href={itemUrl(item)}>
-                    Details<span class="visually-hidden">: {plain(data.title)}</span>
-                  </a>
-                  {data.links
-                    .filter((link) => /^https?:/.test(link.url))
-                    .map((link) => (
-                      <a href={link.url} rel="noopener">
-                        <T text={link.label} />
-                        <span aria-hidden="true"> ↗</span>
-                      </a>
-                    ))}
-                </p>
+  <ol class="wrap inno">
+    {
+      innovations.map((item, i) => {
+        const { data } = item;
+        const info = data.innovation!;
+        return (
+          <li id={item.id} class:list={['inno__item', { 'inno__item--flip': i % 2 === 1 }]}>
+            <figure class:list={['inno__media', 'reveal', i % 2 === 1 ? 'reveal--right' : 'reveal--left']}>
+              <div class="inno__frame">
+                <Illustration name={info.image || 'microneedle'} />
               </div>
-            </li>
-          );
-        })
-      }
-    </ol>
+              <figcaption class="illus-note">Conceptual illustration, not a screenshot</figcaption>
+            </figure>
+            <div class="inno__body reveal" style="--delay:120ms">
+              <p class="label">
+                {sections[item.collection].title}
+              </p>
+              <h2 class="inno__title">
+                <T text={data.title} />
+              </h2>
+              {data.status && <span class:list={['badge', { 'badge--violet': !available(data.status) }]}>{data.status}</span>}
+              <p class="inno__summary">
+                <T text={data.summary} />
+              </p>
+              <dl class="inno__facts">
+                <div>
+                  <dt>Problem it addresses</dt>
+                  <dd set:html={inlineHtml(info.problem)} />
+                </div>
+                <div>
+                  <dt>Intended users</dt>
+                  <dd set:html={inlineHtml(info.users)} />
+                </div>
+                {data.status && (
+                  <div>
+                    <dt>Stage</dt>
+                    <dd>{data.status}</dd>
+                  </div>
+                )}
+                {info.recognition && (
+                  <div>
+                    <dt>Recognition</dt>
+                    <dd set:html={inlineHtml(info.recognition)} />
+                  </div>
+                )}
+              </dl>
+              <p class="inno__links">
+                {data.links
+                  .filter((link) => /^https?:/.test(link.url))
+                  .map((link) => (
+                    <a class="btn btn--primary" href={link.url} rel="noopener">
+                      <T text={link.label} />
+                      <span class="btn__arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  ))}
+                <a class="btn btn--ghost" href={itemUrl(item)}>
+                  Details<span class="visually-hidden">: {plain(data.title)}</span>
+                </a>
+              </p>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
 
-    <p class="inno__more reveal">
-      Copyright works, including a visual protocol for fabricating the resveratrol microneedle patches, the <em>Cellular Lifespan</em>
-      films and <em>DADU DODECA-FIT</em>, are listed under{' '}<a href="/industry/2026-copyright-works/">intellectual property</a>.
-    </p>
-  </div>
+  <p class="wrap inno__more reveal">
+    Copyright works, including a visual protocol for fabricating the resveratrol microneedle patches, the <em>Cellular Lifespan</em> films and
+    <em>DADU DODECA-FIT</em>, are listed under{' '}<a href="/industry/2026-copyright-works/">intellectual property</a>.
+  </p>
 </Base>
 
 <style>
-  .inno-head {
-    text-align: center;
-    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  .inno-hero {
+    padding: clamp(3rem, 8vw, 6rem) 0 clamp(3rem, 6vw, 4.5rem);
   }
 
-  .inno-head__title {
-    font-size: clamp(3rem, 6vw, 5rem);
+  .inno-hero__inner {
+    max-width: 60rem;
+  }
+
+  .inno-hero__title {
+    font-size: clamp(2.8rem, 5vw + 0.5rem, 4.8rem);
     font-weight: 500;
-    margin: 0.6rem 0 1rem;
+    line-height: 1.04;
+    margin: 0.7rem 0 1.1rem;
   }
 
-  .inno-head__desc {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(1.25rem, 1vw + 1rem, 1.6rem);
-    line-height: 1.4;
-    max-width: 42ch;
-    margin: 0 auto;
-    color: var(--ink-soft);
+  .inno-hero__desc {
+    max-width: 44rem;
+    font-size: 1.12rem;
+  }
+
+  .inno-hero__index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+  }
+
+  .inno-hero__index a {
+    display: inline-block;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid rgb(143 216 211 / 35%);
+    border-radius: 999px;
+    color: var(--on-night);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color var(--quick) var(--ease);
+  }
+
+  .inno-hero__index a:hover {
+    background: rgb(143 216 211 / 12%);
   }
 
   .inno {
     list-style: none;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--rule-strong);
+    margin: 0 auto;
+    padding-top: var(--space-7);
+    display: grid;
+    gap: clamp(4rem, 8vw, 7rem);
   }
 
   .inno__item {
     display: grid;
-    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
-    padding: var(--space-5) 0;
-    border-bottom: 1px solid var(--rule);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    scroll-margin-top: calc(var(--header-h) + 2rem);
+  }
+
+  .inno__item--flip .inno__media {
+    order: 2;
   }
 
   .inno__media {
-    display: block;
-    aspect-ratio: 4 / 3;
+    margin: 0;
+  }
+
+  .inno__frame {
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius);
     overflow: hidden;
-    background: var(--paper-sunk);
+    box-shadow: var(--shadow-lift);
+    transition: transform var(--slow) var(--ease-out);
   }
 
-  .inno__media :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .inno__item:hover .inno__frame {
+    transform: translateY(-4px);
   }
 
-  .inno__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.15rem 0.9rem;
-    margin: 0 0 0.6rem;
-  }
-
-  .inno__status {
-    color: var(--muted);
-  }
-
-  .inno__status::before {
-    content: '·';
-    margin-right: 0.9rem;
-    color: var(--brass);
+  .inno__body {
+    display: grid;
+    justify-items: start;
+    gap: 0.7rem;
   }
 
   .inno__title {
-    font-size: clamp(1.6rem, 1vw + 1.3rem, 2.1rem);
+    font-size: clamp(2rem, 2vw + 1.2rem, 2.8rem);
     font-weight: 500;
-    line-height: 1.15;
-    margin: 0 0 0.75rem;
-  }
-
-  .inno__title a {
-    color: var(--ink);
-    text-decoration: none;
-  }
-
-  .inno__title a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
-    text-decoration-color: var(--brass);
   }
 
   .inno__summary {
-    color: var(--ink-soft);
-    margin: 0 0 1.25rem;
-    max-width: 44rem;
+    margin: 0.2rem 0 0;
+    font-size: 1.05rem;
   }
 
   .inno__facts {
     display: grid;
     gap: 0.75rem;
-    margin: 0 0 1.25rem;
-    max-width: 44rem;
+    width: 100%;
+    margin: 0.4rem 0 0;
+    padding: 1.1rem 1.25rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
   }
 
   .inno__facts div {
     display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
+    grid-template-columns: 10.5rem minmax(0, 1fr);
     gap: 1rem;
   }
 
   .inno__facts dt {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
     color: var(--muted);
   }
 
@@ -221,28 +247,24 @@ const innovations = (await getInnovations()).sort(
   .inno__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1.4rem;
-    margin: 0;
-  }
-
-  .inno__links a {
-    color: var(--link);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.3em;
-    text-decoration-color: var(--brass);
+    gap: 0.6rem;
+    margin: 0.5rem 0 0;
   }
 
   .inno__more {
-    margin: var(--space-5) auto 0;
-    max-width: 46rem;
+    margin-top: var(--space-7);
+    max-width: 48rem;
     text-align: center;
     color: var(--muted);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 880px) {
     .inno__item {
       grid-template-columns: 1fr;
+    }
+
+    .inno__item--flip .inno__media {
+      order: 0;
     }
 
     .inno__facts div {

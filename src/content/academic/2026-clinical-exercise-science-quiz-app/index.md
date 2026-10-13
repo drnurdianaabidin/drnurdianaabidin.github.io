@@ -6,12 +6,13 @@ status: Available online
 summary: "A quiz app, usable on phones and computers, that helps MSc Clinical Exercise Science students revise key concepts across core modules."
 innovation:
   order: 4
+  image: quiz
   problem: "Giving students frequent, self-paced revision and self-assessment of key concepts outside class hours."
   users: "Students on the MSc in Clinical Exercise Science."
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of outlined circles."
+coverAlt: "Illustration of a multiple-choice quiz card with one answer marked correct."
 links:
   - label: "Open the quiz app"
     url: https://clinical-quiz-ces.vercel.app/

@@ -4,10 +4,10 @@ date: 2026
 type: Current projects
 status: Ongoing
 summary: "Developing and evaluating prediction models to identify low muscle mass and low bone density from population data, including NHANES, and comparing machine learning with conventional screening approaches."
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of a grid of small dots."
+coverAlt: "Illustration of rows of population data feeding a neural network that separates two groups."
 featured: true
 ---
 

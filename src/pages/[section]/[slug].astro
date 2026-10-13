@@ -49,6 +49,14 @@ const { Content } = await render(item);
 const doi = doiLink(item);
 const appearances = sortedAppearances(item);
 
+// Generated covers say so in their description; a real photo's description
+// will not start this way, so the caption disappears when one is added.
+const coverNote = /^illustration\b/i.test(data.coverAlt)
+  ? 'Conceptual illustration, not a photograph'
+  : /^abstract graphic\b/i.test(data.coverAlt)
+    ? 'Abstract cover graphic'
+    : undefined;
+
 const people = data.collaborators.map((c) => (typeof c === 'string' ? { name: c } : c));
 const peopleLabel = data.collaboratorsLabel ?? 'Collaborators';
 const links = data.links.map((link) => {
@@ -69,10 +77,13 @@ const links = data.links.map((link) => {
         <a href={`/${item.collection}/?type=${encodeURIComponent(data.type)}`}>{data.type}</a>
       </nav>
       <h1 class="item__title"><T text={data.title} /></h1>
-      <p class="item__date"><time datetime={isoDate(data.date)}>{formatDate(data.date)}</time></p>
+      <p class="item__date">
+        <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+        {data.status && <span class:list={['badge', { 'badge--violet': !/published|available/i.test(data.status) }]}>{data.status}</span>}
+      </p>
     </header>
 
-    <figure class="wrap item__cover reveal">
+    <figure class="wrap item__cover reveal reveal--scale">
       <Image
         src={data.cover}
         alt={plain(data.coverAlt)}
@@ -83,6 +94,7 @@ const links = data.links.map((link) => {
         loading="eager"
         fetchpriority="high"
       />
+      {coverNote && <figcaption class="illus-note">{coverNote}</figcaption>}
     </figure>
 
     <div class="wrap item__layout">
@@ -312,6 +324,11 @@ const links = data.links.map((link) => {
   }
 
   .item__date {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
     margin: 1.25rem 0 0;
     color: var(--muted);
   }
@@ -322,9 +339,15 @@ const links = data.links.map((link) => {
 
   .item__cover :global(img) {
     width: 100%;
-    max-height: 78vh;
+    max-height: 72vh;
     object-fit: cover;
     background: var(--paper-sunk);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .item__cover figcaption {
+    text-align: right;
   }
 
   .item__layout {
@@ -361,11 +384,19 @@ const links = data.links.map((link) => {
   .item__aside {
     grid-area: aside;
     position: sticky;
-    top: 2rem;
+    top: calc(var(--header-h) + 1.5rem);
     display: grid;
-    gap: 2rem;
-    padding-left: clamp(1.25rem, 2.5vw, 2rem);
-    border-left: 1px solid var(--rule);
+    gap: 1.75rem;
+    padding: 1.5rem 1.6rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .aside-block + .aside-block {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
   }
 
   .aside-block h2 {
@@ -435,6 +466,30 @@ const links = data.links.map((link) => {
     color: var(--ink-soft);
   }
 
+  .item__citation {
+    margin-top: 2.5rem;
+    padding: 1.4rem 1.6rem;
+    background: var(--teal-soft);
+    border-left: 3px solid var(--brass);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  .item__citation h2 {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brass-text);
+    margin: 0 0 0.6rem;
+  }
+
+  .item__citation p {
+    margin: 0;
+    font-size: 0.98rem;
+    overflow-wrap: anywhere;
+  }
+
   .item__media {
     margin-top: var(--space-7);
   }
@@ -453,9 +508,8 @@ const links = data.links.map((link) => {
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-4) 0;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--rule);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
   }
 
   .pager__link {
@@ -464,6 +518,21 @@ const links = data.links.map((link) => {
     text-decoration: none;
     color: var(--ink);
     max-width: 28rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    transition:
+      transform var(--medium) var(--ease-out),
+      box-shadow var(--medium) var(--ease-out),
+      border-color var(--quick) var(--ease);
+  }
+
+  .pager__link:hover,
+  .pager__link:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in srgb, var(--brass) 45%, var(--rule));
   }
 
   .pager__link--next {
@@ -498,12 +567,13 @@ const links = data.links.map((link) => {
 
     .item__aside {
       position: static;
-      border-left: 0;
-      padding-left: 0;
-      padding-bottom: 2rem;
-      margin-bottom: 2rem;
-      border-bottom: 1px solid var(--rule);
+      margin-bottom: 2.5rem;
       grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+
+    .aside-block + .aside-block {
+      padding-top: 0;
+      border-top: 0;
     }
 
     .item__summary {

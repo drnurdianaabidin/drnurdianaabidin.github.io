@@ -16,6 +16,7 @@
 
 academic:
   title: Academic
+  image: physioverse
   description: Teaching, postgraduate supervision and academic leadership in clinical exercise science at Universiti Sains Malaysia.
   overview:
     heading: Postgraduate supervision areas
@@ -47,6 +48,10 @@ research:
     note: Collaboration enquiries in any of these areas are welcome. See [Contact](/contact/).
     groups:
       - title: Musculoskeletal health and healthy ageing
+        image: musculoskeletal
+        intro: How muscle, bone and fat change with age, and what this means for physical function, particularly in women after menopause.
+        link: /research/#msk-ageing
+        linkLabel: Musculoskeletal ageing research
         items:
           - Sarcopenia and low muscle mass
           - Osteosarcopenic obesity
@@ -55,6 +60,10 @@ research:
           - Postmenopausal women's health
           - Physical function in older adults
       - title: Artificial intelligence and clinical prediction
+        image: prediction
+        intro: Developing and evaluating screening models from population data, and comparing machine learning with conventional statistics.
+        link: /research/#ai-screening
+        linkLabel: Machine learning screening project
         items:
           - Developing and validating clinical prediction models
           - Machine learning approaches to health screening
@@ -64,6 +73,10 @@ research:
           - Comparing conventional statistical methods with machine learning
           - Clinical usefulness and generalisability of prediction models
       - title: Exercise physiology and interventions
+        image: exercise
+        intro: How the body responds and adapts to exercise, from muscle soreness to physical activity and function in older adults.
+        link: /publications/?q=exercise
+        linkLabel: Publications on exercise
         items:
           - Exercise-induced muscle soreness
           - Physiological responses and adaptations to exercise
@@ -72,6 +85,10 @@ research:
           - Exercise and immune function
           - Exercise-based interventions for older adults
       - title: Digital health and emerging technologies
+        image: digital
+        intro: Immersive virtual reality, dual-task training and digital tools that support cognitive and physical health.
+        link: /research/#vr-dual-task
+        linkLabel: Virtual reality study
         items:
           - Fully immersive virtual reality
           - Dual-task training
@@ -80,12 +97,78 @@ research:
           - Interactive digital learning resources
           - Technology-assisted healthy ageing programmes
       - title: Translational biomedical innovation
+        image: microneedle
+        intro: Turning laboratory work into research prototypes, such as a dissolving microneedle patch that carries resveratrol.
+        link: /research/#microneedle
+        linkLabel: Microneedle patch project
         items:
           - Resveratrol-loaded dissolving microneedles
           - Drug-delivery formulation and optimisation
           - Development of biomedical research prototypes
           - Translational opportunities and intellectual property
           - Applications of emerging technologies in healthcare
+  # Large panels on the Research page. "image" is one of the illustrations
+  # in src/assets/illustrations.
+  features:
+    - id: microneedle
+      title: Resveratrol-loaded dissolving microneedle patch
+      kicker: FRGS project · Principal investigator · 2022 to present
+      status: Ongoing, research prototype
+      image: microneedle
+      text: Developing and optimising dissolving microneedle patches that carry resveratrol, to investigate delivery through the skin for recovery from exercise-induced muscle soreness. The work covers formulation, microneedle fabrication, drug loading and prototype development.
+      note: Recognised with a Gold Medal and First Runner-Up in the Special Category at the USM–AUSC International Sports Innovation Challenge 2025. The patch is not a proven treatment or a registered product.
+      links:
+        - label: Project details
+          href: /research/2022-resveratrol-microneedle-patch/
+        - label: Related review
+          href: /research/2024-resveratrol-muscle-soreness-review/
+    - id: vr-dual-task
+      title: Dual-task training in fully immersive virtual reality
+      kicker: Principal investigator · 2022 to present
+      status: Ongoing
+      image: digital
+      text: A feasibility study and randomised controlled trial of dual-task training in virtual reality for older adults with mild cognitive impairment. The outcomes are cognitive function, physical performance and brain functional connectivity.
+      note: No results have been published yet.
+      links:
+        - label: Project details
+          href: /research/2022-virtual-reality-dual-task-training/
+        - label: Related meta-analysis
+          href: /research/2026-dual-task-training-meta-analysis/
+    - id: ai-screening
+      title: Machine learning for musculoskeletal screening
+      kicker: Ongoing research
+      status: Ongoing
+      image: prediction
+      text: Developing and evaluating prediction models to identify low muscle mass and low bone density from population data such as NHANES, and comparing machine learning with conventional screening approaches.
+      note: The models are research tools. They are not approved or used for clinical diagnosis.
+      links:
+        - label: Project details
+          href: /research/2026-machine-learning-musculoskeletal-screening/
+        - label: Review in Artificial Intelligence in Medicine
+          href: /research/2026-ai-ml-cancer-prediction-models-review/
+    - id: msk-ageing
+      title: Musculoskeletal ageing and women's health
+      kicker: Published research since 2021
+      status: Published
+      image: bone
+      text: Studies of muscle, bone, body fat and vitamin D in postmenopausal Malaysian women, including screening cut-off values for osteosarcopenia, stages of sarcopenia and the "fat or fit" paradox. The work builds on PhD research at the University of Nottingham.
+      links:
+        - label: Related publications
+          href: /publications/?q=postmenopausal
+        - label: Screening cut-off values (2021)
+          href: /research/2021-osteosarcopenia-cut-off-values/
+    - id: community
+      title: Community healthy ageing and PRIME-Active
+      kicker: Completed programmes and a platform in development
+      status: Prototype in development
+      image: community
+      text: Work with older adults in the community includes Karnival Warga Emas 2022 and a healthy lifestyle programme in an adopted community (2011 to 2013), both completed. PRIME-Active, a digital platform in development, is intended to support community physical activity programmes and research.
+      note: PRIME-Active is a prototype. It is not yet publicly available.
+      links:
+        - label: PRIME-Active
+          href: /community/2026-prime-active/
+        - label: Community work
+          href: /community/
   categories:
     - Publications
     - Current projects
@@ -95,6 +178,7 @@ research:
 
 community:
   title: Community
+  image: community
   description: Community programmes for older adults, health promotion and writing for the public in Malaysia.
   overview:
     heading: Areas of interest
@@ -120,6 +204,7 @@ community:
 
 industry:
   title: Industry
+  image: microneedle
   description: Research collaboration with industry, registered intellectual property and interests in translation.
   overview:
     heading: Collaboration interests

@@ -6,13 +6,14 @@ status: Ongoing, research prototype
 summary: "An FRGS-funded project, led as principal investigator, developing and optimising dissolving microneedle patches that carry resveratrol, to investigate their potential use in recovery from exercise-induced muscle soreness."
 innovation:
   order: 1
+  image: microneedle
   problem: "Delayed onset muscle soreness after strenuous or unaccustomed exercise, and whether resveratrol delivered through the skin could support recovery."
   users: "At this stage, researchers in exercise science and drug delivery. People recovering from strenuous exercise are possible future users, subject to further research."
   recognition: "Gold Medal and First Runner-Up in the Special Category, [USM–AUSC International Sports Innovation Challenge 2025](/academic/2025-sports-innovation-challenge-gold/)"
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of a grid of small dots."
+coverAlt: "Illustration of a dissolving microneedle patch pressed into the layers of the skin, releasing its contents."
 featured: true
 ---
 

@@ -64,6 +64,11 @@ export function parseSettings(text) {
       url: p.url ? String(p.url).trim() : '',
     };
   });
+  const highlights = (Array.isArray(raw.highlights) ? raw.highlights : []).map((h) => ({
+    value: String(h?.value ?? '').trim(),
+    label: String(h?.label ?? '').trim(),
+    detail: h?.detail ? String(h.detail).trim() : '',
+  }));
   const optional = (key) => (typeof raw[key] === 'string' ? raw[key].trim() : '');
   return {
     name: requireText(raw, 'name', 'Your name', where),
@@ -73,10 +78,13 @@ export function parseSettings(text) {
     affiliations,
     tagline,
     introduction: optional('introduction'),
+    headline: optional('headline'),
+    designation: optional('designation'),
     description: requireText(raw, 'description', 'The site description', where),
     email: requireText(raw, 'email', 'The email address', where),
     contactNote: optional('contactNote'),
     profiles,
+    highlights,
     siteUrl,
     highlightPlaceholders: raw.highlightPlaceholders !== false,
   };
@@ -88,8 +96,13 @@ function parseOverview(o, key, where) {
   if (typeof o !== 'object') {
     throw new Error(`The "overview" of the "${key}" section in ${where} should have a "heading" and "groups" on the lines below it.`);
   }
+  const text = (v) => (v === undefined || v === null ? '' : String(v).trim());
   const groups = (Array.isArray(o.groups) ? o.groups : []).map((g) => ({
-    title: g && g.title ? String(g.title).trim() : '',
+    title: text(g?.title),
+    intro: text(g?.intro),
+    image: text(g?.image),
+    link: text(g?.link),
+    linkLabel: text(g?.linkLabel),
     items: (Array.isArray(g?.items) ? g.items : []).map((i) => String(i).trim()).filter(Boolean),
   }));
   return {
@@ -119,9 +132,31 @@ export function parseSections(text) {
       description: requireText(s, 'description', `The description of the "${key}" section`, where),
       categories,
       overview: parseOverview(s.overview, key, where),
+      image: typeof s.image === 'string' ? s.image.trim() : '',
+      features: parseFeatures(s.features, key, where),
     };
   }
   return sections;
+}
+
+// Large feature panels, such as the research projects on the Research page.
+function parseFeatures(list, key, where) {
+  if (!Array.isArray(list)) return [];
+  return list.map((f, i) => {
+    if (!f || typeof f !== 'object') {
+      throw new Error(`Feature number ${i + 1} of the "${key}" section in ${where} should have a "title", "text" and "image".`);
+    }
+    return {
+      id: requireText(f, 'id', `The id of feature ${i + 1} in the "${key}" section`, where),
+      title: requireText(f, 'title', `The title of feature ${i + 1} in the "${key}" section`, where),
+      kicker: typeof f.kicker === 'string' ? f.kicker.trim() : '',
+      status: typeof f.status === 'string' ? f.status.trim() : '',
+      text: requireText(f, 'text', `The text of feature ${i + 1} in the "${key}" section`, where),
+      note: typeof f.note === 'string' ? f.note.trim() : '',
+      image: requireText(f, 'image', `The image of feature ${i + 1} in the "${key}" section`, where),
+      links: (Array.isArray(f.links) ? f.links : []).map((l) => ({ label: String(l.label).trim(), href: String(l.href).trim() })),
+    };
+  });
 }
 
 export const loadSettings = () => parseSettings(readFile(settingsPath, 'src/settings.yaml'));

@@ -6,12 +6,13 @@ status: Prototype in development
 summary: "A prototype digital platform, in development, to support community-based physical activity programmes and research among older adults."
 innovation:
   order: 3
+  image: community
   problem: "Supporting the delivery and monitoring of community physical activity programmes for older adults, and the collection of research data from them."
   users: "Researchers, community organisations and programme leaders working with older adults, and the older adults taking part."
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of a round sun above a horizon."
+coverAlt: "Illustration of older adults walking together, linked to a phone showing activity."
 featured: true
 ---
 

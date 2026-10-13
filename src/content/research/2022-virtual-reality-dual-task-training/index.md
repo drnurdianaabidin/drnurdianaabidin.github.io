@@ -4,10 +4,10 @@ date: 2022
 type: Current projects
 status: Ongoing
 summary: "A study, led as principal investigator, of dual-task training in fully immersive virtual reality for older adults with mild cognitive impairment, comprising a feasibility study and a randomised controlled trial."
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of a grid of small dots."
+coverAlt: "Illustration of a virtual reality headset above a floor grid, with footsteps and shapes for a thinking task."
 featured: true
 ---
 

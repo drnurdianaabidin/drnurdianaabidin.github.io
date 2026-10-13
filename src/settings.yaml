@@ -25,9 +25,15 @@ affiliations:
 # Short phrases shown under your name on the home page, one per line.
 tagline:
   - Musculoskeletal Health
-  - Healthy Ageing
   - AI & Predictive Modelling
-  - Digital Health Innovation
+  - Biomedical Innovation
+  - Digital Health
+
+# The large line on the home page, under your name.
+headline: Exploring the Science of Healthy Ageing
+
+# Your position, shown above your name on the home page.
+designation: Senior Lecturer, Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB)
 
 # One or two sentences introducing your research, shown below the menu on the
 # home page.
@@ -42,6 +48,22 @@ email: nurdianaabidin@usm.my
 
 # A sentence or two shown above your email address on the Contact page.
 contactNote: I welcome research collaborations in musculoskeletal ageing, exercise physiology, clinical prediction modelling, digital health and translational biomedical innovation. Prospective postgraduate students and potential partners are welcome to write by email.
+
+# Figures shown on the home page under "At a glance". Write "auto" as the
+# value for publications to count them from the Research section.
+highlights:
+  - value: auto
+    label: Publications
+    detail: Journal articles and a book chapter
+  - value: "2"
+    label: Projects as principal investigator
+    detail: Microneedle patch and virtual reality studies
+  - value: "6"
+    label: Postgraduate researchers supervised
+    detail: Three PhD and three Master's candidates
+  - value: "6"
+    label: Copyright works
+    detail: Films, artwork and literary works
 
 # Your academic profiles, shown on the About and Contact pages.
 # Each has a label, and optionally the ID shown (value) and a web address (url).

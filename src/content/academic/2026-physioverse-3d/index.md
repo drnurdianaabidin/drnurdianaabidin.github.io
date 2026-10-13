@@ -6,12 +6,13 @@ status: Available online
 summary: "A web-based platform that uses animated 3D models to show how muscles and joints work during selected exercises, built to help Clinical Exercise Science students link theory to movement analysis."
 innovation:
   order: 2
+  image: physioverse
   problem: "Bridging theoretical knowledge of muscles, joints and movement with applied movement analysis."
   users: "Students in Clinical Exercise Science and related health science disciplines."
-# The cover is an abstract graphic. To use a photo instead, replace
+# The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
-coverAlt: "Abstract graphic of outlined circles."
+coverAlt: "Illustration of a three-dimensional knee joint with muscles and axes in a browser window."
 featured: true
 links:
   - label: "Open PhysioVerse 3D"

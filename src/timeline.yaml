@@ -1,0 +1,96 @@
+# ---------------------------------------------------------------
+# CAREER TIMELINE AND HIGHLIGHTS (About page)
+#
+# Each milestone has:
+#   year:     the year, a range such as 2012–2015, or Now
+#   category: Education, Appointments, Research, Leadership or Recognition
+#   title:    one line
+#   detail:   one or two sentences (optional)
+#   link:     a page on this site or a web address (optional)
+# Newest first.
+# ---------------------------------------------------------------
+
+milestones:
+  - year: Now
+    category: Appointments
+    title: Senior Lecturer, Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), Universiti Sains Malaysia
+    detail: Teaching applied and clinical exercise physiology, and Head of Module for Clinical Exercise Physiology. PKTAAB was previously known as the Advanced Medical and Dental Institute (AMDI).
+
+  - year: "2026"
+    category: Research
+    title: Systematic review in Artificial Intelligence in Medicine
+    detail: A critical appraisal of AI/ML and conventional prediction models in breast, colorectal and pancreatic cancer.
+    link: /research/2026-ai-ml-cancer-prediction-models-review/
+
+  - year: "2026"
+    category: Research
+    title: Digital tools and two copyright works
+    detail: PhysioVerse 3D and a quiz app for MSc Clinical Exercise Science students, the PRIME-Active prototype, and two literary works on resveratrol notified for copyright.
+    link: /innovations/
+
+  - year: "2025"
+    category: Recognition
+    title: Gold Medal and First Runner-Up (Special Category), USM–AUSC International Sports Innovation Challenge 2025
+    detail: For the resveratrol-loaded dissolving microneedle patch research. Also a Silver award at Academy Fiesta@USM 2025 (Micro-credential category).
+    link: /academic/2025-sports-innovation-challenge-gold/
+
+  - year: 2023–2026
+    category: Leadership
+    title: Head of Programme, MSc in Clinical Exercise Science
+    detail: For the 2023/2024, 2024/2025 and 2025/2026 cohorts.
+    link: /academic/2023-head-of-programme-clinical-exercise-science/
+
+  - year: "2022"
+    category: Research
+    title: Principal investigator of two projects
+    detail: A Fundamental Research Grant Scheme project on resveratrol-loaded dissolving microneedle patches, and a study of dual-task training in virtual reality for older adults with mild cognitive impairment.
+    link: /research/#features
+
+  - year: "2022"
+    category: Leadership
+    title: Project leader and chair, Karnival Warga Emas 2022
+    detail: A carnival for older adults in Bertam, Kepala Batas, with the Ministry of Higher Education Malaysia and Masjid Abdullah Fahim.
+    link: /community/2022-karnival-warga-emas/
+
+  - year: "2021"
+    category: Research
+    title: PhD findings published
+    detail: Screening cut-off values for osteosarcopenia in obese postmenopausal women, and total versus bioavailable 25(OH)D in relation to bone and muscle.
+    link: /publications/?q=postmenopausal
+
+  - year: 2016–2021
+    category: Education
+    title: PhD in Biosciences, University of Nottingham
+    detail: Osteosarcopenic obesity and bioavailable vitamin D in postmenopausal women.
+
+  - year: "2015"
+    category: Leadership
+    title: Chief Secretary, International Conference on Movement, Health and Exercise (MoHE2015)
+    link: /academic/2015-movement-health-exercise-conference/
+
+  - year: 2012–2021
+    category: Recognition
+    title: Universiti Sains Malaysia Academic Staff Training Scheme (ASTS) Fellowship
+    link: /academic/2012-academic-staff-training-scheme-fellowship/
+
+  - year: 2012–2015
+    category: Education
+    title: MSc in Health Sciences (by research), Universiti Sains Malaysia
+    detail: Physical activity of Malay older adults, measured objectively with tri-axial accelerometers.
+
+  - year: 2010–2013
+    category: Research
+    title: Research projects in the Lifestyle Science Cluster
+    detail: Studies of hydration in football, caloric restriction during fasting, a healthy lifestyle programme in an adopted community, and a collaboration with Kao Corporation, Japan.
+    link: /research/?type=Past%20projects
+
+  - year: 2010–2011
+    category: Leadership
+    title: Chief Secretary of two international meetings
+    detail: The International Fasting and Sustainable Health Conference (2010) and the Malaysia-Australia Research Colloquium on Exercise, Nutrition, Health and Wellness (2011).
+
+  - year: 2004–2008
+    category: Education
+    title: BSc (Hons) in Biomedical Sciences, International Islamic University Malaysia (IIUM)
+    detail: Final-year project on the antibacterial activity of medicinal plants, published in 2009.
+    link: /research/2009-antibacterial-medicinal-plants/

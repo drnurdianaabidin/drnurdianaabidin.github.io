@@ -5,8 +5,8 @@ import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
 import T from '../components/T.astro';
 import Profiles from '../components/Profiles.astro';
-import { plain } from '../lib/placeholder.mjs';
 import { settings, sections, resolveLocalFile } from '../lib/items';
+import { milestones, TIMELINE_CATEGORIES } from '../lib/timeline';
 
 const about = await getEntry('about', 'index');
 if (!about) {
@@ -16,190 +16,581 @@ const { Content } = await render(about);
 const { data } = about;
 const cvUrl = data.cv ? resolveLocalFile(about.filePath, data.cv) : undefined;
 const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
-// The research themes from src/sections.yaml, or the tagline if there are none.
-const themes = sections.research.overview?.groups.map((g) => g.title).filter(Boolean) ?? [];
+const themes = sections.research.overview?.groups ?? [];
+const categories = TIMELINE_CATEGORIES.filter((c) => milestones.some((m) => m.category === c));
+const categoryClass = (c: string) => `tl__cat--${c.toLowerCase()}`;
 ---
 
-<Base title="About" description={`Biography, academic positions, qualifications, research themes and CV of ${settings.name}, ${settings.institution}.`}>
+<Base title="About" description={`Biography, academic positions, qualifications, career timeline and CV of ${settings.name}, ${settings.institution}.`}>
   <Masthead slot="header" current="about" />
 
-  <div class="wrap about">
-    <header class="about__head reveal">
+  <header class="about-hero">
+    <div class="wrap reveal">
       <p class="label">About</p>
-      <h1 class="about__title">Biography</h1>
-    </header>
+      <h1 class="about-hero__title">Biography</h1>
+      {settings.headline && <p class="about-hero__lead">{settings.headline}</p>}
+    </div>
+  </header>
 
-    <div class="about__layout">
-      <aside class="about__aside reveal" aria-label="Portrait and CV">
-        <figure class="portrait">
-          <Image src={data.portrait} alt={plain(data.portraitAlt)} widths={[240, 360, 480]} sizes="240px" format="webp" quality={80} />
-        </figure>
+  <div class="wrap about">
+    <aside class="profile card reveal reveal--left" aria-label="Profile">
+      <div class="profile__portrait">
+        <Image src={data.portrait} alt={data.portraitAlt} widths={[280, 420, 560]} sizes="280px" format="webp" quality={82} />
+      </div>
+      <div class="profile__body">
+        <p class="profile__name">{settings.name}</p>
+        {data.positions[0] && <p class="profile__role"><T text={data.positions[0].role} /></p>}
+        <p class="profile__place">{settings.affiliations[0]}<br />{settings.institution}</p>
         {
           cvUrl && (
-            <a class="cv" href={cvUrl} download={cvName}>
-              <span class="label">Curriculum vitae</span>
-              <span class="cv__action">Download CV (PDF)</span>
+            <a class="btn btn--primary profile__cv" href={cvUrl} download={cvName}>
+              Download CV (PDF) <span class="btn__arrow" aria-hidden="true">↓</span>
             </a>
           )
         }
-      </aside>
+        <a class="profile__email" href={`mailto:${settings.email}`}>{settings.email}</a>
+        {
+          settings.profiles.length > 0 && (
+            <div class="profile__links">
+              <p class="label label--muted">Research profiles</p>
+              <Profiles />
+            </div>
+          )
+        }
+      </div>
+    </aside>
 
-      <div class="about__main">
-        <div class="prose about__bio reveal">
-          <Content />
+    <div class="about__main">
+      <div class="prose about__bio reveal">
+        <Content />
+      </div>
+    </div>
+  </div>
+
+  <!-- Qualifications -->
+  {
+    data.education.length > 0 && (
+      <section class="section section--sunk quals" aria-labelledby="quals-heading">
+        <div class="wrap">
+          <div class="heading-block reveal">
+            <p class="label">Qualifications</p>
+            <h2 id="quals-heading">Education</h2>
+          </div>
+          <ol class="quals__list">
+            {data.education.map((e, i) => (
+              <li class="qual card reveal" style={`--delay:${i * 100}ms`}>
+                <span class="qual__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                    <path d="M2 9l10-5 10 5-10 5z" />
+                    <path d="M6 11v5c3 2.5 9 2.5 12 0v-5" />
+                    <path d="M22 9v6" />
+                  </svg>
+                </span>
+                <h3 class="qual__degree"><T text={e.degree} /></h3>
+                <p class="qual__place"><T text={e.place} /></p>
+                {e.focus && <p class="qual__focus"><T text={e.focus} /></p>}
+              </li>
+            ))}
+          </ol>
         </div>
+      </section>
+    )
+  }
 
-        <div class="facts">
-          {
-            data.positions.length > 0 && (
-              <section class="facts__block reveal">
-                <h2 class="label section-heading section-heading--left">Positions</h2>
-                <ul>
-                  {data.positions.map((p) => (
-                    <li>
-                      <span class="facts__main"><T text={p.role} /></span>
-                      <span class="facts__sub"><T text={p.place} /></span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )
-          }
+  <!-- Career timeline -->
+  {
+    milestones.length > 0 && (
+      <section class="section timeline" aria-labelledby="timeline-heading">
+        <div class="wrap">
+          <div class="heading-block reveal">
+            <p class="label">Career</p>
+            <h2 id="timeline-heading">Academic timeline</h2>
+            <p>Education, appointments, research, leadership and recognition, newest first.</p>
+          </div>
 
-          <section class="facts__block reveal">
-            <h2 class="label section-heading section-heading--left">Affiliations</h2>
+          <div class="tl__filters" role="group" aria-label="Show milestones by category" data-tl-filters hidden>
+            <button type="button" class="chip" data-tl-filter="" aria-pressed="true">All</button>
+            {categories.map((c) => (
+              <button type="button" class="chip" data-tl-filter={c} aria-pressed="false">
+                {c}
+              </button>
+            ))}
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-tl-status></p>
+
+          <ol class="tl">
+            {milestones.map((m, i) => (
+              <li class="tl__item reveal" data-category={m.category} style={`--delay:${Math.min(i, 4) * 60}ms`}>
+                <span class="tl__year">{m.year}</span>
+                <span class="tl__dot" aria-hidden="true" />
+                <div class="tl__card">
+                  <span class:list={['tl__cat', categoryClass(m.category)]}>{m.category}</span>
+                  <h3 class="tl__title">
+                    {m.link ? (
+                      <a href={m.link}>
+                        <T text={m.title} />
+                      </a>
+                    ) : (
+                      <T text={m.title} />
+                    )}
+                  </h3>
+                  {m.detail && <p class="tl__detail"><T text={m.detail} /></p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Roles and themes -->
+  <section class="section section--tight facts-band" aria-label="Positions and research themes">
+    <div class="wrap facts">
+      {
+        data.positions.length > 0 && (
+          <section class="facts__block card reveal">
+            <h2 class="label">Positions</h2>
             <ul>
-              {settings.affiliations.map((a) => (
+              {data.positions.map((p) => (
                 <li>
-                  <span class="facts__main">{a}</span>
-                  <span class="facts__sub">{settings.institution}</span>
+                  <span class="facts__main"><T text={p.role} /></span>
+                  <span class="facts__sub"><T text={p.place} /></span>
                 </li>
               ))}
             </ul>
           </section>
-
-          <section class="facts__block reveal">
-            <h2 class="label section-heading section-heading--left">Research themes</h2>
-            {
-              themes.length > 0 ? (
-                <ul class="facts__themes">
-                  {themes.map((t) => (
-                    <li>{t}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p class="facts__interests">{settings.tagline.join(', ')}</p>
-              )
-            }
-            {themes.length > 0 && <p class="facts__more"><a href="/research/#overview">Research themes in detail</a></p>}
+        )
+      }
+      <section class="facts__block card reveal" style="--delay:100ms">
+        <h2 class="label">Affiliations</h2>
+        <ul>
+          {settings.affiliations.map((a) => (
+            <li>
+              <span class="facts__main">{a}</span>
+              <span class="facts__sub">{settings.institution}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      {
+        themes.length > 0 && (
+          <section class="facts__block card reveal" style="--delay:200ms">
+            <h2 class="label">Research themes</h2>
+            <ul>
+              {themes.map((t) => (
+                <li>
+                  <a class="facts__main facts__link" href={t.link || '/research/#overview'}>{t.title}</a>
+                </li>
+              ))}
+            </ul>
           </section>
-
-          {
-            data.education.length > 0 && (
-              <section class="facts__block reveal">
-                <h2 class="label section-heading section-heading--left">Education</h2>
-                <ul>
-                  {data.education.map((e) => (
-                    <li>
-                      <span class="facts__main"><T text={e.degree} /></span>
-                      <span class="facts__sub"><T text={e.place} /></span>
-                      {e.focus && <span class="facts__focus"><T text={e.focus} /></span>}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )
-          }
-
-          {
-            settings.profiles.length > 0 && (
-              <section class="facts__block reveal">
-                <h2 class="label section-heading section-heading--left">Research profiles</h2>
-                <Profiles />
-              </section>
-            )
-          }
-        </div>
-      </div>
+        )
+      }
     </div>
-  </div>
+  </section>
 </Base>
 
+<script>
+  // Timeline filters: show one category at a time. Without scripts every
+  // milestone is shown and the buttons stay hidden.
+  const group = document.querySelector<HTMLElement>('[data-tl-filters]');
+  const status = document.querySelector<HTMLElement>('[data-tl-status]');
+  if (group) {
+    group.hidden = false;
+    const buttons = [...group.querySelectorAll<HTMLButtonElement>('[data-tl-filter]')];
+    const items = [...document.querySelectorAll<HTMLElement>('.tl__item')];
+    buttons.forEach((button) =>
+      button.addEventListener('click', () => {
+        const value = button.dataset.tlFilter ?? '';
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+        let shown = 0;
+        items.forEach((item) => {
+          const match = !value || item.dataset.category === value;
+          item.hidden = !match;
+          if (match) {
+            shown++;
+            item.classList.add('is-visible');
+          }
+        });
+        if (status) status.textContent = `${shown} ${shown === 1 ? 'milestone' : 'milestones'} shown`;
+      })
+    );
+  }
+</script>
+
 <style>
-  .about__head {
-    text-align: center;
+  .about-hero {
     padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+    background:
+      radial-gradient(800px 300px at 90% 0%, var(--teal-soft), transparent 70%),
+      radial-gradient(700px 300px at 0% 100%, var(--violet-soft), transparent 70%);
+    border-bottom: 1px solid var(--rule);
   }
 
-  .about__title {
-    font-size: clamp(2.8rem, 5.5vw, 4.6rem);
+  .about-hero__title {
+    font-size: clamp(3.2rem, 6vw, 5.4rem);
     font-weight: 500;
-    margin-top: 0.6rem;
+    line-height: 1;
+    margin: 0.6rem 0 0.75rem;
   }
 
-  .about__layout {
-    display: grid;
-    grid-template-columns: 15rem minmax(0, 1fr);
-    gap: clamp(2rem, 6vw, 6rem);
-    align-items: start;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule-strong);
-  }
-
-  .about__aside {
-    position: sticky;
-    top: 2rem;
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .portrait {
+  .about-hero__lead {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 1vw + 1rem, 1.75rem);
+    color: var(--ink-soft);
     margin: 0;
-    max-width: 15rem;
-    padding: 8px;
-    border: 1px solid var(--rule);
-    background: var(--paper-raised);
   }
 
-  .portrait :global(img) {
+  /* ---------- Profile and biography ---------- */
+  .about {
+    display: grid;
+    grid-template-columns: 19rem minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5.5rem);
+    align-items: start;
+    padding-block: var(--space-6);
+  }
+
+  .profile {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+  }
+
+  .profile__portrait {
+    padding: 12px 12px 0;
+  }
+
+  .profile__portrait :global(img) {
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
+    border-radius: 999px 999px 10px 10px;
   }
 
-  .cv {
+  .profile__body {
     display: grid;
-    gap: 0.3rem;
-    padding: 1rem 1.1rem;
-    border: 1px solid var(--rule-strong);
-    text-decoration: none;
-    color: var(--ink);
-    transition: border-color var(--medium) var(--ease), background-color var(--medium) var(--ease);
+    gap: 0.35rem;
+    padding: 1.1rem 1.4rem 1.5rem;
   }
 
-  .cv:hover {
-    border-color: var(--ink);
-    background: var(--paper-raised);
-  }
-
-  .cv__action {
+  .profile__name {
     font-family: var(--font-display);
-    font-size: 1.3rem;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .profile__role {
+    margin: 0;
+    font-weight: 600;
+    color: var(--brass-text);
+  }
+
+  .profile__place {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .profile__cv {
+    justify-content: center;
+  }
+
+  .profile__email {
+    margin: 0.6rem 0 0;
+    font-size: 0.92rem;
+    overflow-wrap: anywhere;
+  }
+
+  .profile__links {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .profile__links .label {
+    margin: 0 0 0.75rem;
+  }
+
+  .profile__links :global(.profiles a),
+  .profile__links :global(.profiles__label) {
+    font-size: 1.1rem;
   }
 
   .about__bio {
-    font-size: 1.08em;
+    font-size: 1.07em;
   }
 
-  .facts {
-    margin-top: var(--space-6);
+  .about__bio > :global(p:first-child) {
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 1vw + 1.1rem, 1.85rem);
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+
+    .profile {
+      position: static;
+      display: grid;
+      grid-template-columns: 11rem minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .profile__portrait {
+      padding: 12px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .profile {
+      grid-template-columns: 1fr;
+    }
+
+    .profile__portrait {
+      max-width: 16rem;
+      margin-inline: auto;
+      padding-bottom: 0;
+    }
+  }
+
+  /* ---------- Qualifications ---------- */
+  .quals {
+    margin-top: var(--space-5);
+  }
+
+  .quals__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-5) clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
-  .facts__block .section-heading {
-    margin-bottom: 1.25rem;
+  .qual {
+    padding: 1.6rem 1.6rem 1.7rem;
+  }
+
+  .qual__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--teal-soft);
+    color: var(--brass-text);
+    margin-bottom: 1rem;
+  }
+
+  .qual__degree {
+    font-size: 1.55rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .qual__place {
+    margin: 0;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .qual__focus {
+    margin: 0.6rem 0 0;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .quals__list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Timeline ---------- */
+  .tl__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: var(--space-5);
+  }
+
+  .tl__filters[hidden] {
+    display: none;
+  }
+
+  .tl {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  /* The line through the dots */
+  .tl::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: calc(7.5rem + 0.75rem + 7px);
+    width: 2px;
+    background: linear-gradient(var(--brass), var(--violet));
+    opacity: 0.45;
+  }
+
+  .tl__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 7.5rem 16px minmax(0, 1fr);
+    gap: 0.75rem 1.5rem;
+    align-items: start;
+  }
+
+  .tl__item[hidden] {
+    display: none;
+  }
+
+  .tl__year {
+    padding-top: 1.05rem;
+    text-align: right;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: lining-nums;
+    margin-left: 0.75rem;
+  }
+
+  .tl__dot {
+    margin-top: 1.45rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 3px solid var(--brass);
+    transition:
+      transform var(--quick) var(--ease),
+      background-color var(--quick) var(--ease);
+  }
+
+  .tl__card {
+    padding: 1rem 1.25rem 1.1rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition:
+      transform var(--medium) var(--ease-out),
+      box-shadow var(--medium) var(--ease-out),
+      border-color var(--quick) var(--ease);
+  }
+
+  .tl__item:hover .tl__card,
+  .tl__item:focus-within .tl__card {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in srgb, var(--brass) 40%, var(--rule));
+  }
+
+  .tl__item:hover .tl__dot,
+  .tl__item:focus-within .tl__dot {
+    transform: scale(1.25);
+    background: var(--brass);
+  }
+
+  .tl__cat {
+    display: inline-block;
+    margin-bottom: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass-text);
+  }
+
+  .tl__cat--research,
+  .tl__cat--recognition {
+    color: var(--violet);
+  }
+
+  .tl__cat--appointments {
+    color: var(--ink);
+  }
+
+  .tl__title {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .tl__title a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+
+  .tl__title a:hover {
+    text-decoration-color: var(--brass);
+  }
+
+  .tl__detail {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .tl::before {
+      left: 7px;
+    }
+
+    .tl__item {
+      grid-template-columns: 16px minmax(0, 1fr);
+      gap: 0.25rem 1rem;
+    }
+
+    .tl__year {
+      grid-column: 2;
+      text-align: left;
+      padding-top: 0;
+      margin-left: 0;
+      font-size: 1.15rem;
+    }
+
+    .tl__dot {
+      grid-column: 1;
+      grid-row: 1;
+      margin-top: 0.35rem;
+    }
+
+    .tl__card {
+      grid-column: 2;
+    }
+  }
+
+  /* ---------- Positions, affiliations and themes ---------- */
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .facts__block {
+    padding: 1.5rem 1.6rem;
+  }
+
+  .facts__block .label {
+    margin-bottom: 1rem;
   }
 
   .facts ul {
@@ -207,62 +598,34 @@ const themes = sections.research.overview?.groups.map((g) => g.title).filter(Boo
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 
   .facts__main {
     display: block;
     font-family: var(--font-display);
-    font-size: 1.3rem;
+    font-size: 1.28rem;
+    font-weight: 600;
     line-height: 1.25;
     color: var(--ink);
+  }
+
+  .facts__link {
+    text-decoration: none;
+  }
+
+  .facts__link:hover {
+    color: var(--link);
+    text-decoration: underline;
   }
 
   .facts__sub {
     display: block;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: var(--muted);
   }
 
-  .facts__focus {
-    display: block;
-    margin-top: 0.2rem;
-    font-size: 0.9rem;
-    font-style: italic;
-    color: var(--ink-soft);
-  }
-
-  .facts__themes {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    line-height: 1.25;
-    color: var(--ink);
-  }
-
-  .facts__more {
-    margin: 1rem 0 0;
-    font-size: 0.92rem;
-  }
-
-  .facts__interests {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.3rem;
-    line-height: 1.4;
-    color: var(--ink);
-  }
-
-  @media (max-width: 820px) {
-    .about__layout {
-      grid-template-columns: 1fr;
-    }
-
-    .about__aside {
-      position: static;
-      grid-template-columns: 9rem minmax(0, 1fr);
-      align-items: end;
-    }
-
+  @media (max-width: 900px) {
     .facts {
       grid-template-columns: 1fr;
     }

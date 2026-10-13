@@ -113,6 +113,8 @@ function itemSchema(section: (typeof SECTION_KEYS)[number]) {
               problem: requiredText('problem', 'followed by the problem the innovation aims to address'),
               users: requiredText('users', 'followed by the people the innovation is intended for'),
               recognition: optionalText,
+              // An illustration from src/assets/illustrations, for example microneedle.
+              image: optionalText,
               // Position on the Innovations page: 1 comes first.
               order: z.number().optional(),
             },

@@ -1,0 +1,35 @@
+---
+import { ILLUSTRATION_ALT } from '../lib/illustrations';
+// An original scientific illustration from src/assets/illustrations, placed
+// inline so its gentle animation can run (and stop when the visitor prefers
+// reduced motion). They are conceptual drawings, not photographs or data.
+// Regenerate them with: python3 scripts/illustrations.py src/assets/illustrations
+const files = import.meta.glob('/src/assets/illustrations/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+
+interface Props {
+  name: string;
+  /** Overrides the default description. Pass an empty string for a purely decorative use. */
+  alt?: string;
+  class?: string;
+}
+
+const { name, alt, class: className } = Astro.props;
+const svg = files[`/src/assets/illustrations/${name}.svg`];
+if (!svg) {
+  throw new Error(`There is no illustration called "${name}". Choose one of: ${Object.keys(ILLUSTRATION_ALT).join(', ')}.`);
+}
+const label = alt ?? ILLUSTRATION_ALT[name] ?? '';
+---
+
+{
+  label ? (
+    <div class:list={['illus', className]} role="img" aria-label={label} set:html={svg} />
+  ) : (
+    <div class:list={['illus', className]} aria-hidden="true" set:html={svg} />
+  )
+}

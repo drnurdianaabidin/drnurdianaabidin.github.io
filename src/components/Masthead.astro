@@ -1,66 +1,46 @@
 ---
-// The header at the top of every page. On the home page it is large and
-// your name is the main heading. On other pages it is smaller and your
-// name links back to the home page.
+// The navy bar at the top of every page: name, menu and the light/dark
+// switch. It stays at the top while scrolling. On narrow screens the menu
+// folds behind a Menu button; without scripts it simply wraps below the name.
 import ThemeToggle from './ThemeToggle.astro';
 import { settings, sections, sectionKeys, extraPages } from '../lib/items';
 
 interface Props {
+  /** Kept for older pages; the header looks the same everywhere. */
   size?: 'large' | 'compact';
   current?: string;
 }
 
-const { size = 'compact', current } = Astro.props;
-const large = size === 'large';
+const { current } = Astro.props;
+
 // Publications and Innovations follow Research, and Media follows Community.
-const links = sectionKeys.flatMap((key) => [
-  { href: `/${key}/`, label: sections[key].title, key },
-  ...extraPages.filter((page) => page.after === key),
-]);
+const links = [
+  ...sectionKeys.flatMap((key) => [
+    { href: `/${key}/`, label: sections[key].title, key },
+    ...extraPages.filter((page) => page.after === key),
+  ]),
+  { href: '/about/', label: 'About', key: 'about' },
+  { href: '/contact/', label: 'Contact', key: 'contact' },
+];
 ---
 
-<header class:list={['masthead', `masthead--${size}`]}>
-  <div class="wrap masthead__inner">
-    <div class="masthead__utility">
-      <ThemeToggle />
-    </div>
-    <p class="label masthead__kicker">{settings.institution}</p>
-    {
-      large ? (
-        <h1 class="masthead__name">{settings.name}</h1>
-      ) : (
-        <p class="masthead__name">
-          <a href="/" aria-label={`${settings.name}, home page`}>{settings.name}</a>
-        </p>
-      )
-    }
-    {
-      large && (
-        <p class="masthead__tagline">
-          {settings.tagline.map((t, i) => (
-            <>
-              {i > 0 && <span class="masthead__sep" aria-hidden="true">·</span>}
-              <span>{t}</span>
-            </>
-          ))}
-        </p>
-      )
-    }
-    {
-      large && (
-        <p class="masthead__affil">
-          {settings.affiliations.map((a, i) => (
-            <>
-              {i > 0 && <span class="masthead__sep" aria-hidden="true">·</span>}
-              <span>{a}</span>
-            </>
-          ))}
-        </p>
-      )
-    }
-    <hr class="rule rule--double masthead__rule" />
-    <nav class="masthead__nav" aria-label="Main">
-      <ul>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label={`${settings.name}, home page`}>
+      <span class="brand__mark" aria-hidden="true">NZA</span>
+      <span class="brand__text">
+        <span class="brand__name">{settings.name}</span>
+        <span class="brand__sub">{settings.institution}</span>
+      </span>
+    </a>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-button hidden>
+      <span class="menu-button__lines" aria-hidden="true"><span></span><span></span></span>
+      <span class="menu-button__text">Menu</span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main" data-menu>
+      <ul class="site-nav__list">
         {
           links.map((link) => (
             <li>
@@ -71,188 +51,283 @@ const links = sectionKeys.flatMap((key) => [
           ))
         }
       </ul>
-      <span class="masthead__nav-sep" aria-hidden="true"></span>
-      <ul>
-        <li><a href="/about/" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
-        <li><a href="/contact/" aria-current={current === 'contact' ? 'page' : undefined}>Contact</a></li>
-      </ul>
+      <ThemeToggle class="site-nav__theme" />
     </nav>
   </div>
 </header>
 
 <style>
-  .masthead {
-    padding-top: clamp(1rem, 3vw, 2rem);
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(11 26 46 / 94%);
+    color: var(--on-night);
+    border-bottom: 1px solid var(--night-rule);
+    transition: box-shadow var(--medium) var(--ease), background-color var(--medium) var(--ease);
   }
 
-  .masthead__inner {
-    text-align: center;
+  @supports (backdrop-filter: blur(8px)) {
+    .site-header {
+      background: rgb(11 26 46 / 93%);
+      backdrop-filter: blur(14px) saturate(140%);
+    }
   }
 
-  .masthead__utility {
+  .site-header[data-scrolled] {
+    box-shadow: 0 10px 30px rgb(3 10 20 / 28%);
+  }
+
+  .site-header__inner {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: clamp(0.25rem, 2vw, 1.25rem);
-  }
-
-  .masthead--compact .masthead__utility {
-    margin-bottom: 0;
-  }
-
-  .masthead__kicker {
-    margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
-  }
-
-  .masthead--compact .masthead__kicker {
-    margin-bottom: 0.5rem;
-  }
-
-  .masthead__name {
-    font-family: var(--font-display);
-    font-size: clamp(2.75rem, 7.4vw, 6.75rem);
-    font-weight: 500;
-    letter-spacing: -0.012em;
-    line-height: 1;
-    color: var(--ink);
-    margin: 0;
-    text-wrap: balance;
-  }
-
-  .masthead--compact .masthead__name {
-    font-size: clamp(2rem, 3.6vw, 3rem);
-    line-height: 1.05;
-  }
-
-  .masthead__name a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .masthead__tagline {
-    margin: clamp(1rem, 2vw, 1.5rem) auto 0;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(1.15rem, 0.8vw + 0.95rem, 1.45rem);
-    line-height: 1.35;
-    color: var(--ink-soft);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.1rem 0.75rem;
-  }
-
-  .masthead__affil {
-    margin: clamp(0.75rem, 1.5vw, 1.1rem) auto 0;
-    color: var(--muted);
-    font-size: 0.98rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.2rem 0.75rem;
-  }
-
-  .masthead__sep {
-    color: var(--brass);
-  }
-
-  .masthead__rule {
-    margin-top: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  .masthead--compact .masthead__rule {
-    margin-top: clamp(1.1rem, 2.5vw, 1.6rem);
-  }
-
-  .masthead__nav {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0 clamp(1rem, 3vw, 2.25rem);
-    padding: 0.35rem 0;
-    border-bottom: 1px solid var(--rule);
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: var(--header-h);
   }
 
-  .masthead__nav ul {
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--on-night);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid rgb(143 216 211 / 55%);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--night-accent);
+    transition: background-color var(--quick) var(--ease), color var(--quick) var(--ease);
+  }
+
+  .brand:hover .brand__mark {
+    background: var(--night-accent);
+    color: var(--night);
+  }
+
+  .brand__text {
+    display: grid;
+    line-height: 1.15;
+  }
+
+  .brand__name {
+    font-family: var(--font-display);
+    font-size: 1.32rem;
+    font-weight: 600;
+  }
+
+  .brand__sub {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-night-soft);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .site-nav__list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 0 clamp(1rem, 3vw, 2.25rem);
+    gap: 0.1rem clamp(0.7rem, 1.1vw, 1.1rem);
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .masthead__nav a {
+  .site-nav__list a {
+    position: relative;
     display: inline-block;
-    padding: 0.75rem 0;
-    font-size: 0.78rem;
+    padding: 0.55rem 0;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--ink);
-    background: linear-gradient(var(--brass), var(--brass)) no-repeat 50% calc(100% - 0.55rem) / 0 1px;
-    transition: background-size var(--medium) var(--ease), color var(--quick) var(--ease);
+    color: var(--on-night-soft);
+    transition: color var(--quick) var(--ease);
   }
 
-  .masthead__nav a:hover,
-  .masthead__nav a:focus-visible,
-  .masthead__nav a[aria-current='page'] {
-    background-size: 100% 1px;
+  /* An underline that grows from the centre */
+  .site-nav__list a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.3rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--night-accent);
+    transform: scaleX(0);
+    transition: transform var(--medium) var(--ease-out);
   }
 
-  .masthead__nav a[aria-current='page'] {
-    color: var(--brass-text);
+  .site-nav__list a:hover,
+  .site-nav__list a:focus-visible,
+  .site-nav__list a[aria-current='page'] {
+    color: var(--on-night);
   }
 
-  .masthead__nav-sep {
-    width: 1px;
-    height: 1rem;
-    background: var(--rule-strong);
+  .site-nav__list a:hover::after,
+  .site-nav__list a:focus-visible::after,
+  .site-nav__list a[aria-current='page']::after {
+    transform: scaleX(1);
   }
 
-  @media (max-width: 760px) {
-    .masthead__nav-sep {
+  .site-nav__list a:focus-visible {
+    outline-color: var(--night-accent);
+  }
+
+  .menu-button {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--night-rule);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--on-night);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .menu-button__lines {
+    display: grid;
+    gap: 5px;
+    width: 18px;
+  }
+
+  .menu-button__lines span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform var(--quick) var(--ease);
+  }
+
+  .menu-button[aria-expanded='true'] .menu-button__lines span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .menu-button[aria-expanded='true'] .menu-button__lines span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  /* Narrow screens: with scripts, the menu folds behind the button. */
+  @media (max-width: 1240px) {
+    .site-header__inner {
+      flex-wrap: wrap;
+    }
+
+    :global(.js) .menu-button {
+      display: inline-flex;
+    }
+
+    :global(.js) .site-nav {
       display: none;
     }
-  }
 
-  @media (max-width: 560px) {
-    .masthead__tagline {
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .masthead__affil {
-      flex-direction: column;
-      gap: 0.15rem;
-      font-size: 0.92rem;
-    }
-
-    .masthead__sep {
-      display: none;
-    }
-
-    .masthead__nav {
-      flex-direction: column;
-      gap: 0;
-      padding: 0.25rem 0;
-    }
-
-    .masthead__nav ul {
-      gap: 0 1rem;
-    }
-
-    .masthead__nav ul + ul {
-      border-top: 1px solid var(--rule);
+    :global(.js) .site-nav[data-open] {
+      display: grid;
       width: 100%;
+      padding: 0.5rem 0 1.25rem;
+      border-top: 1px solid var(--night-rule);
+      animation: menu-open var(--medium) var(--ease-out);
     }
 
-    .masthead__nav a {
-      font-size: 0.7rem;
-      letter-spacing: 0.13em;
-      padding: 0.7rem 0;
+    :global(.js) .site-nav[data-open] .site-nav__list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+      gap: 0;
+    }
+
+    :global(.js) .site-nav[data-open] .site-nav__list a {
+      display: block;
+      padding: 0.85rem 0;
+      font-size: 0.85rem;
+    }
+
+    :global(.js) .site-nav[data-open] .site-nav__list a::after {
+      bottom: 0.5rem;
+      right: auto;
+      width: 2rem;
+    }
+
+    /* No scripts: everything stays visible, wrapped under the name. */
+    :global(html:not(.js)) .site-nav {
+      width: 100%;
+      flex-wrap: wrap;
+      padding-bottom: 0.75rem;
+    }
+  }
+
+  @keyframes menu-open {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  /* Phones: the name and the menu button share one row. */
+  @media (max-width: 520px) {
+    .site-header__inner {
+      gap: 0.75rem;
+    }
+
+    .brand {
+      gap: 0.6rem;
+    }
+
+    .brand__mark {
+      width: 2.2rem;
+      height: 2.2rem;
+      font-size: 0.82rem;
+    }
+
+    .brand__name {
+      font-size: 1.05rem;
+      white-space: nowrap;
+    }
+
+    .brand__sub {
+      display: none;
+    }
+
+    .menu-button {
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .menu-button {
+      padding: 0.4rem 0.8rem;
+    }
+
+    .menu-button__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
 </style>

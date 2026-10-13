@@ -11,11 +11,29 @@ export type Overview = {
   heading: string;
   text: string;
   note: string;
-  groups: { title: string; items: string[] }[];
+  groups: { title: string; intro: string; image: string; link: string; linkLabel: string; items: string[] }[];
+};
+export type Feature = {
+  id: string;
+  title: string;
+  kicker: string;
+  status: string;
+  text: string;
+  note: string;
+  image: string;
+  links: { label: string; href: string }[];
 };
 export const sections = parseSections(sectionsText) as Record<
   SectionKey,
-  { key: SectionKey; title: string; description: string; categories: string[]; overview?: Overview }
+  {
+    key: SectionKey;
+    title: string;
+    description: string;
+    categories: string[];
+    overview?: Overview;
+    image: string;
+    features: Feature[];
+  }
 >;
 export const sectionKeys = SECTION_KEYS as unknown as SectionKey[];
 
@@ -176,4 +194,26 @@ export async function getMedia(): Promise<Item[]> {
 /** Where a piece of media work appeared, newest first, with undated appearances last. */
 export function sortedAppearances(item: Item) {
   return [...item.data.appearances].sort((a, b) => (b.date?.getTime() ?? -Infinity) - (a.date?.getTime() ?? -Infinity));
+}
+
+/** The kind of publication, read from its title and citation. */
+export function publicationType(item: Item) {
+  const text = `${item.data.title} ${item.data.citation ?? ''}`;
+  if (/chapter in/i.test(text)) return 'Book chapter';
+  if (/systematic review|meta-analysis|\breview\b/i.test(item.data.title)) return 'Review';
+  return 'Research article';
+}
+
+/** The journal or book: the part of the citation in *stars*. */
+export function journalOf(item: Item) {
+  return item.data.citation?.match(/\*([^*]+)\*/)?.[1] ?? '';
+}
+
+/** The authors: the part of the citation before the year. */
+export function authorsOf(item: Item) {
+  if (publicationType(item) === 'Book chapter') return '';
+  const c = item.data.citation ?? '';
+  const m = c.match(/^(.*?)\.\s(?:19|20)\d\d\./);
+  if (!m) return '';
+  return m[1].endsWith('et al') ? `${m[1]}.` : m[1];
 }
