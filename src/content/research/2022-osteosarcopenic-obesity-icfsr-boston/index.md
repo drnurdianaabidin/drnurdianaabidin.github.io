@@ -11,6 +11,9 @@ collaboratorsLabel: Authors
 collaborators:
   - "Abidin NZ"
   - "Mitra SR"
+links:
+  - label: "Read the abstract"
+    url: https://doi.org/10.14283/jfa.2022.23
 ---
 
 **Poster presentation**  

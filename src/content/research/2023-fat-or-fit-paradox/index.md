@@ -11,10 +11,10 @@ collaboratorsLabel: Authors
 collaborators:
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.32098/mltj.03.2023.20
 ---
 
 ## Citation
 
-Abidin NZ. 2023. The "Fat or Fit Paradox" in postmenopausal women: A cross-sectional study on the association between skeletal muscle mass, adiposity, and muscle strength. *Muscles, Ligaments and Tendons Journal*, 13(3), 494–503.
+Abidin NZ. 2023. The "Fat or Fit Paradox" in postmenopausal women: A cross-sectional study on the association between skeletal muscle mass, adiposity, and muscle strength. *Muscles, Ligaments and Tendons Journal*, 13(3), 494–503. DOI: [10.32098/mltj.03.2023.20](https://doi.org/10.32098/mltj.03.2023.20)

@@ -8,7 +8,7 @@ summary: "A book chapter in Genetic Disorders and Rare Diseases: Current Updates
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of vertical bars, like a simple bar chart."
 links:
-  - label: "DOI"
+  - label: "Read the chapter"
     url: https://doi.org/10.52305/WNGG1520
 ---
 
@@ -18,4 +18,4 @@ links:
 
 ## Citation
 
-Shaharudin S, Edinur HA, Che Mat NF. 2023. *Genetic Disorders and Rare Diseases: Current Updates*. School of Health Sciences, Universiti Sains Malaysia.
+Shaharudin S, Edinur HA, Che Mat NF. 2023. *Genetic Disorders and Rare Diseases: Current Updates*. School of Health Sciences, Universiti Sains Malaysia. DOI: [10.52305/WNGG1520](https://doi.org/10.52305/WNGG1520)

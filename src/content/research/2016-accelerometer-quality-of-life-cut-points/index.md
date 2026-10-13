@@ -13,10 +13,10 @@ collaborators:
   - "Muhamed AMC"
   - "Singh R"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.15282/mohe.v5i1.102
 ---
 
 ## Citation
 
-Abidin NZ, Muhamed AMC, Singh R. 2016. Associations between Tri-Axial Accelerometer-Determined Physical Activity and Self-Reported Health-Related Quality of Life of Older Malay Adults Using Cut-Points for Vector Magnitude. *Malaysian Journal of Movement, Health & Exercise*, 5(1).
+Abidin NZ, Muhamed AMC, Singh R. 2016. Associations between Tri-Axial Accelerometer-Determined Physical Activity and Self-Reported Health-Related Quality of Life of Older Malay Adults Using Cut-Points for Vector Magnitude. *Malaysian Journal of Movement, Health & Exercise*, 5(1). DOI: [10.15282/mohe.v5i1.102](https://doi.org/10.15282/mohe.v5i1.102)

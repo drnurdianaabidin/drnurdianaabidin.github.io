@@ -12,10 +12,10 @@ collaborators:
   - "Mitra SR"
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.31246/mjn-2020-0080
 ---
 
 ## Citation
 
-Mitra SR, Abidin NZ. 2021. Comparison of anthropometric profile, bone-related parameters, biochemical parameters, functional capacity and Vitamin D status: a study on postmenopausal Malaysian women. *Malaysian Journal of Nutrition*.
+Mitra SR, Abidin NZ. 2021. Comparison of anthropometric profile, bone-related parameters, biochemical parameters, functional capacity and Vitamin D status: a study on postmenopausal Malaysian women. *Malaysian Journal of Nutrition*. DOI: [10.31246/mjn-2020-0080](https://doi.org/10.31246/mjn-2020-0080)

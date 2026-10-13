@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import T from './T.astro';
+import { plain } from '../lib/placeholder.mjs';
 import { type Item, sections, itemUrl, formatDate, isoDate } from '../lib/items';
 
 interface Props {
@@ -22,6 +23,8 @@ const {
 } = Astro.props;
 const { data } = item;
 const Heading = level === 2 ? 'h2' : 'h3';
+// A DOI link (a paper, chapter or abstract) is also offered on the card itself.
+const doiLink = data.links.find((link) => /^https?:\/\/(dx\.)?doi\.org\//i.test(link.url));
 ---
 
 <article class="card reveal" style={`--delay:${delay}ms`}>
@@ -37,6 +40,15 @@ const Heading = level === 2 ? 'h2' : 'h3';
     <p class="card__date"><time datetime={isoDate(data.date)}>{formatDate(data.date, 'month')}</time></p>
     {showSummary && <p class="card__summary"><T text={data.summary} /></p>}
   </a>
+  {
+    doiLink && (
+      <a class="card__doi label" href={doiLink.url} rel="noopener">
+        <T text={doiLink.label} />
+        <span class="visually-hidden">: {plain(data.title)}</span>
+        <span aria-hidden="true"> ↗</span>
+      </a>
+    )
+  }
 </article>
 
 <style>
@@ -102,5 +114,20 @@ const Heading = level === 2 ? 'h2' : 'h3';
     font-size: 0.98rem;
     color: var(--ink-soft);
     margin: 0;
+  }
+
+  .card__doi {
+    display: inline-block;
+    margin-top: 0.9rem;
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--brass);
+  }
+
+  .card__doi:hover,
+  .card__doi:focus-visible {
+    color: var(--ink);
   }
 </style>

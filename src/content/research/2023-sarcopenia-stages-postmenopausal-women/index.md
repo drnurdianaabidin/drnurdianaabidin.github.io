@@ -11,10 +11,10 @@ collaboratorsLabel: Authors
 collaborators:
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.21315/mjms2023.30.5.8
 ---
 
 ## Citation
 
-Abidin NZ. 2023. Comparison of muscle, bone and fat indices between stages of sarcopenia in postmenopausal Malaysian women. *Malaysian Journal of Medical Sciences*, 30(5), 91–105.
+Abidin NZ. 2023. Comparison of muscle, bone and fat indices between stages of sarcopenia in postmenopausal Malaysian women. *Malaysian Journal of Medical Sciences*, 30(5), 91–105. DOI: [10.21315/mjms2023.30.5.8](https://doi.org/10.21315/mjms2023.30.5.8)

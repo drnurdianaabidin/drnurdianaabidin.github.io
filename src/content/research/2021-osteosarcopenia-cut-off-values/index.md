@@ -13,10 +13,10 @@ collaborators:
   - "Abidin NZ"
   - "Mitra SR"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.1155/2021/6634474
 ---
 
 ## Citation
 
-Abidin NZ, Mitra SR. 2021. Determination of cut-off values for the screening of Osteosarcopenia in obese postmenopausal women. *Current Gerontology and Geriatrics Research*, 2021, Article ID 6634474.
+Abidin NZ, Mitra SR. 2021. Determination of cut-off values for the screening of Osteosarcopenia in obese postmenopausal women. *Current Gerontology and Geriatrics Research*, 2021, Article ID 6634474. DOI: [10.1155/2021/6634474](https://doi.org/10.1155/2021/6634474)

@@ -13,10 +13,10 @@ collaborators:
   - "Yusof HA"
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.1089/g4h.2025.0044
 ---
 
 ## Citation
 
-Wen F, Yusof HA, Abidin NZ. 2025. Effects of Active Video Games on Energy Expenditure and Weight Management Among Young Adults: A Systematic Review. *Games for Health Journal*, 14(5), 345–357.
+Wen F, Yusof HA, Abidin NZ. 2025. Effects of Active Video Games on Energy Expenditure and Weight Management Among Young Adults: A Systematic Review. *Games for Health Journal*, 14(5), 345–357. DOI: [10.1089/g4h.2025.0044](https://doi.org/10.1089/g4h.2025.0044)

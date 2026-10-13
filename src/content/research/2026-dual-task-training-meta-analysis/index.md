@@ -15,12 +15,12 @@ collaborators:
   - "Abd Hamid AI"
   - "Mat Isa S"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.1177/00315125261425126
 ---
 
 ## Citation
 
-Abidin NZ, Mansor NS, Yusof HA, Abd Hamid AI, Mat Isa S. 2026. The Impact of Dual-Task Training Versus Single-Task Training on Cognitive and Physical Function in Neurologically Impaired Individuals: A Systematic Review and Meta-Analysis of Randomized Controlled Trials. *Perceptual and Motor Skills*. OnlineFirst.
+Abidin NZ, Mansor NS, Yusof HA, Abd Hamid AI, Mat Isa S. 2026. The Impact of Dual-Task Training Versus Single-Task Training on Cognitive and Physical Function in Neurologically Impaired Individuals: A Systematic Review and Meta-Analysis of Randomized Controlled Trials. *Perceptual and Motor Skills*. OnlineFirst. DOI: [10.1177/00315125261425126](https://doi.org/10.1177/00315125261425126)
 
 See also the current project on [dual-task cognitive training in virtual reality](/research/2022-virtual-reality-dual-task-training/).

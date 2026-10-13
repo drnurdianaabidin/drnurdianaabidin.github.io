@@ -13,10 +13,10 @@ collaborators:
   - "Yusof HA"
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.1186/s12889-025-25413-1
 ---
 
 ## Citation
 
-Wen F, Yusof HA, Abidin NZ. 2025. Effects of active video games on affective responses and mental health symptoms in young adults: a systematic review. *BMC Public Health*, 25, 3995.
+Wen F, Yusof HA, Abidin NZ. 2025. Effects of active video games on affective responses and mental health symptoms in young adults: a systematic review. *BMC Public Health*, 25, 3995. DOI: [10.1186/s12889-025-25413-1](https://doi.org/10.1186/s12889-025-25413-1)

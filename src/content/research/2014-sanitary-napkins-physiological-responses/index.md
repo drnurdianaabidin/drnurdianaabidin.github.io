@@ -17,12 +17,12 @@ collaborators:
   - "Muhamed AMC"
   - "Singh R"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.1186/1880-6805-33-28
 ---
 
 ## Citation
 
-Mohamed NG, Abidin NZ, Law KS, Abe M, Suzuki M, Muhamed AMC, Singh R. 2014. The effect of wearing sanitary napkins of different thicknesses on physiological and psychological responses in Muslim females. *Journal of Physiological Anthropology*, 33, 28.
+Mohamed NG, Abidin NZ, Law KS, Abe M, Suzuki M, Muhamed AMC, Singh R. 2014. The effect of wearing sanitary napkins of different thicknesses on physiological and psychological responses in Muslim females. *Journal of Physiological Anthropology*, 33, 28. DOI: [10.1186/1880-6805-33-28](https://doi.org/10.1186/1880-6805-33-28)
 
 See also the [research collaboration with Kao Corporation, Japan](/industry/2011-kao-corporation-collaboration/).

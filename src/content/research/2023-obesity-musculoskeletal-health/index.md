@@ -11,10 +11,10 @@ collaboratorsLabel: Authors
 collaborators:
   - "Abidin NZ"
 links:
-  - label: "DOI"
+  - label: "Read the paper"
     url: https://doi.org/10.21315/mjms2023.30.1.12
 ---
 
 ## Citation
 
-Abidin NZ. 2023. Obesity and musculoskeletal health of young and older Malaysian women: a cross-sectional study. *Malaysian Journal of Medical Sciences*, 30(1), 137–151.
+Abidin NZ. 2023. Obesity and musculoskeletal health of young and older Malaysian women: a cross-sectional study. *Malaysian Journal of Medical Sciences*, 30(1), 137–151. DOI: [10.21315/mjms2023.30.1.12](https://doi.org/10.21315/mjms2023.30.1.12)
