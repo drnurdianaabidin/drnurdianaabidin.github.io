@@ -22,7 +22,7 @@ Dr Nurdiana Zainol Abidin is a Senior Lecturer at Universiti Sains Malaysia, and
 
 Dr Nurdiana completed a PhD in Biosciences at the University of Nottingham in 2021, with a thesis on screening criteria for osteosarcopenic obesity and its association with bioavailable 25(OH)D. An earlier MSc in Health Sciences at Universiti Sains Malaysia measured the physical activity of Malay older adults with tri-axial accelerometers.
 
-Current projects, led as principal investigator, include a resveratrol-loaded microneedle patch for muscle soreness after exercise, funded by the Fundamental Research Grant Scheme, and dual-task cognitive training in fully immersive virtual reality. Teaching covers applied and clinical exercise physiology, supported by digital learning tools such as PhysioVerse 3D, an interactive 3D biomechanics platform. Dr Nurdiana also founded the AMDI Longitudinal Program for Healthy Ageing (ALPHA).
+Current projects, led as principal investigator, include a resveratrol-loaded microneedle patch for muscle soreness after exercise, funded by the Fundamental Research Grant Scheme, and dual-task cognitive training in fully immersive virtual reality. Teaching covers applied and clinical exercise physiology, supported by digital learning tools such as PhysioVerse 3D, an interactive 3D biomechanics platform.
 
 ## Research profiles
 
