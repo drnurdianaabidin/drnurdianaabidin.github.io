@@ -49,6 +49,14 @@ email: nurdianaabidin@usm.my
 # A sentence or two shown above your email address on the Contact page.
 contactNote: I welcome research collaborations in musculoskeletal ageing, exercise physiology, clinical prediction modelling, digital health and translational biomedical innovation. Prospective postgraduate students and potential partners are welcome to write by email.
 
+# The three papers shown under "Recent papers" on the home page: the folder
+# names of publications in src/content/research/. Remove these lines to show
+# the three newest instead.
+homePapers:
+  - 2026-ai-ml-cancer-prediction-models-review
+  - 2026-dual-task-training-meta-analysis
+  - 2024-resveratrol-muscle-soreness-review
+
 # Figures shown on the home page under "At a glance". Write "auto" as the
 # value for publications to count them from the Research section.
 highlights:

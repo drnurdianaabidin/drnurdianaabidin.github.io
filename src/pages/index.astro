@@ -27,7 +27,18 @@ if (!about) throw new Error('The About page is missing. It should be at src/cont
 const themes = sections.research.overview?.groups ?? [];
 const features = sections.research.features.slice(0, 3);
 const publications = await getPublications();
-const latest = publications.slice(0, 3);
+// The papers chosen under homePapers in src/settings.yaml, or the newest three.
+const latest = settings.homePapers.length
+  ? settings.homePapers.map((id) => {
+      const paper = publications.find((p) => p.id === id);
+      if (!paper) {
+        throw new Error(
+          `The paper "${id}" listed under homePapers in src/settings.yaml was not found. Use the folder name of a publication in src/content/research/.`
+        );
+      }
+      return paper;
+    })
+  : publications.slice(0, 3);
 // The newest blog articles; the section is left out until there are any.
 const posts = await getPosts();
 const latestPosts = posts.slice(0, 3);

@@ -70,6 +70,7 @@ export function parseSettings(text) {
     detail: h?.detail ? String(h.detail).trim() : '',
   }));
   const optional = (key) => (typeof raw[key] === 'string' ? raw[key].trim() : '');
+  const homePapers = (Array.isArray(raw.homePapers) ? raw.homePapers : []).map((p) => String(p).trim()).filter(Boolean);
   // The GoatCounter code is the first part of the dashboard address, such as
   // "nurdiana" for https://nurdiana.goatcounter.com. Accept the full address too.
   const goatcounter = optional('goatcounter')
@@ -96,6 +97,7 @@ export function parseSettings(text) {
     contactNote: optional('contactNote'),
     profiles,
     highlights,
+    homePapers,
     siteUrl,
     goatcounter,
     highlightPlaceholders: raw.highlightPlaceholders !== false,

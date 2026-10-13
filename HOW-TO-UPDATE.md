@@ -271,6 +271,8 @@ Visits from your own computer while you preview the site are not counted. To sto
 
 **Headline and title under your name.** In `src/settings.yaml`, `headline:` is the large line on the home page ("Exploring the Science of Healthy Ageing") and `designation:` is your title shown above it. The four phrases under `tagline:` appear as small labels in the home page banner, in the footer and on the Contact page.
 
+**Papers on the home page.** The three papers under "Recent papers" are listed under `homePapers:` in `src/settings.yaml`, by the folder name of each publication in `src/content/research/`, for example `2024-resveratrol-muscle-soreness-review`. Remove the list to show the three newest instead.
+
 **"At a glance" figures.** Also in `src/settings.yaml`, under `highlights:`. Each figure has a `value`, a `label` and an optional `detail`. Write `value: auto` for publications and the site counts them for you. Keep the other numbers up to date by hand, and only include figures you can stand behind.
 
 **Career timeline (About page).** Open `src/timeline.yaml`. Each milestone looks like this:
