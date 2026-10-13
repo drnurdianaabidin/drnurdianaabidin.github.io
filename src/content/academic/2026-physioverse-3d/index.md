@@ -9,6 +9,7 @@ innovation:
   image: physioverse
   problem: "Bridging theoretical knowledge of muscles, joints and movement with applied movement analysis."
   users: "Students in Clinical Exercise Science and related health science disciplines."
+  recognition: "Gold Medal (Professional category), [Virtual Innovation Competition 2026](/academic/2026-virtual-innovation-competition-gold/)"
 # The cover is a conceptual illustration. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
@@ -32,3 +33,7 @@ The platform supports visual and self-directed learning among students in Clinic
 - Biomechanics and joint movement explanations
 - Clinical and educational notes for applied exercise physiology
 - Web-based access for flexible student learning
+
+## Recognition
+
+PhysioVerse 3D received a [Gold Medal in the Professional category at the Virtual Innovation Competition 2026](/academic/2026-virtual-innovation-competition-gold/), an international event organised by DIGIT360 and Universiti Teknologi MARA.
