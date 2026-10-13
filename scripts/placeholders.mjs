@@ -20,7 +20,14 @@ const byFile = new Map();
 for await (const file of walk('src')) {
   if (!TEXT.has(extname(file))) continue;
   const lines = (await readFile(file, 'utf8')).split(/\r?\n/);
+  const isYaml = extname(file) !== '.md';
+  let dashes = 0;
   lines.forEach((line, i) => {
+    if (line.trim() === '---') dashes++;
+    // Skip notes (lines starting with #) in settings files and in the
+    // top part of Markdown files, where # marks a note, not a heading.
+    const inHeader = isYaml || dashes < 2;
+    if (inHeader && line.trim().startsWith('#')) return;
     const found = line.match(/\[\[([\s\S]*?)\]\]|\[\[.*$/g);
     if (!found) return;
     const name = relative(process.cwd(), file);
