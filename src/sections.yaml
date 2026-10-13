@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------
+# SECTIONS AND CATEGORIES
+# Each section has a title, a one-line description, and a list of
+# categories. Every piece of work must use one of the categories
+# listed for its section, spelled exactly the same way.
+#
+# To add a category: add a new line starting with "- ".
+# To rename one: change it here AND in any work that uses it.
+# Do not change the four section keys (academic, research,
+# community, industry) as they match the folder names.
+# ---------------------------------------------------------------
+
+academic:
+  title: Academic
+  description: "[[Teaching, postgraduate supervision and programme development at Universiti Sains Malaysia.]]"
+  categories:
+    - Teaching
+    - Postgraduate supervision
+    - Curriculum and programme development
+    - Invited lectures
+    - Awards
+
+research:
+  title: Research
+  description: "[[Studies of muscle, fat and physical function as people age.]]"
+  categories:
+    - Publications
+    - Current projects
+    - Grants
+    - Conference presentations
+
+community:
+  title: Community
+  description: "[[Health outreach and public engagement with communities in Malaysia.]]"
+  categories:
+    - Health outreach
+    - Public talks
+    - Community programmes
+    - Media appearances
+
+industry:
+  title: Industry
+  description: "[[Partnerships and training carried out with organisations outside the university.]]"
+  categories:
+    - Partnerships
+    - Consultancy
+    - Workshops and training
+    - Collaborative projects

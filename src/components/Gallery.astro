@@ -1,0 +1,236 @@
+---
+// Photo gallery. Each photo opens in a full-screen viewer: arrow keys on a
+// computer, swipe on a phone, Escape or the close button to leave.
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import T from './T.astro';
+import { plain } from '../lib/placeholder.mjs';
+
+interface Props {
+  photos: { image: ImageMetadata; alt: string; caption?: string }[];
+}
+
+const { photos } = Astro.props;
+const prepared = await Promise.all(
+  photos.map(async (photo) => {
+    const large = await getImage({ src: photo.image, widths: [960, 1600, 2400], format: 'webp', quality: 82 });
+    return { ...photo, large };
+  })
+);
+---
+
+<div class="gallery" data-gallery>
+  {
+    prepared.map((photo, i) => (
+      <figure class="gallery__item reveal" style={`--delay:${(i % 3) * 90}ms`}>
+        <a
+          href={photo.large.src}
+          class="gallery__link"
+          data-index={i}
+          data-srcset={photo.large.srcSet.attribute}
+          data-alt={plain(photo.alt)}
+          data-caption={photo.caption ? plain(photo.caption) : ''}
+        >
+          <Image
+            src={photo.image}
+            alt={plain(photo.alt)}
+            widths={[360, 600, 900]}
+            sizes="(min-width: 1000px) 30vw, (min-width: 600px) 45vw, 92vw"
+            format="webp"
+            quality={78}
+          />
+          <span class="visually-hidden">Open larger view</span>
+        </a>
+        {photo.caption && (
+          <figcaption class="gallery__caption">
+            <T text={photo.caption} />
+          </figcaption>
+        )}
+      </figure>
+    ))
+  }
+</div>
+
+<dialog class="lightbox" data-lightbox aria-label="Photo viewer">
+  <div class="lightbox__stage" data-stage>
+    <img class="lightbox__img" alt="" data-img />
+  </div>
+  <div class="lightbox__bar">
+    <p class="lightbox__caption" data-caption></p>
+    <p class="lightbox__count label" data-count aria-live="polite"></p>
+    <div class="lightbox__controls">
+      <button type="button" class="lightbox__btn" data-prev aria-label="Previous photo">
+        <span aria-hidden="true">&larr;</span>
+      </button>
+      <button type="button" class="lightbox__btn" data-next aria-label="Next photo">
+        <span aria-hidden="true">&rarr;</span>
+      </button>
+      <button type="button" class="lightbox__btn lightbox__btn--close" data-close aria-label="Close photo viewer">
+        <span class="label">Close</span>
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { initLightbox } from '../scripts/lightbox';
+  initLightbox();
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.75rem);
+  }
+
+  .gallery__item {
+    margin: 0;
+  }
+
+  .gallery__link {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-sunk);
+    cursor: zoom-in;
+  }
+
+  .gallery__link :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1200ms var(--ease), opacity var(--medium) var(--ease);
+  }
+
+  .gallery__link:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .gallery__caption {
+    margin-top: 0.55rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #0a0f19;
+    color: #efe8d9;
+    display: none;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    animation: lightbox-in var(--medium) var(--ease);
+  }
+
+  .lightbox::backdrop {
+    background: #0a0f19;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .lightbox__stage {
+    display: grid;
+    place-items: center;
+    padding: clamp(0.5rem, 3vw, 2.5rem);
+    touch-action: pan-y pinch-zoom;
+    overflow: hidden;
+  }
+
+  .lightbox__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: opacity 320ms var(--ease), transform 320ms var(--ease);
+  }
+
+  .lightbox__img.is-changing {
+    opacity: 0;
+  }
+
+  .lightbox__bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem clamp(1rem, 3vw, 2.5rem) max(0.75rem, env(safe-area-inset-bottom));
+    border-top: 1px solid rgb(239 232 217 / 0.15);
+  }
+
+  .lightbox__caption {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #d2cbbb;
+  }
+
+  .lightbox__count {
+    margin: 0;
+    color: #c4a465;
+  }
+
+  .lightbox__controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .lightbox__btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.9rem;
+    border: 1px solid rgb(239 232 217 / 0.3);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: border-color var(--quick) var(--ease), background-color var(--quick) var(--ease);
+  }
+
+  .lightbox__btn:hover {
+    border-color: #efe8d9;
+    background: rgb(239 232 217 / 0.08);
+  }
+
+  .lightbox__btn:focus-visible {
+    outline-color: #e3c27a;
+  }
+
+  .lightbox__btn .label {
+    color: inherit;
+  }
+
+  @media (max-width: 600px) {
+    .lightbox__bar {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: 'caption caption' 'count controls';
+    }
+
+    .lightbox__caption {
+      grid-area: caption;
+    }
+
+    .lightbox__count {
+      grid-area: count;
+    }
+
+    .lightbox__controls {
+      grid-area: controls;
+    }
+  }
+</style>

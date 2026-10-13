@@ -1,0 +1,10 @@
+# Built site and caches. These are created automatically.
+dist/
+.astro/
+node_modules/
+
+# Computer clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log

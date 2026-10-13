@@ -1,0 +1,106 @@
+---
+import { Image } from 'astro:assets';
+import T from './T.astro';
+import { type Item, sections, itemUrl, formatDate } from '../lib/items';
+
+interface Props {
+  item: Item;
+  showSection?: boolean;
+  showSummary?: boolean;
+  sizes?: string;
+  delay?: number;
+  level?: 2 | 3;
+}
+
+const {
+  item,
+  showSection = true,
+  showSummary = true,
+  sizes = '(min-width: 1240px) 280px, (min-width: 640px) 45vw, 92vw',
+  delay = 0,
+  level = 3,
+} = Astro.props;
+const { data } = item;
+const Heading = level === 2 ? 'h2' : 'h3';
+---
+
+<article class="card reveal" style={`--delay:${delay}ms`}>
+  <a class="card__link" href={itemUrl(item)}>
+    <div class="card__media">
+      <Image src={data.cover} alt="" widths={[360, 560, 800, 1100]} sizes={sizes} format="webp" quality={78} />
+    </div>
+    <p class="label card__meta">
+      {showSection && <span>{sections[item.collection].title}<span class="visually-hidden">,</span></span>}
+      <span class="card__type">{data.type}</span>
+    </p>
+    <Heading class="card__title"><T text={data.title} /></Heading>
+    <p class="card__date"><time datetime={data.date.toISOString().slice(0, 10)}>{formatDate(data.date, 'month')}</time></p>
+    {showSummary && <p class="card__summary"><T text={data.summary} /></p>}
+  </a>
+</article>
+
+<style>
+  .card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-sunk);
+    margin-bottom: 1.1rem;
+  }
+
+  .card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.001);
+    transition: transform 1400ms var(--ease), opacity var(--medium) var(--ease);
+  }
+
+  .card__link:hover .card__media :global(img),
+  .card__link:focus-visible .card__media :global(img) {
+    transform: scale(1.035);
+  }
+
+  .card__meta {
+    margin: 0 0 0.55rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.9rem;
+  }
+
+  .card__type {
+    color: var(--muted);
+  }
+
+  .card__title {
+    font-size: clamp(1.35rem, 0.6vw + 1.15rem, 1.6rem);
+    line-height: 1.18;
+    margin-bottom: 0.5rem;
+    transition: color var(--quick) var(--ease);
+  }
+
+  .card__link:hover .card__title {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--brass);
+  }
+
+  .card__date {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .card__summary {
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,180 @@
+---
+// A list of work: year, title, section and type, with a small picture that
+// comes into colour when the pointer rests on the row.
+import { Image } from 'astro:assets';
+import T from './T.astro';
+import { type Item, sections, itemUrl } from '../lib/items';
+
+interface Props {
+  items: Item[];
+  heading: string;
+  headingId: string;
+}
+
+const { items, heading, headingId } = Astro.props;
+const count = items.length === 1 ? '1 entry' : `${items.length} entries`;
+---
+
+<section class="wrap work-index" aria-labelledby={headingId}>
+  <div class="work-index__head">
+    <h2 id={headingId} class="work-index__title">{heading}</h2>
+    <p class="label label--muted">{count}</p>
+  </div>
+  <ol class="work-index__list">
+    {
+      items.map((item, i) => (
+        <li class="reveal" style={`--delay:${i * 80}ms`}>
+          <a class="row" href={itemUrl(item)}>
+            <span class="row__year">{item.data.date.getUTCFullYear()}</span>
+            <span class="row__title">
+              <T text={item.data.title} />
+            </span>
+            <span class="row__meta label">
+              <span>
+                {sections[item.collection].title}
+                <span class="visually-hidden">,</span>
+              </span>
+              <span class="row__type">{item.data.type}</span>
+            </span>
+            <span class="row__thumb" aria-hidden="true">
+              <Image src={item.data.cover} alt="" widths={[240, 480]} sizes="128px" format="webp" quality={76} />
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .work-index {
+    margin-top: var(--space-7);
+  }
+
+  .work-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .work-index__head p {
+    margin: 0;
+  }
+
+  .work-index__title {
+    font-size: clamp(2rem, 2vw + 1.2rem, 2.8rem);
+    font-weight: 500;
+  }
+
+  .work-index__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 15rem) 8rem;
+    align-items: center;
+    gap: var(--space-4);
+    padding: 1.1rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color var(--medium) var(--ease);
+  }
+
+  .row:hover,
+  .row:focus-visible {
+    background: var(--paper-raised);
+  }
+
+  .row__year {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-variant-numeric: oldstyle-nums;
+    color: var(--muted);
+  }
+
+  .row__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 0.8vw + 1.1rem, 1.75rem);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .row:hover .row__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--brass);
+  }
+
+  .row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 0.8rem;
+  }
+
+  .row__type {
+    color: var(--muted);
+  }
+
+  .row__thumb {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--paper-sunk);
+    opacity: 0.4;
+    filter: grayscale(1);
+    transition: opacity var(--medium) var(--ease), filter var(--medium) var(--ease);
+  }
+
+  .row__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .row:hover .row__thumb,
+  .row:focus-visible .row__thumb {
+    opacity: 1;
+    filter: none;
+  }
+
+  @media (hover: none) {
+    .row__thumb {
+      opacity: 1;
+      filter: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .row {
+      grid-template-columns: 3.25rem minmax(0, 1fr) 5.5rem;
+      grid-template-areas: 'year title thumb' 'year meta thumb';
+      row-gap: 0.4rem;
+      padding-inline: 0;
+    }
+
+    .row__year {
+      grid-area: year;
+      align-self: start;
+      font-size: 1.15rem;
+    }
+
+    .row__title {
+      grid-area: title;
+    }
+
+    .row__meta {
+      grid-area: meta;
+    }
+
+    .row__thumb {
+      grid-area: thumb;
+    }
+  }
+</style>

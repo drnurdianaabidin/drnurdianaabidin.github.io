@@ -1,0 +1,456 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import T from '../../components/T.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import Gallery from '../../components/Gallery.astro';
+import { plain } from '../../lib/placeholder.mjs';
+import {
+  sections,
+  sectionKeys,
+  getItems,
+  itemUrl,
+  formatDate,
+  resolveLocalFile,
+  type Item,
+} from '../../lib/items';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const section of sectionKeys) {
+    const items = await getItems(section);
+    items.forEach((item, i) => {
+      paths.push({
+        params: { section, slug: item.id },
+        props: { item, newer: items[i - 1], older: items[i + 1] },
+      });
+    });
+  }
+  return paths;
+}
+
+interface Props {
+  item: Item;
+  newer?: Item;
+  older?: Item;
+}
+
+const { item, newer, older } = Astro.props;
+const { data } = item;
+const section = sections[item.collection];
+const { Content } = await render(item);
+
+const people = data.collaborators.map((c) => (typeof c === 'string' ? { name: c } : c));
+const peopleLabel = data.collaboratorsLabel ?? 'Collaborators';
+const links = data.links.map((link) => {
+  const local = /^\.\.?\//.test(link.url);
+  const href = local ? resolveLocalFile(item.filePath, link.url) : link.url;
+  return { ...link, href, external: !local && /^https?:/.test(link.url) };
+});
+const isoDate = data.date.toISOString().slice(0, 10);
+---
+
+<Base title={data.title} description={data.summary} image={data.cover} imageAlt={data.coverAlt} type="article">
+  <Masthead slot="header" current={item.collection} />
+
+  <article class="item">
+    <header class="wrap item__head reveal">
+      <nav aria-label="Breadcrumb" class="item__crumbs label">
+        <a href={`/${item.collection}/`}>{section.title}</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/${item.collection}/?type=${encodeURIComponent(data.type)}`}>{data.type}</a>
+      </nav>
+      <h1 class="item__title"><T text={data.title} /></h1>
+      <p class="item__date"><time datetime={isoDate}>{formatDate(data.date)}</time></p>
+    </header>
+
+    <figure class="wrap item__cover reveal">
+      <Image
+        src={data.cover}
+        alt={plain(data.coverAlt)}
+        widths={[640, 960, 1280, 1600, 2000]}
+        sizes="(min-width: 1240px) 1144px, 94vw"
+        format="webp"
+        quality={80}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+
+    <div class="wrap item__layout">
+      <p class="item__summary reveal"><T text={data.summary} /></p>
+
+      <aside class="item__aside reveal" aria-label="Details">
+        {
+          people.length > 0 && (
+            <section class="aside-block">
+              <h2 class="label">{peopleLabel}</h2>
+              <ul class="people">
+                {people.map((p) => (
+                  <li>
+                    <span class="people__name">
+                      {p.url ? (
+                        <a href={p.url} rel="noopener">
+                          <T text={p.name} />
+                        </a>
+                      ) : (
+                        <T text={p.name} />
+                      )}
+                    </span>
+                    {(p.role || p.affiliation) && (
+                      <span class="people__role">
+                        <T text={[p.role, p.affiliation].filter(Boolean).join(', ')} />
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        {
+          links.length > 0 && (
+            <section class="aside-block">
+              <h2 class="label">Links</h2>
+              <ul class="links">
+                {links.map((link) => (
+                  <li>
+                    <a href={link.href} rel={link.external ? 'noopener' : undefined}>
+                      <T text={link.label} />
+                      <span class="links__arrow" aria-hidden="true">
+                        {link.external ? '↗' : '↓'}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        <section class="aside-block aside-block--meta">
+          <h2 class="label">Details</h2>
+          <dl class="meta">
+            <div>
+              <dt>Section</dt>
+              <dd><a href={`/${item.collection}/`}>{section.title}</a></dd>
+            </div>
+            <div>
+              <dt>Type</dt>
+              <dd>{data.type}</dd>
+            </div>
+            <div>
+              <dt>Date</dt>
+              <dd>{formatDate(data.date)}</dd>
+            </div>
+          </dl>
+        </section>
+      </aside>
+
+      <div class="item__body prose reveal">
+        <Content />
+      </div>
+    </div>
+
+    {
+      data.video && (
+        <section class="wrap item__media reveal" aria-labelledby="video-heading">
+          <h2 id="video-heading" class="label section-heading">Video</h2>
+          <div class="item__video">
+            <VideoEmbed url={data.video.url} title={data.video.title} poster={data.video.poster ?? data.cover} entryPath={item.filePath} />
+          </div>
+        </section>
+      )
+    }
+
+    {
+      data.gallery.length > 0 && (
+        <section class="wrap item__media" aria-labelledby="gallery-heading">
+          <h2 id="gallery-heading" class="label section-heading">Photographs</h2>
+          <Gallery photos={data.gallery} />
+        </section>
+      )
+    }
+
+    <nav class="wrap pager" aria-label={`More from ${section.title}`}>
+      <div class="pager__inner">
+        {
+          newer ? (
+            <a class="pager__link" href={itemUrl(newer)} rel="prev">
+              <span class="label label--muted">&larr; Previous</span>
+              <span class="pager__title"><T text={newer.data.title} /></span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        <a class="pager__all label" href={`/${item.collection}/`}>All {section.title}</a>
+        {
+          older ? (
+            <a class="pager__link pager__link--next" href={itemUrl(older)} rel="next">
+              <span class="label label--muted">Next &rarr;</span>
+              <span class="pager__title"><T text={older.data.title} /></span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </div>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .item__head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .item__crumbs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .item__crumbs a {
+    color: var(--brass-text);
+    text-decoration: none;
+  }
+
+  .item__crumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .item__crumbs span {
+    color: var(--rule-strong);
+  }
+
+  .item__title {
+    font-size: clamp(2.3rem, 4.6vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1.08;
+    max-width: 22ch;
+    margin: 0 auto;
+  }
+
+  .item__date {
+    margin: 1.25rem 0 0;
+    color: var(--muted);
+  }
+
+  .item__cover {
+    margin: 0 auto;
+  }
+
+  .item__cover :global(img) {
+    width: 100%;
+    max-height: 78vh;
+    object-fit: cover;
+    background: var(--paper-sunk);
+  }
+
+  .item__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 18rem);
+    grid-template-areas:
+      'summary aside'
+      'body aside';
+    column-gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .item__summary {
+    grid-area: summary;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 1.2vw + 1.1rem, 2rem);
+    line-height: 1.35;
+    color: var(--ink);
+    max-width: 34ch;
+    margin: 0 0 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .item__body {
+    grid-area: body;
+  }
+
+  .item__body > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .item__aside {
+    grid-area: aside;
+    position: sticky;
+    top: 2rem;
+    display: grid;
+    gap: 2rem;
+    padding-left: clamp(1.25rem, 2.5vw, 2rem);
+    border-left: 1px solid var(--rule);
+  }
+
+  .aside-block h2 {
+    margin: 0 0 0.85rem;
+  }
+
+  .people,
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .people__name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .people__role {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .links a {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .links__arrow {
+    color: var(--brass);
+    text-decoration: none;
+  }
+
+  .meta {
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .meta div {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 0.5rem;
+  }
+
+  .meta dt {
+    color: var(--muted);
+  }
+
+  .meta dd {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .item__media {
+    margin-top: var(--space-7);
+  }
+
+  .item__video {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .pager {
+    margin-top: var(--space-7);
+  }
+
+  .pager__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .pager__link {
+    display: grid;
+    gap: 0.35rem;
+    text-decoration: none;
+    color: var(--ink);
+    max-width: 28rem;
+  }
+
+  .pager__link--next {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .pager__title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.25;
+  }
+
+  .pager__link:hover .pager__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--brass);
+    text-underline-offset: 0.18em;
+  }
+
+  .pager__all {
+    text-decoration: none;
+    color: var(--brass-text);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .item__layout {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'summary' 'aside' 'body';
+    }
+
+    .item__aside {
+      position: static;
+      border-left: 0;
+      padding-left: 0;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--rule);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+
+    .item__summary {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .pager__inner {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 'all all' 'prev next';
+    }
+
+    .pager__all {
+      grid-area: all;
+      justify-self: center;
+    }
+
+    .pager__inner > :first-child {
+      grid-area: prev;
+    }
+
+    .pager__inner > :last-child {
+      grid-area: next;
+    }
+
+    .pager__title {
+      font-size: 1.1rem;
+    }
+  }
+</style>

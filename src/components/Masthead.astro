@@ -1,0 +1,226 @@
+---
+// The header at the top of every page. On the home page it is large and
+// your name is the main heading. On other pages it is smaller and your
+// name links back to the home page.
+import ThemeToggle from './ThemeToggle.astro';
+import { settings, sections, sectionKeys } from '../lib/items';
+
+interface Props {
+  size?: 'large' | 'compact';
+  current?: string;
+}
+
+const { size = 'compact', current } = Astro.props;
+const large = size === 'large';
+const links = [
+  ...sectionKeys.map((key) => ({ href: `/${key}/`, label: sections[key].title, key })),
+];
+---
+
+<header class:list={['masthead', `masthead--${size}`]}>
+  <div class="wrap masthead__inner">
+    <div class="masthead__utility">
+      <ThemeToggle />
+    </div>
+    <p class="label masthead__kicker">{settings.institution}</p>
+    {
+      large ? (
+        <h1 class="masthead__name">{settings.name}</h1>
+      ) : (
+        <p class="masthead__name">
+          <a href="/" aria-label={`${settings.name}, home page`}>{settings.name}</a>
+        </p>
+      )
+    }
+    {
+      large && (
+        <p class="masthead__affil">
+          {settings.affiliations.map((a, i) => (
+            <>
+              {i > 0 && <span class="masthead__sep" aria-hidden="true">·</span>}
+              <span>{a}</span>
+            </>
+          ))}
+        </p>
+      )
+    }
+    <hr class="rule rule--double masthead__rule" />
+    <nav class="masthead__nav" aria-label="Main">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={current === link.key ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="masthead__nav-sep" aria-hidden="true"></span>
+      <ul>
+        <li><a href="/about/" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
+        <li><a href="/contact/" aria-current={current === 'contact' ? 'page' : undefined}>Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .masthead {
+    padding-top: clamp(1rem, 3vw, 2rem);
+  }
+
+  .masthead__inner {
+    text-align: center;
+  }
+
+  .masthead__utility {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: clamp(0.25rem, 2vw, 1.25rem);
+  }
+
+  .masthead--compact .masthead__utility {
+    margin-bottom: 0;
+  }
+
+  .masthead__kicker {
+    margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .masthead--compact .masthead__kicker {
+    margin-bottom: 0.5rem;
+  }
+
+  .masthead__name {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 7.4vw, 6.75rem);
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    line-height: 1;
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead--compact .masthead__name {
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    line-height: 1.05;
+  }
+
+  .masthead__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .masthead__affil {
+    margin: clamp(1rem, 2vw, 1.5rem) auto 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.2rem 0.75rem;
+  }
+
+  .masthead__sep {
+    color: var(--brass);
+  }
+
+  .masthead__rule {
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .masthead--compact .masthead__rule {
+    margin-top: clamp(1.1rem, 2.5vw, 1.6rem);
+  }
+
+  .masthead__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 clamp(1rem, 3vw, 2.25rem);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .masthead__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 clamp(1rem, 3vw, 2.25rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .masthead__nav a {
+    display: inline-block;
+    padding: 0.75rem 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    background: linear-gradient(var(--brass), var(--brass)) no-repeat 50% calc(100% - 0.55rem) / 0 1px;
+    transition: background-size var(--medium) var(--ease), color var(--quick) var(--ease);
+  }
+
+  .masthead__nav a:hover,
+  .masthead__nav a:focus-visible,
+  .masthead__nav a[aria-current='page'] {
+    background-size: 100% 1px;
+  }
+
+  .masthead__nav a[aria-current='page'] {
+    color: var(--brass-text);
+  }
+
+  .masthead__nav-sep {
+    width: 1px;
+    height: 1rem;
+    background: var(--rule-strong);
+  }
+
+  @media (max-width: 760px) {
+    .masthead__nav-sep {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .masthead__affil {
+      flex-direction: column;
+      gap: 0.15rem;
+      font-size: 0.92rem;
+    }
+
+    .masthead__sep {
+      display: none;
+    }
+
+    .masthead__nav {
+      flex-direction: column;
+      gap: 0;
+      padding: 0.25rem 0;
+    }
+
+    .masthead__nav ul {
+      gap: 0 1rem;
+    }
+
+    .masthead__nav ul + ul {
+      border-top: 1px solid var(--rule);
+      width: 100%;
+    }
+
+    .masthead__nav a {
+      font-size: 0.7rem;
+      letter-spacing: 0.13em;
+      padding: 0.7rem 0;
+    }
+  }
+</style>

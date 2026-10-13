@@ -1,0 +1,102 @@
+---
+import T from './T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, sections, sectionKeys } from '../lib/items';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <hr class="rule rule--double" />
+    <div class="site-footer__grid">
+      <div>
+        <p class="site-footer__name">{settings.name}</p>
+        <p class="site-footer__affil">
+          {settings.affiliations.map((a) => <span>{a}</span>)}
+          <span>{settings.institution}</span>
+        </p>
+      </div>
+      <nav aria-label="Footer">
+        <p class="label">Work</p>
+        <ul>
+          {sectionKeys.map((key) => <li><a href={`/${key}/`}>{sections[key].title}</a></li>)}
+        </ul>
+      </nav>
+      <div>
+        <p class="label">Elsewhere</p>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href={`mailto:${plain(settings.email)}`}><T text={settings.email} /></a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="site-footer__small">&copy; {year} {settings.name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-7);
+    padding-bottom: var(--space-5);
+    font-size: 0.95rem;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-5);
+    padding: var(--space-5) 0;
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .site-footer__affil {
+    color: var(--muted);
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .site-footer ul {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .site-footer a {
+    color: var(--ink-soft);
+    text-decoration-color: var(--rule-strong);
+    overflow-wrap: anywhere;
+  }
+
+  .site-footer a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--brass);
+  }
+
+  .site-footer__small {
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-3);
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer__grid > :first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

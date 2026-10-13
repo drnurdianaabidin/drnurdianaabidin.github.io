@@ -1,0 +1,226 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import T from '../components/T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, resolveLocalFile } from '../lib/items';
+
+const about = await getEntry('about', 'index');
+if (!about) {
+  throw new Error('The About page is missing. It should be at src/content/about/index.md');
+}
+const { Content } = await render(about);
+const { data } = about;
+const cvUrl = data.cv ? resolveLocalFile(about.filePath, data.cv) : undefined;
+const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
+---
+
+<Base title="About" description={`Biography, affiliations and CV of ${settings.name}.`}>
+  <Masthead slot="header" current="about" />
+
+  <div class="wrap about">
+    <header class="about__head reveal">
+      <p class="label">About</p>
+      <h1 class="about__title">Biography</h1>
+    </header>
+
+    <div class="about__layout">
+      <aside class="about__aside reveal" aria-label="Portrait and CV">
+        <figure class="portrait">
+          <Image src={data.portrait} alt={plain(data.portraitAlt)} widths={[240, 360, 480]} sizes="240px" format="webp" quality={80} />
+        </figure>
+        {
+          cvUrl && (
+            <a class="cv" href={cvUrl} download={cvName}>
+              <span class="label">Curriculum vitae</span>
+              <span class="cv__action">Download CV (PDF)</span>
+            </a>
+          )
+        }
+      </aside>
+
+      <div class="about__main">
+        <div class="prose about__bio reveal">
+          <Content />
+        </div>
+
+        <div class="facts">
+          {
+            data.positions.length > 0 && (
+              <section class="facts__block reveal">
+                <h2 class="label section-heading section-heading--left">Positions</h2>
+                <ul>
+                  {data.positions.map((p) => (
+                    <li>
+                      <span class="facts__main"><T text={p.role} /></span>
+                      <span class="facts__sub"><T text={p.place} /></span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+
+          <section class="facts__block reveal">
+            <h2 class="label section-heading section-heading--left">Affiliations</h2>
+            <ul>
+              {settings.affiliations.map((a) => (
+                <li>
+                  <span class="facts__main">{a}</span>
+                  <span class="facts__sub">{settings.institution}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="facts__block reveal">
+            <h2 class="label section-heading section-heading--left">Research interests</h2>
+            <p class="facts__interests"><T text={settings.interests} /></p>
+          </section>
+
+          {
+            data.education.length > 0 && (
+              <section class="facts__block reveal">
+                <h2 class="label section-heading section-heading--left">Education</h2>
+                <ul>
+                  {data.education.map((e) => (
+                    <li>
+                      <span class="facts__main"><T text={e.degree} /></span>
+                      <span class="facts__sub"><T text={e.place} /></span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about__head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .about__title {
+    font-size: clamp(2.8rem, 5.5vw, 4.6rem);
+    font-weight: 500;
+    margin-top: 0.6rem;
+  }
+
+  .about__layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .about__aside {
+    position: sticky;
+    top: 2rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .portrait {
+    margin: 0;
+    max-width: 15rem;
+    padding: 8px;
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .cv {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--rule-strong);
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color var(--medium) var(--ease), background-color var(--medium) var(--ease);
+  }
+
+  .cv:hover {
+    border-color: var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .cv__action {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+  }
+
+  .about__bio {
+    font-size: 1.08em;
+  }
+
+  .facts {
+    margin-top: var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .facts__block .section-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .facts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .facts__main {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .facts__sub {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .facts__interests {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  @media (max-width: 820px) {
+    .about__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .about__aside {
+      position: static;
+      grid-template-columns: 9rem minmax(0, 1fr);
+      align-items: end;
+    }
+
+    .facts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

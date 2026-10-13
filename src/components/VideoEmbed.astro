@@ -1,0 +1,166 @@
+---
+// A video that only loads when the visitor presses play. YouTube videos use
+// the privacy-enhanced youtube-nocookie.com address, and nothing is fetched
+// from YouTube or Vimeo until the play button is pressed.
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import T from './T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { parseVideo } from '../lib/items';
+
+interface Props {
+  url: string;
+  title?: string;
+  poster: ImageMetadata;
+  entryPath?: string;
+}
+
+const { url, title, poster, entryPath } = Astro.props;
+const source = parseVideo(url, entryPath);
+const label = plain(title ?? 'Video');
+const service = source.kind === 'youtube' ? 'YouTube' : source.kind === 'vimeo' ? 'Vimeo' : '';
+const posterForFile = source.kind === 'file' ? await getImage({ src: poster, width: 1600, format: 'webp' }) : undefined;
+---
+
+<figure class="video">
+  {
+    source.kind === 'file' ? (
+      <div class="video__frame">
+        <video controls preload="none" playsinline poster={posterForFile?.src} aria-label={label}>
+          <source src={source.src} type="video/mp4" />
+        </video>
+      </div>
+    ) : (
+      <div class="video__frame" data-video data-embed={source.embed} data-title={label}>
+        <Image src={poster} alt="" widths={[640, 960, 1400]} sizes="(min-width: 1000px) 760px, 100vw" format="webp" quality={76} class="video__poster" />
+        <button type="button" class="video__play" aria-label={`Play video: ${label}`}>
+          <span class="video__icon" aria-hidden="true" />
+          <span class="label video__play-text">Play video</span>
+        </button>
+      </div>
+    )
+  }
+  <figcaption class="video__caption">
+    {title && <T text={title} />}
+    {
+      service && 'watch' in source && (
+        <>
+          {' '}
+          <a href={source.watch} rel="noopener">
+            Watch on {service}
+          </a>
+        </>
+      )
+    }
+    {service && <span class="video__note">The video loads from {service} when you press play.</span>}
+  </figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-video]').forEach((frame) => {
+    const button = frame.querySelector('button');
+    button?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = frame.dataset.embed ?? '';
+      iframe.title = frame.dataset.title ?? 'Video';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.replaceChildren(iframe);
+      iframe.focus();
+    });
+  });
+</script>
+
+<style>
+  .video {
+    margin: 0;
+  }
+
+  .video__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--paper-sunk);
+    overflow: hidden;
+  }
+
+  .video__frame :global(img),
+  .video__frame :global(iframe),
+  .video__frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+  }
+
+  .video__frame video {
+    object-fit: contain;
+    background: #000;
+  }
+
+  .video__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.9rem;
+    border: 0;
+    background: rgb(var(--scrim) / 0.35);
+    color: var(--on-image);
+    cursor: pointer;
+    transition: background-color var(--medium) var(--ease);
+  }
+
+  .video__play:hover,
+  .video__play:focus-visible {
+    background: rgb(var(--scrim) / 0.55);
+  }
+
+  .video__play:focus-visible {
+    outline-offset: -6px;
+    outline-color: var(--on-image);
+  }
+
+  .video__icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    position: relative;
+    transition: transform var(--medium) var(--ease);
+  }
+
+  .video__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 54%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 0.65rem 0 0.65rem 1.05rem;
+    border-color: transparent transparent transparent currentColor;
+  }
+
+  .video__play:hover .video__icon {
+    transform: scale(1.06);
+  }
+
+  .video__play-text {
+    color: inherit;
+  }
+
+  .video__caption {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  .video__note {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+</style>

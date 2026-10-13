@@ -1,0 +1,39 @@
+---
+const { class: className = '' } = Astro.props;
+---
+
+<button type="button" class:list={['theme-toggle', className]} data-theme-toggle aria-label="Switch colour mode">
+  <span class="theme-toggle__mark" aria-hidden="true"></span>
+  <span><span data-theme-label>Dark</span> mode</span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: none;
+    border: 0;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color var(--quick) var(--ease);
+  }
+
+  .theme-toggle:hover {
+    color: var(--ink);
+  }
+
+  .theme-toggle__mark {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  }
+</style>

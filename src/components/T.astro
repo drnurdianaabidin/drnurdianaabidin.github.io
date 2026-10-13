@@ -1,0 +1,7 @@
+---
+// Prints text, highlighting any [[placeholder]] parts.
+import { ph } from '../lib/placeholder.mjs';
+const { text = '' } = Astro.props;
+---
+
+<Fragment set:html={ph(text)} />

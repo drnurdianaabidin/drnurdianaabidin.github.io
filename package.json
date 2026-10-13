@@ -1,0 +1,27 @@
+{
+  "name": "nurdiana-academic-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "preview": "astro dev --open",
+    "build": "node scripts/check-files.mjs && astro build",
+    "photos": "node scripts/prepare-photos.mjs",
+    "check": "node scripts/check-files.mjs",
+    "placeholders": "node scripts/placeholders.mjs",
+    "publish": "node scripts/publish.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.3",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "astro": "^7.3.8",
+    "js-yaml": "^5.4.3",
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

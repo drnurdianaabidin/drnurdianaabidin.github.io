@@ -1,0 +1,267 @@
+---
+import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import T from '../../components/T.astro';
+import { plain } from '../../lib/placeholder.mjs';
+import { sections, sectionKeys, getItems, roman, type SectionKey } from '../../lib/items';
+
+export function getStaticPaths() {
+  return sectionKeys.map((section) => ({ params: { section } }));
+}
+
+const key = Astro.params.section as SectionKey;
+const section = sections[key];
+const index = sectionKeys.indexOf(key);
+const items = await getItems(key);
+
+// Only offer filters that would show something.
+const typeCounts = new Map<string, number>();
+for (const item of items) typeCounts.set(item.data.type, (typeCounts.get(item.data.type) ?? 0) + 1);
+const types = section.categories.filter((c) => typeCounts.has(c));
+const years = [...new Set(items.map((item) => item.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+
+const searchText = (item: (typeof items)[number]) => {
+  const people = item.data.collaborators.map((c) =>
+    typeof c === 'string' ? c : [c.name, c.role, c.affiliation].filter(Boolean).join(' ')
+  );
+  return plain([item.data.title, item.data.summary, item.data.type, ...people].join(' ')).toLowerCase();
+};
+---
+
+<Base title={section.title} description={plain(section.description)}>
+  <Masthead slot="header" current={key} />
+
+  <div class="wrap">
+    <header class="section-head reveal">
+      <p class="label">Section {roman(index)}</p>
+      <h1 class="section-head__title">{section.title}</h1>
+      <p class="section-head__desc"><T text={section.description} /></p>
+    </header>
+
+    {
+      items.length > 0 ? (
+        <>
+          <div class="filters" data-filters hidden>
+            <div class="filters__group" role="group" aria-labelledby="filter-type-label">
+              <p class="label label--muted filters__label" id="filter-type-label">Type</p>
+              <div class="filters__buttons">
+                <button type="button" class="chip" data-filter="type" data-value="" aria-pressed="true">
+                  All <span class="chip__count">{items.length}</span>
+                </button>
+                {types.map((type) => (
+                  <button type="button" class="chip" data-filter="type" data-value={type} aria-pressed="false">
+                    {type} <span class="chip__count">{typeCounts.get(type)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {years.length > 1 && (
+              <div class="filters__group" role="group" aria-labelledby="filter-year-label">
+                <p class="label label--muted filters__label" id="filter-year-label">Year</p>
+                <div class="filters__buttons">
+                  <button type="button" class="chip" data-filter="year" data-value="" aria-pressed="true">
+                    All years
+                  </button>
+                  {years.map((year) => (
+                    <button type="button" class="chip" data-filter="year" data-value={String(year)} aria-pressed="false">
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div class="filters__search">
+              <label class="label label--muted filters__label" for="search">Search</label>
+              <input id="search" type="search" class="search" placeholder={`Search ${section.title.toLowerCase()}`} autocomplete="off" data-search />
+            </div>
+          </div>
+
+          <p class="results label label--muted" aria-live="polite" data-results>
+            {items.length === 1 ? '1 entry' : `${items.length} entries`}
+          </p>
+
+          <div class="grid" data-grid>
+            {items.map((item, i) => (
+              <div
+                class="grid__item"
+                data-card
+                data-type={item.data.type}
+                data-year={String(item.data.date.getUTCFullYear())}
+                data-text={searchText(item)}
+              >
+                <WorkCard item={item} level={2} showSection={false} delay={Math.min(i, 6) * 70} sizes="(min-width: 1240px) 380px, (min-width: 700px) 45vw, 92vw" />
+              </div>
+            ))}
+          </div>
+
+          <div class="empty" data-empty hidden>
+            <p>No entries match these filters.</p>
+            <button type="button" class="chip" data-clear>Clear filters</button>
+          </div>
+        </>
+      ) : (
+        <p class="empty">Work in this section will appear here soon.</p>
+      )
+    }
+  </div>
+</Base>
+
+<script>
+  import { initFilters } from '../../scripts/filters';
+  initFilters();
+</script>
+
+<style>
+  .section-head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .section-head__title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 500;
+    margin: 0.6rem 0 1rem;
+  }
+
+  .section-head__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.6rem);
+    line-height: 1.4;
+    max-width: 40ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+  }
+
+  .filters {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--rule-strong);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  :global(.js) .filters[hidden] {
+    display: grid;
+  }
+
+  .filters__group,
+  .filters__search {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .filters__label {
+    margin: 0;
+  }
+
+  .filters__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    padding: 0.35rem 0.95rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color var(--medium) var(--ease), color var(--medium) var(--ease), border-color var(--medium) var(--ease);
+  }
+
+  .chip:hover {
+    border-color: var(--ink);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .chip__count {
+    font-size: 0.75rem;
+    color: inherit;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .search {
+    width: 100%;
+    max-width: 26rem;
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .search::placeholder {
+    color: var(--muted);
+  }
+
+  .search:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+    border-color: var(--ink);
+  }
+
+  .results {
+    margin: 1.25rem 0 1.75rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(2rem, 3vw, 3rem) clamp(1.25rem, 2.5vw, 2.25rem);
+  }
+
+  .grid__item[hidden] {
+    display: none;
+  }
+
+  .empty {
+    text-align: center;
+    padding: var(--space-6) 0;
+    color: var(--muted);
+  }
+
+  .empty:not([hidden]) {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filters__group,
+    .filters__search {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

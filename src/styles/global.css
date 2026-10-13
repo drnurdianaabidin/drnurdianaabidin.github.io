@@ -1,0 +1,354 @@
+/* ------------------------------------------------------------------
+   Design tokens
+   ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+  --paper: #f6f1e7;
+  --paper-raised: #fbf8f2;
+  --paper-sunk: #ede6d8;
+  --ink: #15223b;
+  --ink-soft: #33405a;
+  --muted: #5c6577;
+  --rule: #ddd3c1;
+  --rule-strong: #b8ab92;
+  --link: #102b52;
+  --brass: #a08043;
+  --brass-text: #765a22;
+  --scrim: 13 22 38;
+  --on-image: #f6f1e7;
+  --ph-bg: #ffe45c;
+  --ph-ink: #1b1b1b;
+  --focus: #9a6f12;
+
+  --font-display: 'Cormorant Garamond', 'EB Garamond', Garamond, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3 Variable', 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+  --display-weight: 500;
+
+  --measure: 66ch;
+  --page: 1240px;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: clamp(4rem, 9vw, 7.5rem);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --slow: 900ms;
+  --medium: 600ms;
+  --quick: 300ms;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0d1421;
+  --paper-raised: #131c2c;
+  --paper-sunk: #0a0f19;
+  --ink: #efe8d9;
+  --ink-soft: #d2cbbb;
+  --muted: #a5abb7;
+  --rule: #253046;
+  --rule-strong: #3b4a64;
+  --link: #e3cf9f;
+  --brass: #c4a465;
+  --brass-text: #d3b778;
+  --scrim: 6 10 18;
+  --ph-bg: #f2d54a;
+  --focus: #e3c27a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #0d1421;
+    --paper-raised: #131c2c;
+    --paper-sunk: #0a0f19;
+    --ink: #efe8d9;
+    --ink-soft: #d2cbbb;
+    --muted: #a5abb7;
+    --rule: #253046;
+    --rule-strong: #3b4a64;
+    --link: #e3cf9f;
+    --brass: #c4a465;
+    --brass-text: #d3b778;
+    --scrim: 6 10 18;
+    --ph-bg: #f2d54a;
+    --focus: #e3c27a;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 0.4vw + 0.95rem, 1.1875rem);
+  line-height: 1.65;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--medium) var(--ease), color var(--medium) var(--ease);
+}
+
+img,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  color: var(--ink);
+  line-height: 1.12;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color var(--quick) var(--ease), text-decoration-color var(--quick) var(--ease);
+}
+
+a:hover {
+  text-decoration-color: var(--brass);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brass) 35%, transparent);
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  transition: top var(--quick) var(--ease);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ------------------------------------------------------------------
+   Layout helpers
+   ------------------------------------------------------------------ */
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+  line-height: 1.4;
+}
+
+.label--muted {
+  color: var(--muted);
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+
+.rule--double {
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  height: 4px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.section-heading::before,
+.section-heading::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--rule);
+}
+
+.section-heading--left::before {
+  display: none;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose h2 {
+  font-size: clamp(1.6rem, 1.2vw + 1.2rem, 2.1rem);
+  margin: 2.2em 0 0.6em;
+}
+
+.prose h3 {
+  font-size: 1.4rem;
+  margin: 1.8em 0 0.5em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.2em;
+  margin: 0 0 1em;
+}
+
+.prose li {
+  margin-bottom: 0.4em;
+}
+
+.prose blockquote {
+  margin: 1.6em 0;
+  padding-left: 1.2em;
+  border-left: 2px solid var(--brass);
+  font-family: var(--font-display);
+  font-size: 1.35em;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.prose img {
+  margin: 2em 0;
+}
+
+.prose strong {
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------------
+   Placeholder highlighting (switched on in src/settings.yaml)
+   ------------------------------------------------------------------ */
+mark.ph {
+  background: none;
+  color: inherit;
+}
+
+:root[data-ph='on'] mark.ph {
+  background: var(--ph-bg);
+  color: var(--ph-ink);
+  padding: 0.04em 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ------------------------------------------------------------------
+   Quiet scroll reveal. Only runs when scripts are available and the
+   visitor has not asked their device to reduce motion.
+   ------------------------------------------------------------------ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
+  transition-delay: var(--delay, 0ms);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gentle cross-fade between pages in browsers that support it */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 450ms;
+  animation-timing-function: var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  @view-transition {
+    navigation: none;
+  }
+}
