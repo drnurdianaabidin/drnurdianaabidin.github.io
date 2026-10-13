@@ -1,0 +1,194 @@
+---
+// Every publication from the Research section as a list of citations,
+// grouped by status (in press, published, under review) and by year.
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import T from '../components/T.astro';
+import {
+  settings,
+  getPublications,
+  itemUrl,
+  doiLink,
+  citationHtml,
+  type Item,
+} from '../lib/items';
+
+const publications = await getPublications();
+const statusOf = (item: Item) => item.data.status ?? 'Published';
+
+const inPress = publications.filter((p) => statusOf(p) === 'In press');
+const underReview = publications.filter((p) => statusOf(p) === 'Under review');
+const published = publications.filter((p) => !['In press', 'Under review'].includes(statusOf(p)));
+const years = [...new Set(published.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+
+const groups = [
+  ...(inPress.length ? [{ id: 'in-press', heading: 'Accepted and in press', items: inPress }] : []),
+  ...years.map((year) => ({
+    id: `y${year}`,
+    heading: String(year),
+    items: published.filter((p) => p.data.date.getUTCFullYear() === year),
+  })),
+  ...(underReview.length
+    ? [{ id: 'under-review', heading: 'Under review (not yet accepted)', items: underReview }]
+    : []),
+];
+
+const scholar = settings.profiles.find((p) => /scholar/i.test(p.label) && p.url);
+const orcid = settings.profiles.find((p) => /orcid/i.test(p.label) && p.url);
+---
+
+<Base
+  title="Publications"
+  description={`Journal articles and book chapters by ${settings.name} on sarcopenia, osteosarcopenic obesity, physical activity in older adults, exercise physiology and machine learning in healthcare, with DOI links.`}
+>
+  <Masthead slot="header" current="publications" />
+
+  <div class="wrap">
+    <header class="pubs-head reveal">
+      <p class="label">Research</p>
+      <h1 class="pubs-head__title">Publications</h1>
+      <p class="pubs-head__desc">
+        {published.length} published {published.length === 1 ? 'work' : 'works'}, newest first. Each title with a DOI links to the
+        published version.
+      </p>
+    </header>
+
+    <div class="pubs reveal">
+      {
+        (scholar || orcid) && (
+          <p class="pubs__note">
+            For a full record and citation counts, see{' '}
+            {scholar && (
+              <a href={scholar.url} rel="noopener">
+                Google Scholar
+              </a>
+            )}
+            {scholar && orcid && ' and '}
+            {orcid && (
+              <a href={orcid.url} rel="noopener">
+                ORCID
+              </a>
+            )}
+            . Conference presentations are listed in{' '}
+            <a href={`/research/?type=${encodeURIComponent('Conference presentations')}`}>Research</a>.
+          </p>
+        )
+      }
+
+      {
+        groups.map((group) => (
+          <section class="pubs__group" aria-labelledby={group.id}>
+            <h2 id={group.id} class="pubs__year">
+              {group.heading}
+            </h2>
+            <ol class="pubs__list">
+              {group.items.map((item) => {
+                const doi = doiLink(item);
+                return (
+                  <li class="pub">
+                    <p class="pub__citation">
+                      {item.data.citation ? <Fragment set:html={citationHtml(item.data.citation)} /> : <T text={item.data.title} />}
+                    </p>
+                    <p class="pub__links label">
+                      {doi && (
+                        <a href={doi.url} rel="noopener">
+                          <T text={doi.label} />
+                          <span class="visually-hidden">: {item.data.title}</span>
+                          <span aria-hidden="true"> ↗</span>
+                        </a>
+                      )}
+                      <a href={itemUrl(item)}>
+                        Details<span class="visually-hidden">: {item.data.title}</span>
+                      </a>
+                      {item.data.status && item.data.status !== 'Published' && <span class="pub__status">{item.data.status}</span>}
+                    </p>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Base>
+
+<style>
+  .pubs-head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .pubs-head__title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 500;
+    margin: 0.6rem 0 1rem;
+  }
+
+  .pubs-head__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.6rem);
+    line-height: 1.4;
+    max-width: 40ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+  }
+
+  .pubs {
+    max-width: 50rem;
+    margin: 0 auto;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .pubs__note {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 var(--space-5);
+  }
+
+  .pubs__group + .pubs__group {
+    margin-top: var(--space-5);
+  }
+
+  .pubs__year {
+    font-size: 1.9rem;
+    font-weight: 500;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .pubs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .pub__citation {
+    margin: 0 0 0.45rem;
+    line-height: 1.55;
+  }
+
+  .pub__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+    margin: 0;
+  }
+
+  .pub__links a {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--brass);
+  }
+
+  .pub__status {
+    color: var(--muted);
+  }
+</style>

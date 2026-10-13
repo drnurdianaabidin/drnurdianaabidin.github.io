@@ -1,0 +1,253 @@
+---
+// Research innovations: work from any section that has an "innovation"
+// block, with what it is, the problem it addresses, who it is for and
+// how far it has got.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import T from '../components/T.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, sections, getInnovations, itemUrl, inlineHtml } from '../lib/items';
+
+const innovations = (await getInnovations()).sort(
+  (a, b) => (a.data.innovation?.order ?? 99) - (b.data.innovation?.order ?? 99)
+);
+---
+
+<Base
+  title="Research innovations"
+  description={`Biomedical and digital innovations developed by ${settings.name}: a resveratrol microneedle patch, PhysioVerse 3D, PRIME-Active and a clinical exercise science quiz app, with their current stage of development.`}
+>
+  <Masthead slot="header" current="innovations" />
+
+  <div class="wrap">
+    <header class="inno-head reveal">
+      <p class="label">Research</p>
+      <h1 class="inno-head__title">Innovations</h1>
+      <p class="inno-head__desc">
+        Biomedical and digital tools developed alongside the research and teaching. The stage of each is given, from research
+        prototype to tools already in use with students.
+      </p>
+    </header>
+
+    <ol class="inno">
+      {
+        innovations.map((item) => {
+          const { data } = item;
+          const info = data.innovation!;
+          return (
+            <li class="inno__item reveal">
+              <a class="inno__media" href={itemUrl(item)} tabindex="-1" aria-hidden="true">
+                <Image src={data.cover} alt="" widths={[360, 560, 800]} sizes="(min-width: 900px) 320px, 92vw" format="webp" quality={78} />
+              </a>
+              <div class="inno__body">
+                <p class="label inno__meta">
+                  <span>{sections[item.collection].title}</span>
+                  {data.status && <span class="inno__status">{data.status}</span>}
+                </p>
+                <h2 class="inno__title">
+                  <a href={itemUrl(item)}>
+                    <T text={data.title} />
+                  </a>
+                </h2>
+                <p class="inno__summary">
+                  <T text={data.summary} />
+                </p>
+                <dl class="inno__facts">
+                  <div>
+                    <dt>Problem it addresses</dt>
+                    <dd set:html={inlineHtml(info.problem)} />
+                  </div>
+                  <div>
+                    <dt>Intended users</dt>
+                    <dd set:html={inlineHtml(info.users)} />
+                  </div>
+                  {data.status && (
+                    <div>
+                      <dt>Stage</dt>
+                      <dd>{data.status}</dd>
+                    </div>
+                  )}
+                  {info.recognition && (
+                    <div>
+                      <dt>Recognition</dt>
+                      <dd set:html={inlineHtml(info.recognition)} />
+                    </div>
+                  )}
+                </dl>
+                <p class="inno__links label">
+                  <a href={itemUrl(item)}>
+                    Details<span class="visually-hidden">: {plain(data.title)}</span>
+                  </a>
+                  {data.links
+                    .filter((link) => /^https?:/.test(link.url))
+                    .map((link) => (
+                      <a href={link.url} rel="noopener">
+                        <T text={link.label} />
+                        <span aria-hidden="true"> ↗</span>
+                      </a>
+                    ))}
+                </p>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    <p class="inno__more reveal">
+      Registered copyright works, including the <em>Cellular Lifespan</em> films and <em>DADU DODECA-FIT</em>, are listed
+      under{' '}<a href="/industry/2025-registered-copyright-works/">intellectual property</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .inno-head {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .inno-head__title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 500;
+    margin: 0.6rem 0 1rem;
+  }
+
+  .inno-head__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.6rem);
+    line-height: 1.4;
+    max-width: 42ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+  }
+
+  .inno {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .inno__item {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .inno__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-sunk);
+  }
+
+  .inno__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .inno__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.9rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .inno__status {
+    color: var(--muted);
+  }
+
+  .inno__status::before {
+    content: '·';
+    margin-right: 0.9rem;
+    color: var(--brass);
+  }
+
+  .inno__title {
+    font-size: clamp(1.6rem, 1vw + 1.3rem, 2.1rem);
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0 0 0.75rem;
+  }
+
+  .inno__title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .inno__title a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--brass);
+  }
+
+  .inno__summary {
+    color: var(--ink-soft);
+    margin: 0 0 1.25rem;
+    max-width: 44rem;
+  }
+
+  .inno__facts {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0 0 1.25rem;
+    max-width: 44rem;
+  }
+
+  .inno__facts div {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .inno__facts dt {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .inno__facts dd {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .inno__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+    margin: 0;
+  }
+
+  .inno__links a {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--brass);
+  }
+
+  .inno__more {
+    margin: var(--space-5) auto 0;
+    max-width: 46rem;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .inno__item {
+      grid-template-columns: 1fr;
+    }
+
+    .inno__facts div {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+  }
+</style>

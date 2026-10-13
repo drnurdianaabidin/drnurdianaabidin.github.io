@@ -2,7 +2,8 @@
 title: "Dual-task cognitive training in virtual reality for older adults with mild cognitive impairment"
 date: 2022
 type: Current projects
-summary: "A feasibility study and randomised controlled trial, led as principal investigator, of dual-task cognitive training in fully immersive virtual reality for older adults with mild cognitive impairment."
+status: Ongoing
+summary: "A study, led as principal investigator, of dual-task training in fully immersive virtual reality for older adults with mild cognitive impairment, comprising a feasibility study and a randomised controlled trial."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
@@ -16,7 +17,21 @@ featured: true
 **Programme:** Dementia Multidisciplinary Research (IPPT)  
 **Period:** 2022 to present
 
-The study looks at three outcomes: cognitive function, brain functional connectivity and physical performance.
+## What the study involves
+
+Dual-task training asks people to do a cognitive task and a physical task at the same time. In this study the training takes place in fully immersive virtual reality, with older adults who have mild cognitive impairment.
+
+The outcomes are:
+
+- cognitive function
+- physical performance
+- brain functional connectivity
+
+The study also considers how immersive technology might support healthy ageing more widely.
+
+## Status
+
+Ongoing. Results have not yet been published, and no clinical conclusions should be drawn at this stage.
 
 ## Related work
 

@@ -47,17 +47,56 @@ export function parseSettings(text) {
     throw new Error(`The siteUrl in ${where} must start with https:// (for example https://drnurdianaabidin.github.io).`);
   }
   const affiliations = Array.isArray(raw.affiliations) ? raw.affiliations.map(String) : [];
+  // The tagline is a list of short phrases, or one line with the phrases separated by |
+  const tagline = (Array.isArray(raw.tagline) ? raw.tagline : String(raw.tagline ?? '').split('|'))
+    .map((t) => String(t).trim())
+    .filter(Boolean);
+  if (tagline.length === 0) {
+    throw new Error(`The tagline is missing in ${where}. Add a line starting with "tagline:" followed by a list of short phrases.`);
+  }
+  const profiles = (Array.isArray(raw.profiles) ? raw.profiles : []).map((p, i) => {
+    if (!p || typeof p !== 'object' || !p.label) {
+      throw new Error(`Profile number ${i + 1} in ${where} needs a "label", for example "label: ORCID".`);
+    }
+    return {
+      label: String(p.label).trim(),
+      value: p.value ? String(p.value).trim() : '',
+      url: p.url ? String(p.url).trim() : '',
+    };
+  });
+  const optional = (key) => (typeof raw[key] === 'string' ? raw[key].trim() : '');
   return {
     name: requireText(raw, 'name', 'Your name', where),
     shortName: requireText(raw, 'shortName', 'The short form of your name (shortName)', where),
+    siteTitle: optional('siteTitle'),
     institution: requireText(raw, 'institution', 'The institution', where),
     affiliations,
-    interests: requireText(raw, 'interests', 'The research interests line (interests)', where),
+    tagline,
+    introduction: optional('introduction'),
     description: requireText(raw, 'description', 'The site description', where),
     email: requireText(raw, 'email', 'The email address', where),
-    contactNote: typeof raw.contactNote === 'string' ? raw.contactNote.trim() : '',
+    contactNote: optional('contactNote'),
+    profiles,
     siteUrl,
     highlightPlaceholders: raw.highlightPlaceholders !== false,
+  };
+}
+
+// An optional block shown at the top of a section page, such as research themes.
+function parseOverview(o, key, where) {
+  if (o === undefined || o === null) return undefined;
+  if (typeof o !== 'object') {
+    throw new Error(`The "overview" of the "${key}" section in ${where} should have a "heading" and "groups" on the lines below it.`);
+  }
+  const groups = (Array.isArray(o.groups) ? o.groups : []).map((g) => ({
+    title: g && g.title ? String(g.title).trim() : '',
+    items: (Array.isArray(g?.items) ? g.items : []).map((i) => String(i).trim()).filter(Boolean),
+  }));
+  return {
+    heading: requireText(o, 'heading', `The overview heading of the "${key}" section`, where),
+    text: typeof o.text === 'string' ? o.text.trim() : '',
+    note: typeof o.note === 'string' ? o.note.trim() : '',
+    groups,
   };
 }
 
@@ -79,6 +118,7 @@ export function parseSections(text) {
       title: requireText(s, 'title', `The title of the "${key}" section`, where),
       description: requireText(s, 'description', `The description of the "${key}" section`, where),
       categories,
+      overview: parseOverview(s.overview, key, where),
     };
   }
   return sections;

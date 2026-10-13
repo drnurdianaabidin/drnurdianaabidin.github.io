@@ -4,7 +4,7 @@ import Masthead from '../../components/Masthead.astro';
 import WorkCard from '../../components/WorkCard.astro';
 import T from '../../components/T.astro';
 import { plain } from '../../lib/placeholder.mjs';
-import { sections, sectionKeys, getItems, roman, type SectionKey } from '../../lib/items';
+import { sections, sectionKeys, getItems, roman, inlineHtml, type SectionKey } from '../../lib/items';
 
 export function getStaticPaths() {
   return sectionKeys.map((section) => ({ params: { section } }));
@@ -14,6 +14,8 @@ const key = Astro.params.section as SectionKey;
 const section = sections[key];
 const index = sectionKeys.indexOf(key);
 const items = await getItems(key);
+const overview = section.overview;
+const numbered = (overview?.groups.filter((g) => g.title).length ?? 0) > 1;
 
 // Only offer filters that would show something.
 const typeCounts = new Map<string, number>();
@@ -38,6 +40,33 @@ const searchText = (item: (typeof items)[number]) => {
       <h1 class="section-head__title">{section.title}</h1>
       <p class="section-head__desc"><T text={section.description} /></p>
     </header>
+
+    {
+      overview && (
+        <section class="overview reveal" id="overview" aria-labelledby="overview-heading">
+          <h2 id="overview-heading" class="label section-heading">{overview.heading}</h2>
+          {overview.text && <p class="overview__text" set:html={inlineHtml(overview.text)} />}
+          <ul class:list={['overview__groups', { 'overview__groups--single': overview.groups.length === 1 }]}>
+            {overview.groups.map((g, i) => (
+              <li class="overview__group">
+                {g.title && (
+                  <h3 class="overview__title">
+                    {numbered && <span class="label overview__num">Theme {i + 1}</span>}
+                    {g.title}
+                  </h3>
+                )}
+                <ul class="overview__items">
+                  {g.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          {overview.note && <p class="overview__note" set:html={inlineHtml(overview.note)} />}
+        </section>
+      )
+    }
 
     {
       items.length > 0 ? (
@@ -133,6 +162,79 @@ const searchText = (item: (typeof items)[number]) => {
     line-height: 1.4;
     max-width: 40ch;
     margin: 0 auto;
+    color: var(--ink-soft);
+  }
+
+  /* Overview, such as research themes */
+  .overview {
+    padding: var(--space-5) 0 var(--space-6);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .overview__text {
+    max-width: 46rem;
+    margin: 0 auto var(--space-5);
+    text-align: center;
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+  }
+
+  .overview__groups {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr));
+    gap: var(--space-5) clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .overview__groups--single {
+    max-width: 46rem;
+    margin: 0 auto;
+  }
+
+  .overview__title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .overview__num {
+    display: block;
+    margin-bottom: 0.45rem;
+  }
+
+  .overview__items {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .overview__groups--single .overview__items {
+    columns: 2 16rem;
+    column-gap: 2.5rem;
+    display: block;
+  }
+
+  .overview__groups--single .overview__items li {
+    margin-bottom: 0.4rem;
+    break-inside: avoid;
+  }
+
+  .overview__note {
+    max-width: 46rem;
+    margin: var(--space-5) auto 0;
+    text-align: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.4;
     color: var(--ink-soft);
   }
 

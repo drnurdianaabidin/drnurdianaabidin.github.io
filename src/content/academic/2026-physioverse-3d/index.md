@@ -2,7 +2,12 @@
 title: "PhysioVerse 3D: interactive biomechanics platform"
 date: 2026
 type: Teaching innovation
+status: Available online
 summary: "A web-based platform that uses animated 3D models to show how muscles and joints work during selected exercises, built to help Clinical Exercise Science students link theory to movement analysis."
+innovation:
+  order: 2
+  problem: "Bridging theoretical knowledge of muscles, joints and movement with applied movement analysis."
+  users: "Students in Clinical Exercise Science and related health science disciplines."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg

@@ -22,11 +22,13 @@ interface Props {
   imageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  /** Use the title as it is, without adding the short name after it (the home page). */
+  titleIsFull?: boolean;
 }
 
-const { title, description, image, imageAlt, type = 'website', noindex = false } = Astro.props;
+const { title, description, image, imageAlt, type = 'website', noindex = false, titleIsFull = false } = Astro.props;
 
-const pageTitle = title ? `${plain(title)} | ${settings.shortName}` : settings.name;
+const pageTitle = title ? (titleIsFull ? plain(title) : `${plain(title)} | ${settings.shortName}`) : settings.name;
 const pageDescription = plain(description ?? settings.description);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 

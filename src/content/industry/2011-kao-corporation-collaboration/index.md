@@ -2,6 +2,7 @@
 title: "Research collaboration with Kao Corporation, Japan"
 date: 2011
 type: Collaborative projects
+status: Completed
 summary: "A research collaboration with Kao Corporation, Japan, on the effects of sanitary napkins on physiological stress markers and quality of life of Malaysian women (2011 to 2013)."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.

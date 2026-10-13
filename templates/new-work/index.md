@@ -38,6 +38,20 @@ coverAlt: "Describe what the cover photo shows."
 # true shows this work under "Selected work" on the home page.
 featured: false
 
+# Where the work stands: Ongoing, Completed, Prototype in development,
+# Published, In press or Under review.
+status: Ongoing
+
+# For publications only: the full reference. Put the journal in *stars*.
+# citation: "Abidin NZ, Author B. 2026. Title of the paper. *Journal Name*, 12(3), 45–56."
+
+# For research innovations only: these lines also list the work on the
+# Innovations page. Remove the # at the start of each line to use them.
+# innovation:
+#   problem: "The problem it aims to address."
+#   users: "The people it is intended for."
+#   recognition: "Any award, with its exact name."
+
 # The heading above the list of people, for example Co-authors,
 # Research team, Community partners. Leave out to use "Collaborators".
 collaboratorsLabel: Collaborators

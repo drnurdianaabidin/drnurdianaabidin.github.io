@@ -4,8 +4,9 @@ import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
 import T from '../components/T.astro';
+import Profiles from '../components/Profiles.astro';
 import { plain } from '../lib/placeholder.mjs';
-import { settings, resolveLocalFile } from '../lib/items';
+import { settings, sections, resolveLocalFile } from '../lib/items';
 
 const about = await getEntry('about', 'index');
 if (!about) {
@@ -15,9 +16,11 @@ const { Content } = await render(about);
 const { data } = about;
 const cvUrl = data.cv ? resolveLocalFile(about.filePath, data.cv) : undefined;
 const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
+// The research themes from src/sections.yaml, or the tagline if there are none.
+const themes = sections.research.overview?.groups.map((g) => g.title).filter(Boolean) ?? [];
 ---
 
-<Base title="About" description={`Biography, affiliations and CV of ${settings.name}.`}>
+<Base title="About" description={`Biography, academic positions, qualifications, research themes and CV of ${settings.name}, ${settings.institution}.`}>
   <Masthead slot="header" current="about" />
 
   <div class="wrap about">
@@ -76,8 +79,19 @@ const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
           </section>
 
           <section class="facts__block reveal">
-            <h2 class="label section-heading section-heading--left">Research interests</h2>
-            <p class="facts__interests"><T text={settings.interests} /></p>
+            <h2 class="label section-heading section-heading--left">Research themes</h2>
+            {
+              themes.length > 0 ? (
+                <ul class="facts__themes">
+                  {themes.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="facts__interests">{settings.tagline.join(', ')}</p>
+              )
+            }
+            {themes.length > 0 && <p class="facts__more"><a href="/research/#overview">Research themes in detail</a></p>}
           </section>
 
           {
@@ -89,9 +103,19 @@ const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
                     <li>
                       <span class="facts__main"><T text={e.degree} /></span>
                       <span class="facts__sub"><T text={e.place} /></span>
+                      {e.focus && <span class="facts__focus"><T text={e.focus} /></span>}
                     </li>
                   ))}
                 </ul>
+              </section>
+            )
+          }
+
+          {
+            settings.profiles.length > 0 && (
+              <section class="facts__block reveal">
+                <h2 class="label section-heading section-heading--left">Research profiles</h2>
+                <Profiles />
               </section>
             )
           }
@@ -198,6 +222,26 @@ const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
     display: block;
     font-size: 0.92rem;
     color: var(--muted);
+  }
+
+  .facts__focus {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .facts__themes {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .facts__more {
+    margin: 1rem 0 0;
+    font-size: 0.92rem;
   }
 
   .facts__interests {

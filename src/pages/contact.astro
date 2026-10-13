@@ -2,13 +2,14 @@
 import Base from '../layouts/Base.astro';
 import Masthead from '../components/Masthead.astro';
 import T from '../components/T.astro';
+import Profiles from '../components/Profiles.astro';
 import { plain } from '../lib/placeholder.mjs';
 import { settings } from '../lib/items';
 
 const email = plain(settings.email);
 ---
 
-<Base title="Contact" description={`How to contact ${settings.name}.`}>
+<Base title="Contact" description={`Contact ${settings.name} about research collaboration, postgraduate study and partnerships. Email and academic profiles.`}>
   <Masthead slot="header" current="contact" />
 
   <div class="wrap contact">
@@ -22,6 +23,14 @@ const email = plain(settings.email);
       <p class="contact__email">
         <a href={`mailto:${email}`}><T text={settings.email} /></a>
       </p>
+      {
+        settings.profiles.length > 0 && (
+          <section class="contact__profiles" aria-labelledby="profiles-heading">
+            <h2 id="profiles-heading" class="label">Academic profiles</h2>
+            <Profiles align="centre" />
+          </section>
+        )
+      }
       <hr class="rule contact__rule" />
       <p class="contact__affil">
         {settings.affiliations.map((a) => <span>{a}</span>)}
@@ -57,7 +66,7 @@ const email = plain(settings.email);
     font-size: clamp(1.3rem, 1vw + 1rem, 1.6rem);
     line-height: 1.4;
     color: var(--ink-soft);
-    max-width: 34ch;
+    max-width: 42ch;
     margin: 0 auto 2rem;
   }
 
@@ -73,6 +82,14 @@ const email = plain(settings.email);
     text-decoration-color: var(--brass);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
+  }
+
+  .contact__profiles {
+    margin-top: 2.75rem;
+  }
+
+  .contact__profiles h2 {
+    margin: 0 0 1.25rem;
   }
 
   .contact__rule {

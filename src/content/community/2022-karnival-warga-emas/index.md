@@ -2,12 +2,12 @@
 title: "Karnival Warga Emas 2022"
 date: 2022-11-12
 type: Community programmes
+status: Completed
 summary: "A carnival for older adults in Bertam, Kepala Batas, organised with the Ministry of Higher Education Malaysia and Masjid Abdullah Fahim, with Dr Nurdiana as project leader and chair."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of a round sun above a horizon."
-featured: true
 collaboratorsLabel: Partners
 collaborators:
   - "Ministry of Higher Education Malaysia"

@@ -3,7 +3,7 @@
 // your name is the main heading. On other pages it is smaller and your
 // name links back to the home page.
 import ThemeToggle from './ThemeToggle.astro';
-import { settings, sections, sectionKeys } from '../lib/items';
+import { settings, sections, sectionKeys, extraPages } from '../lib/items';
 
 interface Props {
   size?: 'large' | 'compact';
@@ -12,9 +12,10 @@ interface Props {
 
 const { size = 'compact', current } = Astro.props;
 const large = size === 'large';
-const links = [
-  ...sectionKeys.map((key) => ({ href: `/${key}/`, label: sections[key].title, key })),
-];
+// Publications and Innovations sit straight after Research.
+const sectionLinks = sectionKeys.map((key) => ({ href: `/${key}/`, label: sections[key].title, key }));
+const at = sectionLinks.findIndex((link) => link.key === 'research') + 1;
+const links = [...sectionLinks.slice(0, at), ...extraPages, ...sectionLinks.slice(at)];
 ---
 
 <header class:list={['masthead', `masthead--${size}`]}>
@@ -29,6 +30,18 @@ const links = [
       ) : (
         <p class="masthead__name">
           <a href="/" aria-label={`${settings.name}, home page`}>{settings.name}</a>
+        </p>
+      )
+    }
+    {
+      large && (
+        <p class="masthead__tagline">
+          {settings.tagline.map((t, i) => (
+            <>
+              {i > 0 && <span class="masthead__sep" aria-hidden="true">·</span>}
+              <span>{t}</span>
+            </>
+          ))}
         </p>
       )
     }
@@ -114,8 +127,21 @@ const links = [
     text-decoration: none;
   }
 
-  .masthead__affil {
+  .masthead__tagline {
     margin: clamp(1rem, 2vw, 1.5rem) auto 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.15rem, 0.8vw + 0.95rem, 1.45rem);
+    line-height: 1.35;
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1rem 0.75rem;
+  }
+
+  .masthead__affil {
+    margin: clamp(0.75rem, 1.5vw, 1.1rem) auto 0;
     color: var(--muted);
     font-size: 0.98rem;
     display: flex;
@@ -192,6 +218,11 @@ const links = [
   }
 
   @media (max-width: 560px) {
+    .masthead__tagline {
+      flex-direction: column;
+      gap: 0;
+    }
+
     .masthead__affil {
       flex-direction: column;
       gap: 0.15rem;

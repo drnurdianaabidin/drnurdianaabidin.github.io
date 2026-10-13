@@ -81,6 +81,23 @@ function itemSchema(section: (typeof SECTION_KEYS)[number]) {
           'followed by a short description of the cover photo for people who cannot see it'
         ),
         featured: z.boolean({ error: '"featured" must be either true or false.' }).default(false),
+        // Where the work stands, for example Ongoing, Completed, Prototype, Published or In press.
+        status: optionalText,
+        // For publications: the full reference, with the journal in *stars* for italics.
+        citation: optionalText,
+        // For research innovations, which are also listed on the Innovations page.
+        innovation: z
+          .object(
+            {
+              problem: requiredText('problem', 'followed by the problem the innovation aims to address'),
+              users: requiredText('users', 'followed by the people the innovation is intended for'),
+              recognition: optionalText,
+              // Position on the Innovations page: 1 comes first.
+              order: z.number().optional(),
+            },
+            { error: '"innovation" needs "problem" and "users" on the lines below it, each indented by two spaces.' }
+          )
+          .optional(),
         collaboratorsLabel: optionalText,
         collaborators: z
           .array(
@@ -172,6 +189,7 @@ const about = defineCollection({
           z.object({
             degree: requiredText('degree', 'followed by the qualification'),
             place: requiredText('place', 'followed by the institution and year'),
+            focus: optionalText,
           })
         )
         .default([]),

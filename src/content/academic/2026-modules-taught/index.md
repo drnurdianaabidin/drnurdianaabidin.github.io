@@ -2,14 +2,14 @@
 title: "Modules taught: applied and clinical exercise physiology"
 date: 2026
 type: Teaching
-summary: "Teaching in applied and clinical exercise physiology, practicum supervision and research examination at Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI), Universiti Sains Malaysia."
+summary: "Teaching in applied and clinical exercise physiology, practicum supervision and research examination at Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), Universiti Sains Malaysia."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of a solid square on a lined background."
 ---
 
-Modules taught at Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI), Universiti Sains Malaysia.
+Modules taught at Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), Universiti Sains Malaysia.
 
 ## TCE 504 Applied Exercise Physiology
 

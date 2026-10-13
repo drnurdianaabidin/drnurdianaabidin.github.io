@@ -14,6 +14,8 @@ import {
   itemUrl,
   formatDate,
   isoDate,
+  doiLink,
+  citationHtml,
   resolveLocalFile,
   type Item,
 } from '../../lib/items';
@@ -42,6 +44,7 @@ const { item, newer, older } = Astro.props;
 const { data } = item;
 const section = sections[item.collection];
 const { Content } = await render(item);
+const doi = doiLink(item);
 
 const people = data.collaborators.map((c) => (typeof c === 'string' ? { name: c } : c));
 const peopleLabel = data.collaboratorsLabel ?? 'Collaborators';
@@ -144,12 +147,45 @@ const links = data.links.map((link) => {
               <dt>Date</dt>
               <dd>{formatDate(data.date)}</dd>
             </div>
+            {
+              data.status && (
+                <div>
+                  <dt>Status</dt>
+                  <dd>{data.status}</dd>
+                </div>
+              )
+            }
+            {
+              data.innovation && (
+                <div>
+                  <dt>Listed in</dt>
+                  <dd>
+                    <a href="/innovations/">Research innovations</a>
+                  </dd>
+                </div>
+              )
+            }
           </dl>
         </section>
       </aside>
 
       <div class="item__body prose reveal">
         <Content />
+        {
+          data.citation && (
+            <section class="item__citation" aria-labelledby="citation-heading">
+              <h2 id="citation-heading">Citation</h2>
+              <p>
+                <Fragment set:html={citationHtml(data.citation)} />
+                {doi && (
+                  <>
+                    {' '}DOI: <a href={doi.url} rel="noopener">{doi.url.replace(/^https?:\/\/(dx\.)?doi\.org\//i, '')}</a>
+                  </>
+                )}
+              </p>
+            </section>
+          )
+        }
       </div>
     </div>
 

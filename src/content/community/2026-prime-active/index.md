@@ -2,17 +2,35 @@
 title: "PRIME-Active: digital health platform for active ageing"
 date: 2026
 type: Community programmes
-summary: "A prototype digital health platform, now in development, to support physical activity, self-monitoring and health promotion among older adults and communities."
+status: Prototype in development
+summary: "A prototype digital platform, in development, to support community-based physical activity programmes and research among older adults."
+innovation:
+  order: 3
+  problem: "Supporting the delivery and monitoring of community physical activity programmes for older adults, and the collection of research data from them."
+  users: "Researchers, community organisations and programme leaders working with older adults, and the older adults taking part."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of a round sun above a horizon."
+featured: true
 ---
 
 **Role:** Principal developer  
 **Period:** 2026 to present  
 **Status:** Prototype in development. Not yet publicly available.
 
-PRIME-Active is a digital health platform for active ageing and community-based promotion of physical activity. It is designed to support physical activity, self-monitoring and health promotion among older adults and community populations.
+## What it is
 
-The platform is part of a community-focused digital health initiative. It will be refined through stakeholder input, co-design and a pilot.
+PRIME-Active is a digital health platform for active ageing and community-based physical activity. It is designed to support physical activity, self-monitoring and health promotion among older adults and community groups.
+
+## Proposed uses
+
+- supporting the delivery of community physical activity programmes
+- monitoring participation and progress
+- collecting data for research
+
+## Next steps
+
+The prototype will be refined through stakeholder input, co-design and a pilot study.
+
+In the longer term, PRIME-Active could be licensed to, or adopted by, researchers and community organisations. This is a possible future direction. The platform is not licensed, commercially deployed or clinically validated.

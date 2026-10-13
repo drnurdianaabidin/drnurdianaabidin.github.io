@@ -7,9 +7,15 @@ export type SectionKey = (typeof SECTION_KEYS)[number];
 export type Item = CollectionEntry<SectionKey>;
 
 export const settings = parseSettings(settingsText);
+export type Overview = {
+  heading: string;
+  text: string;
+  note: string;
+  groups: { title: string; items: string[] }[];
+};
 export const sections = parseSections(sectionsText) as Record<
   SectionKey,
-  { key: SectionKey; title: string; description: string; categories: string[] }
+  { key: SectionKey; title: string; description: string; categories: string[]; overview?: Overview }
 >;
 export const sectionKeys = SECTION_KEYS as unknown as SectionKey[];
 
@@ -119,3 +125,35 @@ export function parseVideo(url: string, entryFilePath?: string): VideoSource {
       'Use a YouTube or Vimeo address, or a short MP4 file in the same folder written as ./my-clip.mp4'
   );
 }
+
+/** The first DOI link of a piece of work (a paper, chapter or abstract), if it has one. */
+export function doiLink(item: Item) {
+  return item.data.links.find((link) => /^https?:\/\/(dx\.)?doi\.org\//i.test(link.url));
+}
+
+/** Short text as HTML: escaped, with *stars* for italics and [text](/link) for links. */
+export function inlineHtml(text: string) {
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return escaped
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/|mailto:)[^)\s]+)\)/g, '<a href="$2">$1</a>');
+}
+
+/** A citation as HTML, with the journal in *stars* shown in italics. */
+export const citationHtml = inlineHtml;
+
+/** Everything in the Research section with the type "Publications", newest first. */
+export async function getPublications(): Promise<Item[]> {
+  return (await getItems('research')).filter((item) => item.data.type === 'Publications');
+}
+
+/** Work from any section that has an "innovation" block. */
+export async function getInnovations(): Promise<Item[]> {
+  return (await getAllItems()).filter((item) => item.data.innovation);
+}
+
+/** The extra pages listed in the main menu after the sections. */
+export const extraPages = [
+  { key: 'publications', href: '/publications/', label: 'Publications' },
+  { key: 'innovations', href: '/innovations/', label: 'Innovations' },
+];

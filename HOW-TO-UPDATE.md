@@ -80,6 +80,11 @@ The folder name becomes the web address of the page. The example above appears a
 | `links` | No | DOI, PDF, slides, news article or any web page |
 | `gallery` | No | Extra photos, each with a description |
 | `video` | No | A YouTube or Vimeo link, or a short MP4 file in the folder |
+| `status` | No | Where the work stands, for example `Ongoing`, `Completed`, `Prototype in development`, `Published`, `In press` or `Under review`. Shown on the card and the page. |
+| `citation` | No | For publications: the full reference, with the journal name in `*stars*` for italics. It appears on the page and on the Publications page. |
+| `innovation` | No | For a research innovation: `problem` and `users` on the lines below it (indented by two spaces), and optionally `recognition` and `order`. The work is then also listed on the Innovations page. |
+
+**Publications.** Put each publication in `src/content/research/` with `type: Publications`, a `citation`, a `status` and a `links` entry for its DOI labelled `Read the paper`. The Publications page groups them by status: accepted papers appear under "Accepted and in press", and submitted papers under "Under review (not yet accepted)", separate from published work.
 
 **Which program to use for editing.** Any plain text editor works. On Windows, Notepad is fine. A free editor called Visual Studio Code (code.visualstudio.com) is easier because it colours the different parts and shows the folders on the left.
 
@@ -154,6 +159,7 @@ To check on progress, open your repository on GitHub and click the **Actions** t
 4. **To rename a category,** change it here and also change the `type:` line in every piece of work that uses it. The site will tell you if any piece of work still uses the old name.
 5. **To remove a category,** delete its line. First move any work in that category to another one.
 6. You can also change each section's one-line `description` here. It appears on the home page panel and at the top of the section page.
+7. A section can also have an `overview`, shown at the top of its page: a `heading`, a short `text`, `groups` of points (each with an optional `title` and a list of `items`) and an optional `note`. The research themes are written this way.
 
 Do not change the four section names on the left (`academic:`, `research:`, `community:`, `industry:`) because they match the folder names. You can change the `title:` lines, which are what visitors see.
 
@@ -185,7 +191,7 @@ Remember that anyone can download your CV. Leave out your home address, phone nu
 
 ## 7. Change your details and remove placeholder highlighting
 
-Open `src/settings.yaml`. It contains your name, institution, affiliations, research interests line, email, the sentence on the Contact page, and the site description used by search engines.
+Open `src/settings.yaml`. It contains your name, institution, affiliations, the tagline under your name, the short introduction on the home page, your email, the sentence on the Contact page, your academic profile links (ORCID, Google Scholar and others), and the page title and description used by search engines.
 
 **To list the placeholder text still left**, run this in Terminal:
 

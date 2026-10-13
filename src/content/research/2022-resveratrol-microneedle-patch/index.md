@@ -1,8 +1,14 @@
 ---
-title: "Resveratrol-loaded dissolvable microneedle patch for exercise-induced muscle soreness"
+title: "Resveratrol-loaded dissolving microneedle patch for exercise-induced muscle soreness"
 date: 2022
 type: Current projects
-summary: "A Fundamental Research Grant Scheme project, led as principal investigator, on how a resveratrol-loaded dissolvable microneedle patch works and its effects on delayed onset muscle soreness after exercise."
+status: Ongoing, research prototype
+summary: "An FRGS-funded project, led as principal investigator, developing and optimising dissolving microneedle patches that carry resveratrol, to investigate their potential use in recovery from exercise-induced muscle soreness."
+innovation:
+  order: 1
+  problem: "Delayed onset muscle soreness after strenuous or unaccustomed exercise, and whether resveratrol delivered through the skin could support recovery."
+  users: "At this stage, researchers in exercise science and drug delivery. People recovering from strenuous exercise are possible future users, subject to further research."
+  recognition: "Gold Medal and First Runner-Up in the Special Category, [USM–AUSC International Sports Innovation Challenge 2025](/academic/2025-sports-innovation-challenge-gold/)"
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
@@ -16,6 +22,25 @@ featured: true
 **Funder:** Fundamental Research Grant Scheme (FRGS), Ministry of Higher Education Malaysia  
 **Grant:** RM 171,800  
 **Period:** 2022 to present
+
+## What the project involves
+
+A dissolving microneedle patch carries many very small needles that dissolve after being pressed into the skin, releasing what they carry. This project is developing patches loaded with resveratrol, a plant compound, to investigate its delivery through the skin for muscle recovery after exercise.
+
+The work covers:
+
+- formulation development
+- microneedle fabrication and optimisation
+- approaches to loading resveratrol into the microneedles
+- prototype development, with a view to translational use
+
+## Status
+
+Ongoing research at the prototype stage. The patch is not a proven treatment, a registered medical product or a commercial product.
+
+## Recognition
+
+The microneedle research received a Gold Medal and was First Runner-Up in the Special Category at the [USM–AUSC International Sports Innovation Challenge 2025](/academic/2025-sports-innovation-challenge-gold/).
 
 ## Related publication
 

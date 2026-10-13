@@ -1,8 +1,13 @@
 ---
-title: "MSc Clinical Exercise Science quiz app"
+title: "MSc Clinical Exercise Science digital quiz app"
 date: 2026
 type: Teaching innovation
+status: Available online
 summary: "A quiz app, usable on phones and computers, that helps MSc Clinical Exercise Science students revise key concepts across core modules."
+innovation:
+  order: 4
+  problem: "Giving students frequent, self-paced revision and self-assessment of key concepts outside class hours."
+  users: "Students on the MSc in Clinical Exercise Science."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg

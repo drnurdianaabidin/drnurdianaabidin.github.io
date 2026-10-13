@@ -11,12 +11,16 @@ const panels = await getSectionPanels();
 const featured = await getFeatured(6);
 ---
 
-<Base>
+<Base title={settings.siteTitle || undefined} titleIsFull>
   <Masthead size="large" slot="header" />
 
-  <section class="wrap interests reveal" aria-label="Research interests">
-    <p><T text={settings.interests} /></p>
-  </section>
+  {
+    settings.introduction && (
+      <section class="wrap interests reveal" aria-label="Introduction">
+        <p><T text={settings.introduction} /></p>
+      </section>
+    )
+  }
 
   <section class="wrap" aria-label="Sections of work">
     <ul class="panels">
@@ -84,7 +88,7 @@ const featured = await getFeatured(6);
     font-size: clamp(1.35rem, 1.6vw + 0.9rem, 2rem);
     line-height: 1.35;
     color: var(--ink-soft);
-    max-width: 34ch;
+    max-width: 40ch;
     margin: 0 auto;
   }
 

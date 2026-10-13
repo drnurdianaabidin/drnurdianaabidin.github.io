@@ -15,6 +15,6 @@ collaborators:
 ---
 
 **Poster presentation**  
-1st Postgraduates Colloquium on Translational Research 2014, 9 to 10 September 2014, Animal Research Complex, Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), previously known as the Advanced Medical and Dental Institute (AMDI), Universiti Sains Malaysia
+1st Postgraduates Colloquium on Translational Research 2014, 9 to 10 September 2014, Animal Research Complex, Advanced Medical and Dental Institute (now PKTAAB), Universiti Sains Malaysia
 
 **Authors:** Abidin NZ, Muhamed AMC, Singh R

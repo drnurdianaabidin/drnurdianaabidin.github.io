@@ -1,20 +1,22 @@
 ---
-title: "Head of Programme, MSc Clinical Exercise Science"
+title: "Former Head of Programme, MSc in Clinical Exercise Science (2023–2026)"
 date: 2023
 type: Leadership and service
-summary: "Head of Programme for the coursework MSc in Clinical Exercise Science at Universiti Sains Malaysia for the 2023/2024, 2024/2025 and 2025/2026 cohorts."
+status: Completed
+summary: "Head of Programme for the coursework MSc in Clinical Exercise Science at Universiti Sains Malaysia for three cohorts: 2023/2024, 2024/2025 and 2025/2026."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of a solid square on a lined background."
-featured: true
 ---
 
-Dr Nurdiana Zainol Abidin has led the coursework Master of Science in Clinical Exercise Science at Universiti Sains Malaysia as Head of Programme for three cohorts: 2023/2024, 2024/2025 and 2025/2026.
+Dr Nurdiana served as Head of Programme for the coursework Master of Science in Clinical Exercise Science at Universiti Sains Malaysia for three cohorts: 2023/2024, 2024/2025 and 2025/2026.
 
-Dr Nurdiana also teaches applied and clinical exercise physiology, and is Head of Module for Clinical Exercise Physiology. See [modules taught](/academic/2026-modules-taught/).
+The role involved coordinating the delivery of the programme's curriculum, and supporting and mentoring its postgraduate students.
 
-Dr Nurdiana has also built digital learning tools for students on the programme:
+Dr Nurdiana also teaches applied and clinical exercise physiology on the programme and is Head of Module for Clinical Exercise Physiology. See [modules taught](/academic/2026-modules-taught/).
 
-- [PhysioVerse 3D](/academic/2026-physioverse-3d/), an interactive 3D biomechanics platform
-- [MSc Clinical Exercise Science quiz app](/academic/2026-clinical-exercise-science-quiz-app/), for revision across core modules
+Digital learning tools built for the programme's students:
+
+- [PhysioVerse 3D](/academic/2026-physioverse-3d/), an interactive 3D biomechanics learning platform
+- [MSc Clinical Exercise Science digital quiz app](/academic/2026-clinical-exercise-science-quiz-app/), for revision across core modules

@@ -2,6 +2,7 @@
 title: "Healthy lifestyle programme in an adopted community"
 date: 2011
 type: Community programmes
+status: Completed
 summary: "A large community project, led by Professor Rabindarjeet Singh, testing the effectiveness of a healthy lifestyle programme in an adopted community (2011 to 2013). Dr Nurdiana helped run and coordinate it."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.

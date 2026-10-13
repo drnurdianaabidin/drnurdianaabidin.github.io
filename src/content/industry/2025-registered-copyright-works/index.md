@@ -2,6 +2,7 @@
 title: "Registered copyright works"
 date: 2025
 type: Intellectual property
+status: Registered
 summary: "Four registered copyright works: three films in the Cellular Lifespan series and the artwork DADU DODECA-FIT."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.

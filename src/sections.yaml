@@ -8,11 +8,27 @@
 # To rename one: change it here AND in any work that uses it.
 # Do not change the four section keys (academic, research,
 # community, industry) as they match the folder names.
+#
+# A section can also have an "overview": a heading, a short text,
+# and groups of points, shown at the top of the section page.
+# The research themes are an example.
 # ---------------------------------------------------------------
 
 academic:
   title: Academic
-  description: Teaching, postgraduate supervision, programme leadership and digital learning tools in clinical exercise science at Universiti Sains Malaysia.
+  description: Teaching, postgraduate supervision and academic leadership in clinical exercise science at Universiti Sains Malaysia.
+  overview:
+    heading: Postgraduate supervision areas
+    text: Master's and PhD researchers supervised at Universiti Sains Malaysia have worked in the following areas.
+    groups:
+      - items:
+          - Clinical exercise science
+          - Musculoskeletal health
+          - Exercise psychology
+          - Athletic performance
+          - Exercise-based interventions
+          - Healthy ageing
+          - Biomedical and digital health research
   categories:
     - Teaching
     - Teaching innovation
@@ -24,7 +40,52 @@ academic:
 
 research:
   title: Research
-  description: Studies of muscle, bone, fat and physical activity as people age, and of exercise and recovery.
+  description: Research on musculoskeletal health, physical function and healthy ageing, from exercise physiology to machine learning and new technologies.
+  overview:
+    heading: Research themes
+    text: The common aim is to understand, assess and improve musculoskeletal health, physical function and healthy ageing, using biomedical research, exercise science, computational methods and emerging technologies. The five themes are complementary, and most projects draw on more than one. For example, the screening models for low muscle mass and low bone density in theme 2 build on the body composition and bone health research in theme 1.
+    note: Collaboration enquiries in any of these areas are welcome. See [Contact](/contact/).
+    groups:
+      - title: Musculoskeletal health and healthy ageing
+        items:
+          - Sarcopenia and low muscle mass
+          - Osteosarcopenic obesity
+          - Bone mineral density and osteoporosis risk
+          - Body composition and physical performance
+          - Postmenopausal women's health
+          - Physical function in older adults
+      - title: Artificial intelligence and clinical prediction
+        items:
+          - Developing and validating clinical prediction models
+          - Machine learning approaches to health screening
+          - Analysis of population health data, including NHANES
+          - Screening for low appendicular lean mass
+          - Screening for low bone density
+          - Comparing conventional statistical methods with machine learning
+          - Clinical usefulness and generalisability of prediction models
+      - title: Exercise physiology and interventions
+        items:
+          - Exercise-induced muscle soreness
+          - Physiological responses and adaptations to exercise
+          - Exercise and physical function
+          - Age-related physiological changes
+          - Exercise and immune function
+          - Exercise-based interventions for older adults
+      - title: Digital health and emerging technologies
+        items:
+          - Fully immersive virtual reality
+          - Dual-task training
+          - Cognitive and physical function in older adults
+          - Digital assessment and monitoring tools
+          - Interactive digital learning resources
+          - Technology-assisted healthy ageing programmes
+      - title: Translational biomedical innovation
+        items:
+          - Resveratrol-loaded dissolving microneedles
+          - Drug-delivery formulation and optimisation
+          - Development of biomedical research prototypes
+          - Translational opportunities and intellectual property
+          - Applications of emerging technologies in healthcare
   categories:
     - Publications
     - Current projects
@@ -34,7 +95,19 @@ research:
 
 community:
   title: Community
-  description: Healthy ageing programmes, community health projects and writing for the public in Malaysia.
+  description: Community programmes for older adults, health promotion and writing for the public in Malaysia.
+  overview:
+    heading: Areas of interest
+    text: Work with communities focuses on older adults and on putting research into practice. Each entry below is labelled as completed, in development or planned.
+    groups:
+      - items:
+          - Community-based physical activity programmes
+          - Healthy ageing initiatives
+          - Health promotion among older adults
+          - Exercise and physical function
+          - Technology-assisted community health programmes
+          - Knowledge translation
+    note: PRIME-Active, a digital platform still in development, is intended to link research with community physical activity programmes. See [PRIME-Active](/community/2026-prime-active/).
   categories:
     - Health outreach
     - Public talks
@@ -44,7 +117,17 @@ community:
 
 industry:
   title: Industry
-  description: Collaborations with organisations outside the university, and registered intellectual property.
+  description: Research collaboration with industry, registered intellectual property and interests in translation.
+  overview:
+    heading: Collaboration interests
+    text: Areas where collaboration with healthcare and industry partners is welcome. Only the collaborations listed below have taken place; the others are interests, not existing agreements.
+    groups:
+      - items:
+          - Research collaboration with healthcare and industry partners
+          - Translational development of the resveratrol microneedle patch
+          - Future adoption or licensing of digital tools such as PRIME-Active
+          - Knowledge translation and training in exercise science
+    note: Enquiries are welcome. See [Contact](/contact/).
   categories:
     - Partnerships
     - Consultancy

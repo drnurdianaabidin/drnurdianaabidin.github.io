@@ -11,26 +11,51 @@ name: Dr Nurdiana Zainol Abidin
 # Short form used in the browser tab and in shared links.
 shortName: Nurdiana Zainol Abidin
 
+# The browser-tab title of the home page, which search engines also show.
+siteTitle: Dr Nurdiana Zainol Abidin | Musculoskeletal Health and Healthy Ageing Research, Universiti Sains Malaysia
+
 # The institution shown in small capitals above your name.
 institution: Universiti Sains Malaysia
 
 # Departments and centres, one per line, in the order you want them shown.
 affiliations:
-  - Department of Community Health
   - Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB)
+  - Department of Community Health
 
-# One line describing your research, shown under your name on the home page.
-interests: Sarcopenia and osteosarcopenic obesity, physical activity and healthy ageing, clinical exercise physiology, and digital health and virtual reality
+# Short phrases shown under your name on the home page, one per line.
+tagline:
+  - Musculoskeletal Health
+  - Healthy Ageing
+  - AI & Predictive Modelling
+  - Digital Health Innovation
+
+# One or two sentences introducing your research, shown below the menu on the
+# home page.
+introduction: My research brings together exercise physiology, biomedical science, computational approaches and emerging technologies to better understand and support musculoskeletal health and healthy ageing.
 
 # One or two sentences used by search engines and in shared link previews.
-description: The academic, research, community and industry work of Dr Nurdiana Zainol Abidin, Universiti Sains Malaysia. Sarcopenia and osteosarcopenic obesity, physical activity and healthy ageing, clinical exercise physiology, and digital health and virtual reality.
+description: Dr Nurdiana Zainol Abidin is a Senior Lecturer at Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), Universiti Sains Malaysia, researching musculoskeletal ageing, sarcopenia, osteosarcopenic obesity, clinical exercise science, and machine learning for musculoskeletal screening.
 
 # Your institutional email address. It appears on the Contact page and at
 # the foot of each page as a link that opens the visitor's email program.
 email: nurdianaabidin@usm.my
 
 # A sentence or two shown above your email address on the Contact page.
-contactNote: For enquiries about research, teaching, postgraduate supervision or collaboration, please write by email.
+contactNote: I welcome research collaborations in musculoskeletal ageing, exercise physiology, clinical prediction modelling, digital health and translational biomedical innovation. Prospective postgraduate students and potential partners are welcome to write by email.
+
+# Your academic profiles, shown on the About and Contact pages.
+# Each has a label, and optionally the ID shown (value) and a web address (url).
+profiles:
+  - label: ORCID
+    value: 0000-0002-0305-4157
+    url: https://orcid.org/0000-0002-0305-4157
+  - label: Google Scholar
+    url: https://scholar.google.com/citations?user=C_jBuOYAAAAJ
+  - label: Scopus Author ID
+    value: "56366272800"
+    url: https://www.scopus.com/authid/detail.uri?authorId=56366272800
+  - label: Web of Science ResearcherID
+    value: O-3964-2016
 
 # The web address of the site. Change this only if you connect your own domain,
 # for example https://nurdiana.com

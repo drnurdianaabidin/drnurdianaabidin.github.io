@@ -2,7 +2,9 @@
 title: "Obesity and Musculoskeletal Health of Young and Older Malaysian Women: A Cross-Sectional Study"
 date: 2023
 type: Publications
+status: Published
 summary: "A cross-sectional study published in the Malaysian Journal of Medical Sciences, 2023."
+citation: "Abidin NZ. 2023. Obesity and musculoskeletal health of young and older Malaysian women: a cross-sectional study. *Malaysian Journal of Medical Sciences*, 30(1), 137–151."
 # The cover is an abstract graphic. To use a photo instead, replace
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
@@ -14,7 +16,3 @@ links:
   - label: "Read the paper"
     url: https://doi.org/10.21315/mjms2023.30.1.12
 ---
-
-## Citation
-
-Abidin NZ. 2023. Obesity and musculoskeletal health of young and older Malaysian women: a cross-sectional study. *Malaysian Journal of Medical Sciences*, 30(1), 137–151. DOI: [10.21315/mjms2023.30.1.12](https://doi.org/10.21315/mjms2023.30.1.12)

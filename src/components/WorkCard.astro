@@ -35,6 +35,7 @@ const doiLink = data.links.find((link) => /^https?:\/\/(dx\.)?doi\.org\//i.test(
     <p class="label card__meta">
       {showSection && <span>{sections[item.collection].title}<span class="visually-hidden">,</span></span>}
       <span class="card__type">{data.type}</span>
+      {data.status && <span class="card__status">{data.status}</span>}
     </p>
     <Heading class="card__title"><T text={data.title} /></Heading>
     <p class="card__date"><time datetime={isoDate(data.date)}>{formatDate(data.date, 'month')}</time></p>
@@ -85,8 +86,15 @@ const doiLink = data.links.find((link) => /^https?:\/\/(dx\.)?doi\.org\//i.test(
     gap: 0.15rem 0.9rem;
   }
 
-  .card__type {
+  .card__type,
+  .card__status {
     color: var(--muted);
+  }
+
+  .card__status::before {
+    content: '·';
+    margin-right: 0.9rem;
+    color: var(--brass);
   }
 
   .card__title {
