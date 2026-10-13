@@ -9,12 +9,6 @@ citation: "Abidin NZ, Ooi CH, Nosaka K, et al. 2024. Effects of Resveratrol Supp
 # cover.jpg in this folder and describe the photo in coverAlt.
 cover: ./cover.jpg
 coverAlt: "Abstract graphic of vertical bars, like a simple bar chart."
-collaboratorsLabel: Authors
-collaborators:
-  - "Abidin NZ"
-  - "Ooi CH"
-  - "Nosaka K"
-  - "Karim NKA"
 links:
   - label: "Read the paper"
     url: https://doi.org/10.21315/mjms2024.31.6.7
