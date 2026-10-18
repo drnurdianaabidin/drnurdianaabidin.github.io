@@ -1,0 +1,86 @@
+# ---------------------------------------------------------------
+# POSTGRADUATE RESEARCH SUPERVISION (Academic page)
+#
+# Each researcher has:
+#   name:        as they would like it shown
+#   programme:   for example PhD, or MSc (Research)
+#   area:        one sentence on the research
+#   since:       the year supervision began (optional)
+#   status:      for example Ongoing, or Graduated in 2025 (optional)
+#   viva:        the viva voce date, year-month-day (optional)
+#   outcome:     the viva outcome (optional)
+#   highlight:   a distinction shown in gold at the top of the card (optional).
+#                Write it exactly as it stands: a nomination is not an award.
+# Only list people who are happy to be named on the website.
+# ---------------------------------------------------------------
+
+title: Postgraduate Research Supervision
+introduction: Supervising postgraduate researchers is one of the most rewarding aspects of my academic career. I enjoy helping students develop their research questions, navigate the challenges of scientific inquiry, and grow into confident, independent researchers. My supervisory interests span exercise physiology, musculoskeletal health, healthy ageing, rehabilitation, and emerging technologies in healthcare.
+university: Universiti Sains Malaysia
+
+# Researchers for whom you are the main supervisor
+main:
+  - name: Tie Yuhe
+    programme: Master of Science (Research)
+    area: Tai Chi interventions, psychological well-being, Type A behaviour, stress and movement-related outcomes.
+    since: 2024
+    viva: 2026-10-06
+    outcome: Passed with minor corrections
+    highlight: Thesis Nominated for Best Thesis Award – 2026
+
+  - name: Huang Weijie
+    programme: Doctor of Philosophy (PhD)
+    area: Mental skills training, psychological responses, physiological indicators and performance in collegiate basketball athletes.
+    since: 2022
+    status: Ongoing
+
+# Researchers for whom you are a co-supervisor
+co:
+  - name: Nazirah Binti Gulam Mohamed
+    programme: PhD
+    area: Eccentric exercise, weight loss, and physiological and psychological adaptations among women with obesity.
+    since: 2022
+
+  - name: Wen Feng
+    programme: PhD
+    area: Exercise interventions, active video games, dietary habits and physical health among university students.
+    since: 2022
+
+  - name: Zhang Di
+    programme: MSc (Research)
+    area: Sling exercise therapy and rehabilitation following meniscus repair.
+    since: 2023
+
+  - name: Li Muzheng
+    programme: MSc (Research)
+    area: Balance assessment and falls-prevention knowledge and practices among older adults in nursing homes.
+    since: 2022
+    status: Graduated in 2025
+
+# The invitation to prospective students
+invitation:
+  title: Interested in Pursuing Research With Me?
+  text:
+    - I welcome enquiries from prospective master's and PhD students who are curious, committed, and excited about meaningful research. My work brings together exercise physiology, musculoskeletal health, ageing, rehabilitation and digital health technologies.
+    - Whether you have a clearly developed research idea or are still exploring a topic, I would be happy to hear about your interests and discuss whether they align with my current research directions.
+  interests:
+    - Sarcopenia and Muscle Health
+    - Osteoporosis and Bone Health
+    - Exercise Physiology
+    - Healthy Ageing
+    - Dementia and Mild Cognitive Impairment
+    - Virtual Reality and Exercise Rehabilitation
+    - Digital Health and AI in Clinical Exercise Science
+    - Exercise Interventions and Functional Performance
+    - Microneedle Technology and Research Translation
+  button: Enquire About Research Supervision
+  subject: Prospective MSc/PhD Research Supervision Enquiry
+  # What to put in the email. These lines are also filled into the email.
+  include:
+    - Full name
+    - Intended programme (MSc by Research / PhD)
+    - Academic background and qualifications
+    - Research interests or proposed topic
+    - Expected start date
+    - CV and brief research proposal, if available
+  note: Supervision depends on how well a project aligns with my research, my supervisory capacity at the time, and the university's admission requirements. An enquiry does not guarantee a place, a scholarship or funding.

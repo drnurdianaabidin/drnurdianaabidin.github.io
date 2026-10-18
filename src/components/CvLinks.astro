@@ -1,0 +1,122 @@
+---
+// Links to the academic CV named on the "cv" line of src/settings.yaml:
+// "buttons" for the Academic and About pages, "inline" for a quiet line of
+// text such as the one on the home page. The file size is read from the file
+// itself, so it is always right.
+import { statSync } from 'node:fs';
+import { resolve } from 'node:path';
+import Icon from './Icon.astro';
+import { settings } from '../lib/items';
+
+interface Props {
+  variant?: 'buttons' | 'inline';
+  /** Buttons one above the other, filling the width (for narrow cards). */
+  stacked?: boolean;
+  class?: string;
+}
+
+const { variant = 'buttons', stacked = false, class: className } = Astro.props;
+const href = settings.cv;
+
+let details = '';
+const filename = href.split('/').pop() ?? 'CV.pdf';
+if (href) {
+  let bytes = 0;
+  try {
+    bytes = statSync(resolve(process.cwd(), 'public' + href)).size;
+  } catch {
+    throw new Error(
+      `The CV "${href}" named in src/settings.yaml was not found. Put the PDF in public/documents/ with exactly that file name.`
+    );
+  }
+  const size = bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  details = ['PDF', size, settings.cvUpdated && `updated ${settings.cvUpdated}`].filter(Boolean).join(', ');
+}
+---
+
+{
+  href &&
+    (variant === 'buttons' ? (
+      <div class:list={['cv-links', { 'cv-links--stacked': stacked }, className]}>
+        <a class="btn btn--primary cv-links__btn" href={href} download={filename}>
+          <Icon name="download" size={18} />
+          Download Academic CV
+        </a>
+        <a class="btn btn--ghost cv-links__btn" href={href} target="_blank" rel="noopener">
+          <Icon name="document" size={18} />
+          View CV<span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+        <p class="cv-links__meta">{details}</p>
+      </div>
+    ) : (
+      <p class:list={['cv-inline', className]}>
+        <Icon name="document" size={17} />
+        <span class="cv-inline__label">Academic CV</span>
+        <a href={href} target="_blank" rel="noopener">
+          View<span class="visually-hidden"> the academic CV (opens in a new tab)</span>
+        </a>
+        <span aria-hidden="true">·</span>
+        <a href={href} download={filename}>
+          Download<span class="visually-hidden"> the academic CV</span>
+        </a>
+        <span class="cv-inline__meta">({details})</span>
+      </p>
+    ))
+}
+
+<style>
+  .cv-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.75rem;
+  }
+
+  .cv-links__btn {
+    gap: 0.55rem;
+  }
+
+  .cv-links__meta {
+    flex-basis: 100%;
+    margin: 0.1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .cv-links--stacked {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .cv-links--stacked .cv-links__btn {
+    justify-content: center;
+  }
+
+  .cv-links--stacked .cv-links__meta {
+    text-align: center;
+  }
+
+  .cv-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.55rem;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .cv-inline__label {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .cv-inline a {
+    font-weight: 600;
+    color: var(--link);
+  }
+
+  .cv-inline__meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>

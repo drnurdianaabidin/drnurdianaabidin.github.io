@@ -70,6 +70,10 @@ export function parseSettings(text) {
     detail: h?.detail ? String(h.detail).trim() : '',
   }));
   const optional = (key) => (typeof raw[key] === 'string' ? raw[key].trim() : '');
+  const cv = optional('cv');
+  if (cv && !/^\/documents\/[^/]+\.pdf$/i.test(cv)) {
+    throw new Error(`The cv line in ${where} should be the address of a PDF in public/documents/, for example /documents/Nurdiana_Zainol_Abidin_Academic_CV.pdf`);
+  }
   const homePapers = (Array.isArray(raw.homePapers) ? raw.homePapers : []).map((p) => String(p).trim()).filter(Boolean);
   // The GoatCounter code is the first part of the dashboard address, such as
   // "nurdiana" for https://nurdiana.goatcounter.com. Accept the full address too.
@@ -98,6 +102,8 @@ export function parseSettings(text) {
     profiles,
     highlights,
     homePapers,
+    cv,
+    cvUpdated: optional('cvUpdated'),
     siteUrl,
     goatcounter,
     highlightPlaceholders: raw.highlightPlaceholders !== false,

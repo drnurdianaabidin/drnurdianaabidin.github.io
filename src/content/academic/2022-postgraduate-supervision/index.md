@@ -32,4 +32,4 @@ The projects span:
 - Internal examiner, TMR 507 Research
 - Academic advisor
 
-Individual students are not named here.
+The researchers and their projects are listed under [Postgraduate Research Supervision](/academic/#supervision).

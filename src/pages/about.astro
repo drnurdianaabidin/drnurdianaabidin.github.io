@@ -6,7 +6,8 @@ import Masthead from '../components/Masthead.astro';
 import StructuredData from '../components/StructuredData.astro';
 import T from '../components/T.astro';
 import Profiles from '../components/Profiles.astro';
-import { settings, sections, resolveLocalFile } from '../lib/items';
+import { settings, sections } from '../lib/items';
+import CvLinks from '../components/CvLinks.astro';
 import { milestones, TIMELINE_CATEGORIES } from '../lib/timeline';
 
 const about = await getEntry('about', 'index');
@@ -15,8 +16,6 @@ if (!about) {
 }
 const { Content } = await render(about);
 const { data } = about;
-const cvUrl = data.cv ? resolveLocalFile(about.filePath, data.cv) : undefined;
-const cvName = `${settings.shortName.replace(/[^A-Za-z0-9]+/g, '-')}-CV.pdf`;
 const themes = sections.research.overview?.groups ?? [];
 const categories = TIMELINE_CATEGORIES.filter((c) => milestones.some((m) => m.category === c));
 const categoryClass = (c: string) => `tl__cat--${c.toLowerCase()}`;
@@ -43,13 +42,7 @@ const categoryClass = (c: string) => `tl__cat--${c.toLowerCase()}`;
         <p class="profile__name">{settings.name}</p>
         {data.positions[0] && <p class="profile__role"><T text={data.positions[0].role} /></p>}
         <p class="profile__place">{settings.affiliations[0]}<br />{settings.institution}</p>
-        {
-          cvUrl && (
-            <a class="btn btn--primary profile__cv" href={cvUrl} download={cvName}>
-              Download CV (PDF) <span class="btn__arrow" aria-hidden="true">↓</span>
-            </a>
-          )
-        }
+        <CvLinks stacked />
         <a class="profile__email" href={`mailto:${settings.email}`}>{settings.email}</a>
         {
           settings.profiles.length > 0 && (
@@ -296,10 +289,6 @@ const categoryClass = (c: string) => `tl__cat--${c.toLowerCase()}`;
     font-size: 0.9rem;
     color: var(--muted);
     line-height: 1.45;
-  }
-
-  .profile__cv {
-    justify-content: center;
   }
 
   .profile__email {

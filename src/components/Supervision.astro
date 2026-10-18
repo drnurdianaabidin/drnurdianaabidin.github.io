@@ -1,0 +1,590 @@
+---
+// The Postgraduate Research Supervision section of the Academic page, and the
+// invitation to prospective research students. Everything comes from
+// src/supervision.yaml.
+import Icon from './Icon.astro';
+import { plain } from '../lib/placeholder.mjs';
+import { settings, formatDate, isoDate } from '../lib/items';
+import { supervision, enquiryLink, type Researcher } from '../lib/supervision';
+
+const { main, co, invitation } = supervision;
+const email = plain(settings.email);
+const count = (list: Researcher[]) => (list.length === 1 ? '1 researcher' : `${list.length} researchers`);
+---
+
+<section class="section supervision" id="supervision" aria-labelledby="supervision-heading">
+  <div class="wrap">
+    <div class="heading-block reveal">
+      <p class="label">Supervision</p>
+      <h2 id="supervision-heading">{supervision.title}</h2>
+      {supervision.introduction && <p class="supervision__intro">{supervision.introduction}</p>}
+    </div>
+
+    {
+      main.length > 0 && (
+        <div class="sup-group">
+          <div class="sup-group__head reveal">
+            <h3 class="sup-group__title">
+              <span class="sup-role sup-role--main">Main Supervisor</span>
+            </h3>
+            <p class="sup-group__count">{count(main)}</p>
+          </div>
+          <ul class="sup-main">
+            {main.map((r, i) => (
+              <li
+                class:list={['card', 'sup-card', 'reveal', { 'sup-card--distinction': r.highlight }]}
+                style={`--delay:${i * 90}ms`}
+              >
+                {r.highlight && (
+                  <p class="sup-card__distinction">
+                    <span class="sup-card__medal">
+                      <Icon name="trophy" size={24} />
+                    </span>
+                    <span>
+                      <span class="sup-card__distinction-label">Distinction</span>
+                      <strong>{r.highlight}</strong>
+                    </span>
+                  </p>
+                )}
+                <div class="sup-card__body">
+                  <p class="sup-card__role">
+                    <span class="sup-role sup-role--main">Main Supervisor</span>
+                  </p>
+                  <h4 class="sup-card__name">{r.name}</h4>
+                  <p class="sup-card__programme">
+                    <Icon name="cap" size={18} />
+                    {r.programme}
+                  </p>
+                  <dl class="sup-card__facts">
+                    {supervision.university && (
+                      <div>
+                        <dt>University</dt>
+                        <dd>{supervision.university}</dd>
+                      </div>
+                    )}
+                    {r.area && (
+                      <div>
+                        <dt>Research area</dt>
+                        <dd>{r.area}</dd>
+                      </div>
+                    )}
+                    {r.viva && (
+                      <div>
+                        <dt>Viva voce</dt>
+                        <dd>
+                          <time datetime={isoDate(r.viva)}>{formatDate(r.viva)}</time>
+                        </dd>
+                      </div>
+                    )}
+                    {r.outcome && (
+                      <div>
+                        <dt>Outcome</dt>
+                        <dd>{r.outcome}</dd>
+                      </div>
+                    )}
+                    {r.status && (
+                      <div>
+                        <dt>Status</dt>
+                        <dd>
+                          <span class="sup-status">{r.status}</span>
+                        </dd>
+                      </div>
+                    )}
+                    {r.since && (
+                      <div>
+                        <dt>Supervised since</dt>
+                        <dd>{r.since}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      co.length > 0 && (
+        <div class="sup-group">
+          <div class="sup-group__head reveal">
+            <h3 class="sup-group__title">
+              <span class="sup-role sup-role--co">Co-Supervisor</span>
+            </h3>
+            <p class="sup-group__count">
+              {count(co)}
+              {supervision.university && `, ${supervision.university}`}
+            </p>
+          </div>
+          <ul class="sup-co">
+            {co.map((r, i) => (
+              <li class="sup-co__item reveal" style={`--delay:${(i % 2) * 80}ms`}>
+                <div class="sup-co__top">
+                  <h4 class="sup-co__name">{r.name}</h4>
+                  <span class="sup-co__programme">{r.programme}</span>
+                </div>
+                {r.area && <p class="sup-co__area">{r.area}</p>}
+                <p class="sup-co__meta">
+                  <span class="sup-role sup-role--co sup-role--small">Co-Supervisor</span>
+                  {r.since && <span>Since {r.since}</span>}
+                  {r.status && (
+                    <span class="sup-co__status">
+                      <Icon name="check" size={16} />
+                      {r.status}
+                    </span>
+                  )}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<section class="section section--sunk enquire" id="prospective-students" aria-labelledby="enquire-heading">
+  <div class="wrap">
+    <div class="enquire__panel reveal">
+      <div class="enquire__text">
+        <p class="label">Prospective research students</p>
+        <h2 id="enquire-heading" class="enquire__title">{invitation.title}</h2>
+        {invitation.text.map((p) => <p>{p}</p>)}
+        <p class="enquire__action">
+          <a class="btn btn--primary enquire__btn" href={enquiryLink()}>
+            <Icon name="mail" size={18} />
+            {invitation.button}
+          </a>
+        </p>
+        <p class="enquire__alt">
+          The button opens a new email to <a href={`mailto:${email}`}>{email}</a> with the subject and a short template filled in.
+          If it does not open, please write to that address with the subject “{invitation.subject}”.
+        </p>
+      </div>
+
+      <div class="enquire__side">
+        {
+          invitation.interests.length > 0 && (
+            <>
+              <h3 class="label enquire__side-title">Research interests</h3>
+              <ul class="enquire__tags">
+                {invitation.interests.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+        {
+          invitation.include.length > 0 && (
+            <>
+              <h3 class="label enquire__side-title">Please include in your email</h3>
+              <ul class="enquire__include">
+                {invitation.include.map((line) => (
+                  <li>
+                    <Icon name="check" size={16} />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+      </div>
+
+      {
+        invitation.note && (
+          <p class="enquire__note">
+            <Icon name="info" size={18} />
+            <span>{invitation.note}</span>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .supervision {
+    padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .supervision__intro {
+    max-width: 44rem;
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+
+  /* ---------- Roles ---------- */
+  .sup-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .sup-role--main {
+    background: var(--brass);
+    color: #031413;
+  }
+
+  .sup-role--co {
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+  }
+
+  .sup-role--small {
+    padding: 0.15rem 0.6rem;
+    font-size: 0.68rem;
+  }
+
+  .sup-group + .sup-group {
+    margin-top: var(--space-6);
+  }
+
+  .sup-group__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .sup-group__title {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .sup-group__count {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Main supervision cards ---------- */
+  .sup-main {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    align-items: stretch;
+  }
+
+  .sup-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sup-card__body {
+    padding: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .sup-card__role {
+    margin: 0 0 0.9rem;
+  }
+
+  .sup-card__name {
+    font-size: clamp(1.8rem, 1.5vw + 1.2rem, 2.3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 0 0 0.45rem;
+  }
+
+  .sup-card__programme {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.3rem;
+    font-weight: 600;
+    color: var(--brass-text);
+  }
+
+  .sup-card__facts {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .sup-card__facts div {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .sup-card__facts dt {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    padding-top: 0.1rem;
+  }
+
+  .sup-card__facts dd {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .sup-status {
+    display: inline-block;
+    padding: 0.1rem 0.65rem;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--brass-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  /* The distinction: a quiet gold band at the top of the card */
+  .sup-card--distinction {
+    border-color: var(--gold-line);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--gold-line) 35%, transparent),
+      var(--shadow-lift);
+  }
+
+  .sup-card__distinction {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.15rem clamp(1.4rem, 3vw, 2rem);
+    background: var(--gold-soft);
+    border-bottom: 1px solid var(--gold-line);
+    color: var(--gold);
+  }
+
+  .sup-card__distinction-label {
+    display: block;
+    margin-bottom: 0.15rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .sup-card__distinction strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 0.6vw + 1.1rem, 1.45rem);
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .sup-card__medal {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold-line);
+    background: var(--paper-raised);
+    color: var(--gold);
+  }
+
+  /* ---------- Co-supervision ---------- */
+  .sup-co {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .sup-co__item {
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    padding: 1.25rem 1.4rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .sup-co__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+  }
+
+  .sup-co__name {
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .sup-co__programme {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--brass-text);
+    white-space: nowrap;
+  }
+
+  .sup-co__area {
+    margin: 0;
+    font-size: 0.97rem;
+    color: var(--ink-soft);
+  }
+
+  .sup-co__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+    margin: 0.25rem 0 0;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+
+  .sup-co__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 600;
+    color: var(--brass-text);
+  }
+
+  /* ---------- Invitation ---------- */
+  .enquire__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    padding: clamp(1.75rem, 4vw, 3.25rem);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--brass);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .enquire__title {
+    font-size: clamp(2rem, 2.4vw + 1rem, 3rem);
+    line-height: 1.1;
+    margin: 0.55rem 0 1.1rem;
+  }
+
+  .enquire__text p:not(.label) {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .enquire__action {
+    margin: 1.75rem 0 0.9rem;
+  }
+
+  .enquire__btn {
+    gap: 0.6rem;
+  }
+
+  .enquire__text .enquire__alt {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .enquire__alt a {
+    overflow-wrap: anywhere;
+  }
+
+  .enquire__side-title {
+    margin: 0 0 0.9rem;
+  }
+
+  .enquire__side-title + * + .enquire__side-title {
+    margin-top: 2rem;
+  }
+
+  .enquire__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .enquire__tags li {
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--brass-text);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .enquire__include {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .enquire__include li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.97rem;
+  }
+
+  .enquire__include :global(.icon) {
+    margin-top: 0.2rem;
+    color: var(--brass-text);
+  }
+
+  .enquire__note {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .enquire__note :global(.icon) {
+    margin-top: 0.1rem;
+  }
+
+  @media (max-width: 900px) {
+    .sup-main,
+    .sup-co,
+    .enquire__panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .sup-card__facts div {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+
+    .sup-card__distinction {
+      align-items: flex-start;
+    }
+  }
+</style>

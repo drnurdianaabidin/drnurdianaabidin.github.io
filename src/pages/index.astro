@@ -8,6 +8,7 @@ import StructuredData from '../components/StructuredData.astro';
 import Illustration from '../components/Illustration.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import BlogCard from '../components/BlogCard.astro';
+import CvLinks from '../components/CvLinks.astro';
 import { getPosts } from '../lib/blog';
 import {
   settings,
@@ -83,6 +84,9 @@ const explore = await Promise.all(
         <div class="hero__actions">
           <a class="btn btn--primary" href="/research/">Explore the research <span class="btn__arrow" aria-hidden="true">→</span></a>
           <a class="btn btn--ghost" href="/publications/">Publications</a>
+        </div>
+        <div class="hero__cv">
+          <CvLinks variant="inline" />
         </div>
       </div>
       <figure class="hero__portrait">
@@ -473,6 +477,14 @@ const explore = await Promise.all(
 
   .hero__text > :nth-child(5) {
     animation-delay: 480ms;
+  }
+
+  .hero__text > :nth-child(6) {
+    animation-delay: 600ms;
+  }
+
+  .hero__cv {
+    margin-top: 1.4rem;
   }
 
   .hero__portrait {

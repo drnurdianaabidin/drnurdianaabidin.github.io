@@ -18,18 +18,7 @@ academic:
   title: Academic
   image: physioverse
   description: Teaching, postgraduate supervision and academic leadership in clinical exercise science at Universiti Sains Malaysia.
-  overview:
-    heading: Postgraduate supervision areas
-    text: Master's and PhD researchers supervised at Universiti Sains Malaysia have worked in the following areas.
-    groups:
-      - items:
-          - Clinical exercise science
-          - Musculoskeletal health
-          - Exercise psychology
-          - Athletic performance
-          - Exercise-based interventions
-          - Healthy ageing
-          - Biomedical and digital health research
+  # Postgraduate supervision on the Academic page is written in src/supervision.yaml
   categories:
     - Teaching
     - Teaching innovation

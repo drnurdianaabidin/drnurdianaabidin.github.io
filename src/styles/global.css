@@ -439,12 +439,12 @@ button {
 
 .btn--primary {
   background: var(--brass);
-  color: #06201f;
+  color: #031413;
 }
 
 .btn--primary:hover {
   background: color-mix(in srgb, var(--brass) 85%, white);
-  color: #06201f;
+  color: #031413;
 }
 
 .btn--ghost {
@@ -607,7 +607,7 @@ button {
 .chip[aria-pressed='true'] {
   background: var(--brass);
   border-color: var(--brass);
-  color: #06201f;
+  color: #031413;
 }
 
 .chip__count {
@@ -682,6 +682,29 @@ button {
   .filters__search {
     grid-template-columns: 1fr;
     gap: 0.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Distinctions: a restrained gold for nominations and awards
+   ------------------------------------------------------------------ */
+:root {
+  --gold: #855b10;
+  --gold-soft: #faf3e3;
+  --gold-line: #d9b56c;
+}
+
+:root[data-theme='dark'] {
+  --gold: #e9c67c;
+  --gold-soft: #282012;
+  --gold-line: #8d6b2b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --gold: #e9c67c;
+    --gold-soft: #282012;
+    --gold-line: #8d6b2b;
   }
 }
 

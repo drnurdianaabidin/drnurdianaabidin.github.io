@@ -1,7 +1,6 @@
 ---
 portrait: ./portrait.jpg
 portraitAlt: "Portrait of Dr Nurdiana Zainol Abidin"
-cv: ./cv.pdf
 positions:
   - role: Senior Lecturer
     place: Pusat Kanser Tun Abdullah Ahmad Badawi (PKTAAB), Universiti Sains Malaysia

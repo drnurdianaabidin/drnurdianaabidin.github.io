@@ -37,7 +37,9 @@ You will only ever need to touch these files and folders:
 | Industry work | `src/content/industry/` |
 | Blog articles (see BLOG-GUIDE.md) | `src/content/blog/` |
 | Blog title, introduction and topics | `src/blog.yaml` |
-| Your biography, portrait and CV | `src/content/about/` |
+| Your biography and portrait | `src/content/about/` |
+| Your academic CV (PDF) | `public/documents/Nurdiana_Zainol_Abidin_Academic_CV.pdf` |
+| Postgraduate supervision on the Academic page | `src/supervision.yaml` |
 | The career timeline on the About page | `src/timeline.yaml` |
 | The drawings used across the site | `src/assets/illustrations/` |
 | A blank template for new work | `templates/new-work/` |
@@ -191,15 +193,16 @@ Filter buttons only appear for categories that have at least one piece of work.
 
 ## 6. Replace your CV and portrait
 
-Both live in `src/content/about/`.
+The CV lives in `public/documents/` and the portrait in `src/content/about/`.
 
 **CV**
 1. Save your CV as a PDF.
-2. Name it `cv.pdf`.
-3. Put it in `src/content/about/`, replacing the old one.
-4. Publish. Visitors download it as `Nurdiana-Zainol-Abidin-CV.pdf`.
+2. Name it exactly `Nurdiana_Zainol_Abidin_Academic_CV.pdf`.
+3. Put it in `public/documents/`, replacing the old one.
+4. In `src/settings.yaml`, change the `cvUpdated:` line to the month, for example `cvUpdated: January 2027`.
+5. Publish. The Academic, About and home pages all offer **View** (opens in a new tab) and **Download**, and the file size is shown automatically. The CV is always at `https://drnurdianaabidin.github.io/documents/Nurdiana_Zainol_Abidin_Academic_CV.pdf`, so you can share that link.
 
-Remember that anyone can download your CV. Leave out your home address, phone number, date of birth and identity card number.
+Remember that anyone can download your CV. Leave out your home address, phone number, date of birth and identity card number, and the names of anyone who has not agreed to appear (for example co-creators or co-authors you would rather not name).
 
 **Portrait**
 1. Choose a photo, ideally upright (portrait shape). It is shown small, about 5 cm wide.
@@ -272,6 +275,8 @@ Visits from your own computer while you preview the site are not counted. To sto
 **Headline and title under your name.** In `src/settings.yaml`, `headline:` is the large line on the home page ("Exploring the Science of Healthy Ageing") and `designation:` is your title shown above it. The four phrases under `tagline:` appear as small labels in the home page banner, in the footer and on the Contact page.
 
 **Papers on the home page.** The three papers under "Recent papers" are listed under `homePapers:` in `src/settings.yaml`, by the folder name of each publication in `src/content/research/`, for example `2024-resveratrol-muscle-soreness-review`. Remove the list to show the three newest instead.
+
+**Postgraduate supervision.** The "Postgraduate Research Supervision" section of the Academic page, and the invitation to prospective students below it, are written in `src/supervision.yaml`. Each researcher has a name, programme, research area and, where they apply, the year supervision began, a status, the viva date and outcome, and a `highlight` shown in gold at the top of their card. Add new researchers under `main:` or `co:`, and only list people who are happy to be named. The research interests, the button, the email subject and the list of things to include in an enquiry are under `invitation:`.
 
 **"At a glance" figures.** Also in `src/settings.yaml`, under `highlights:`. Each figure has a `value`, a `label` and an optional `detail`. Write `value: auto` for publications and the site counts them for you. Keep the other numbers up to date by hand, and only include figures you can stand behind.
 

@@ -4,6 +4,8 @@ import Masthead from '../../components/Masthead.astro';
 import WorkCard from '../../components/WorkCard.astro';
 import T from '../../components/T.astro';
 import Illustration from '../../components/Illustration.astro';
+import CvLinks from '../../components/CvLinks.astro';
+import Supervision from '../../components/Supervision.astro';
 import { plain } from '../../lib/placeholder.mjs';
 import { sections, sectionKeys, getItems, roman, inlineHtml, type SectionKey } from '../../lib/items';
 
@@ -43,6 +45,7 @@ const searchText = (item: (typeof items)[number]) => {
         <p class="label">Section {roman(index)}</p>
         <h1 class="section-hero__title">{section.title}</h1>
         <p class="section-hero__desc"><T text={section.description} /></p>
+        {key === 'academic' && <CvLinks class="section-hero__cv" />}
       </div>
       {
         section.image && (
@@ -53,6 +56,9 @@ const searchText = (item: (typeof items)[number]) => {
       }
     </div>
   </header>
+
+  {/* The Academic page: postgraduate supervision and the invitation to prospective students */}
+  {key === 'academic' && <Supervision />}
 
   {
     overview && (
@@ -284,6 +290,11 @@ const searchText = (item: (typeof items)[number]) => {
     max-width: 34ch;
     margin: 0;
     color: var(--ink-soft);
+  }
+
+  /* The CV buttons on the Academic page */
+  .section-hero__text :global(.section-hero__cv) {
+    margin-top: 1.75rem;
   }
 
   .section-hero__media {
